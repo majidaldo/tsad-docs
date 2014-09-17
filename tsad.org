@@ -1,0 +1,111 @@
+* Computer
+  - underclock system it's too hot!
+
+* Research
+** anomaly
+** does depth help? 
+*** how to define
+** [[Illya Sutskever phd][RNN]] have promise for ts b/c memory
+** [[http://www.deeplearning.net/tutorial/rnnrbm.html#rnnrbm][RNN-RBM]] Hessian free opt?
+** rnn or cRBM 								  :Q:
+** what input causes the hidden unit i to be maximally active?
+   \[ a_i = f\left(\sum\limits_j \omega_{ij}^{(1)}x_j + b_j \right)    \]
+   constraint $||x||_2=1||$
+   \[ x_j = \frac{ \omega_{ij}^{(1)} }
+                 { \sqrt{\sum\limits_j\left(\omega_{ij}^{(1)}\right)^2} } \]
+
+* Resources
+** [[http://www.quora.com/Machine-Learning/Are-Deep-Belief-Networks-useful-for-Time-Series-Forecasting][Quora: Deep Nets for ts Forecasting]]
+** mendely
+** [[http://www.youtube.com/watch?v=lKDfBZz7Wy8&index=2&list=PLnnr1O8OWc6YM16tj9pdhBZOS9tDktNrx][Modeling Sequences Video]]
+** Coursera neural net
+** http://jychung.wordpress.com/
+
+   
+* Experiment
+  - nhidden
+  - types of ts: frequency-rich, stnarity
+  - can it be insensitive to the window?, robustness in general
+
+*** data sources
+    - sleep stage classification
+    - astro
+    - ted dunniang ekg 
+ 
+*code
+** pyleanr2
+  - smaller data was faster on cpu. gpu shuffling?
+  - the yaml thing makes it complicated for a beginner. it's supposed
+    to make your life easier but it's another thing to learn it's weird
+** theano rnn
+
+* Algorithm:
+** need to have invariance wrt time
+** challenges:
+*** training
+**** contrastive gradient pretraining
+*** choosing the right
+*** if deep we have memory but deep diminishing tangents
+*** hessian free
+*** optimization
+*** ilays sutskever init with echo state nets then train rnn
+*** invariance: 1. scaling: rectifed lin units 2. shift: conv nets. 
+    coursera lec 15 "modeling real-valued data with rbm"
+*** must be as auto as possible. least amount of fidddling
+
+**** id and attacking the saddle pt prblem in high dim non conv opt
+     http://arxiv.org/abs/1406.2572
+     
+* thesis
+- thanks ted dunning, kirk borne, jay kaufold
+- we want to be more general with RNN as opposed to HMM, lin dynamics sys
+* Illya Sutskever phd
+
+
+need to consider temporal aspect.
+the literature if filled with techniques suitable for specific
+application domains! want to bring 
+review neural net literature anomaly detection
+
+http://www.idsia.ch/~juergen/rnn.html
+Hyper-opt for a 'db' of priors
+hierarchy AND recurrent aspects 
+HF opt http://pillowlab.wordpress.com/2013/06/11/lab-meeting-6102013-hessian-free-optimization/
+great ideas for data examples in anomaly detection of ts
+simple explanation of rnn
+http://www.willamette.edu/~gorr/classes/cs449/rnn1.html
+explain rnn vidoedeo
+http://techtalks.tv/talks/on-the-difficulty-of-training-recurrent-neural-networks/58134/
+basins of attraction
+lstm tutorial
+http://techtalks.tv/talks/on-the-difficulty-of-training-recurrent-neural-networks/58134/
+exploding and vanishing gradients problem for rnn..rnn hard for long
+term dependency
+** 4 ways to to train RNN:
+back prop thru time your weights blow up or diminish
+- long short term memory LSTM
+- Hessian free opt: can deal with small grads
+- Echo state net
+- good init with momentum
+
+talk about hierarchy of ts in training and analysis
+don't care about interpretability that much but it may be incl for free.
+need to 'model' ts.. what if we don't want human involvement to model?
+comparison with other techniques: in review paper
+most reserach on training (they are difficult) instead of analysis
+now go through different 
+
+specify a novelty detection mathematical context
+
+Recurrent Neural Networks http://www.cs.bham.ac.uk/~jxb/INC/l12.pdf
+
+
+
+
+what?:
+- architechture
+- training
+- 
+
+future work:
+- multivar ts
