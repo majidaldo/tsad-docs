@@ -32,7 +32,7 @@
     - astro
     - ted dunniang ekg 
  
-*code
+* code
 ** pyleanr2
   - smaller data was faster on cpu. gpu shuffling?
   - the yaml thing makes it complicated for a beginner. it's supposed
@@ -82,7 +82,7 @@ http://techtalks.tv/talks/on-the-difficulty-of-training-recurrent-neural-network
 exploding and vanishing gradients problem for rnn..rnn hard for long
 term dependency
 ** 4 ways to to train RNN:
-back prop thru time your weights blow up or diminish
+back prop thru time your weights blow up or diminish: has local min problem
 - long short term memory LSTM
 - Hessian free opt: can deal with small grads
 - Echo state net
@@ -99,13 +99,40 @@ specify a novelty detection mathematical context
 
 Recurrent Neural Networks http://www.cs.bham.ac.uk/~jxb/INC/l12.pdf
 
-
-
+better predictor makes a better novelty detector?
+can you use a nn to understand the data gen proc?
 
 what?:
 - architechture
-- training
+- training: 
 - 
+
+cool thing about ts is easy to viz. 'watch' the predicted as it
+is training by superimposing. maybe we don't need to go to the most
+min possible
+can a neural net show regularity progressively?
+
+RNN display and memorize temporal nature
 
 future work:
 - multivar ts
+- lstm
+
+
+human intuition => less computation
+no human => lots of computation
+
+transfer learning: if another ts is similar. then, the work used to
+train 1st one could help train the next?
+
+if you just do a sliding window, it def wont remember anything beyond
+size of win. so it requires user intervention.
+
+elman more useful i guess b/c it can capture more complex things
+coming from hidden state.
+
+next task:
+read on the difficulty of training rnn
+
+cool uses:
+compression
