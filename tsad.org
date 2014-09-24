@@ -61,7 +61,7 @@
 - we want to be more general with RNN as opposed to HMM, lin dynamics sys
 * Illya Sutskever phd
 
-
+* Inbox
 need to consider temporal aspect.
 the literature if filled with techniques suitable for specific
 application domains! want to bring 
@@ -81,12 +81,14 @@ lstm tutorial
 http://techtalks.tv/talks/on-the-difficulty-of-training-recurrent-neural-networks/58134/
 exploding and vanishing gradients problem for rnn..rnn hard for long
 term dependency
-** 4 ways to to train RNN:
+
+4 ways to to train RNN:
 back prop thru time your weights blow up or diminish: has local min problem
 - long short term memory LSTM
 - Hessian free opt: can deal with small grads
 - Echo state net
 - good init with momentum
+comparison in hf paper.
 
 talk about hierarchy of ts in training and analysis
 don't care about interpretability that much but it may be incl for free.
@@ -133,6 +135,14 @@ coming from hidden state.
 
 next task:
 read on the difficulty of training rnn
+
+
+HF optimizaion quick intro:
+http://andrew.gibiansky.com/blog/machine-learning/hessian-free-optimization/
+
+HF for real-valued b/c we want twice diff
+
+
 
 cool uses:
 compression
