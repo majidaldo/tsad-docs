@@ -142,7 +142,21 @@ http://andrew.gibiansky.com/blog/machine-learning/hessian-free-optimization/
 
 HF for real-valued b/c we want twice diff
 
+want most automated way. don't want to impose
 
+structural damping incorporates like "memory units"?
+
+do the long term effect captured if they are outside the bptt?
+
+ilyan sketkuver goes through the rnn algos. and makes the case, for
+me!, that the other algos need specific tweaks
+
+important to get unknown lags
+
+motivations:
+lots of ts and idk the chars of them. want robustness
+
+how to feed the net??
 
 cool uses:
-compression
+compressiion
