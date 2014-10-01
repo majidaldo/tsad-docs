@@ -158,5 +158,13 @@ lots of ts and idk the chars of them. want robustness
 
 how to feed the net??
 
+so is sgd doing backprop?
+
+time series segmentation like anomaly detection?
+
+google: time series segmentation anomaly detection' to put things in perspective
+
+why is generative model beter for ad??
+
 cool uses:
 compressiion
