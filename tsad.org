@@ -166,5 +166,11 @@ google: time series segmentation anomaly detection' to put things in perspective
 
 why is generative model beter for ad??
 
+understand vanishing gradients in 'advances in traiing rnns'
+
+state of the art coming from cs, data mining, and stats communities
+
+now go through GroundHog and assoc paper
+
 cool uses:
 compressiion
