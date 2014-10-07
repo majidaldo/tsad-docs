@@ -59,7 +59,8 @@
 * thesis
 - thanks ted dunning, kirk borne, jay kaufold
 - we want to be more general with RNN as opposed to HMM, lin dynamics sys
-* Illya Sutskever phd
+* groundhog notes
+- layers have operators
 
 * Inbox
 need to consider temporal aspect.
@@ -171,6 +172,12 @@ understand vanishing gradients in 'advances in traiing rnns'
 state of the art coming from cs, data mining, and stats communities
 
 now go through GroundHog and assoc paper
+
+
+3. How do neural nets ﬁt in statistical machine translation?
+I Feature extraction
+I Continuous-space representation
+I Truly data-driven: requires minimal domain knowledge
 
 cool uses:
 compressiion
