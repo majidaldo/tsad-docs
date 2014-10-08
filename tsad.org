@@ -61,6 +61,7 @@
 - we want to be more general with RNN as opposed to HMM, lin dynamics sys
 * groundhog notes
 - layers have operators
+- container->layer->model
 
 * Inbox
 need to consider temporal aspect.
@@ -178,6 +179,20 @@ now go through GroundHog and assoc paper
 I Feature extraction
 I Continuous-space representation
 I Truly data-driven: requires minimal domain knowledge
+
+123
+
+http://www.nehalemlabs.net/prototype/blog/2013/10/10/implementing-a-recurrent-neural-network-in-python/
+u could use a simple feedforward neural network and feed all
+dimensions as inputs. But this comes with downsides: first, the
+dimensionality of your first layer will be huge, leading to more
+parameters to learn; second, if the data really is dynamic it could be
+the case that inputs will have different dimensionality and there is
+no elegant way to handle that. 
+
+theanets
+trainingRNNs/ might have clipping
+
 
 cool uses:
 compressiion
