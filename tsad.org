@@ -59,9 +59,8 @@
 * thesis
 - thanks ted dunning, kirk borne, jay kaufold
 - we want to be more general with RNN as opposed to HMM, lin dynamics sys
-* groundhog notes
-- layers have operators
-- container->layer->model
+* theano-nets
+
 
 * Inbox
 need to consider temporal aspect.
@@ -192,7 +191,12 @@ no elegant way to handle that.
 
 theanets
 trainingRNNs/ might have clipping
-
+http://andrew.gibiansky.com/blog/machine-learning/speech-recognition-neural-networks/
+We may want to predict things other than the things in the range of
+the nonlinearity, 
+so instead we do not apply the nonlinearity
+^^check the recrnt code in thenaonet.. how exactly does it train? how
+does it make the trng seq?
 
 cool uses:
 compressiion
