@@ -60,7 +60,12 @@
 - thanks ted dunning, kirk borne, jay kaufold
 - we want to be more general with RNN as opposed to HMM, lin dynamics sys
 * theano-nets
-
+- learn about batches
+- can train multiple len sequences?
+- how does it go though training
+So Network obj is a base obj.: regressor, autoenc, b/c it has a cost fx
+- see if it uses the latest hf optimizer
+only run setup_enc/decoder once
 
 * Inbox
 need to consider temporal aspect.
