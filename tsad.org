@@ -1,5 +1,4 @@
-* Computer
-  - underclock system it's too hot!
+
 
 * Research
 ** anomaly
@@ -66,6 +65,11 @@
 So Network obj is a base obj.: regressor, autoenc, b/c it has a cost fx
 - see if it uses the latest hf optimizer
 only run setup_enc/decoder once
+- check if dataset can do varying length sequences
+- waht does train_batches do?? it's added in seqdataset
+- i want to predict on just one sequence..see how i can cpy params
+  from trained mdl
+- trn and val gen ds still not working
 
 * Inbox
 need to consider temporal aspect.
@@ -202,6 +206,8 @@ the nonlinearity,
 so instead we do not apply the nonlinearity
 ^^check the recrnt code in thenaonet.. how exactly does it train? how
 does it make the trng seq?
+
+machine learning andrew ng
 
 cool uses:
 compressiion
