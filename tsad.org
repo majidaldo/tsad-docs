@@ -70,6 +70,10 @@ only run setup_enc/decoder once
 - i want to predict on just one sequence..see how i can cpy params
   from trained mdl
 - trn and val gen ds still not working
+- why does the ds beak the time axis when using callable()?
+- the callable is exhausted..what happens?
+- how would classifying work? bc it's seq->(one cls)
+- also chk the log out of climate. it says logistic but i'm not sure
 
 * Inbox
 need to consider temporal aspect.
