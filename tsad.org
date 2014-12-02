@@ -74,6 +74,7 @@ only run setup_enc/decoder once
 - the callable is exhausted..what happens?
 - how would classifying work? bc it's seq->(one cls)
 - also chk the log out of climate. it says logistic but i'm not sure
+- can mod the code to make a 'monitor' as a separate proc?
 
 * Inbox
 need to consider temporal aspect.
@@ -210,6 +211,9 @@ the nonlinearity,
 so instead we do not apply the nonlinearity
 ^^check the recrnt code in thenaonet.. how exactly does it train? how
 does it make the trng seq?
+
+for prod. find a way to reduce ts size while keeping important features.
+reduce and extrapolate to higher def. find the errror
 
 machine learning andrew ng
 
