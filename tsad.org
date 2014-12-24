@@ -76,6 +76,15 @@ only run setup_enc/decoder once
 - also chk the log out of climate. it says logistic but i'm not sure
 - can mod the code to make a 'monitor' as a separate proc?
 
+* Bayesian Optimization
+- Nando into https://www.youtube.com/watch?v=4vGiHC35j9s
+- mathmonk intro https://www.youtube.com/watch?v=vU6AiEYED9E
+- 
+- a tutorial on bayesian opt of expensive cost funcs
+- multivar gaussian theorem: go from joint to conditional
+- capture similarity of points with a 'kernel' 
+
+
 * Inbox
 need to consider temporal aspect.
 the literature if filled with techniques suitable for specific
@@ -214,6 +223,13 @@ does it make the trng seq?
 
 for prod. find a way to reduce ts size while keeping important features.
 reduce and extrapolate to higher def. find the errror
+
+should i just give it various distortions of the full ts?
+prediction or autoencoder?
+seems like it predicts better with long seqs. cant fill in short seqs
+error vs seq len
+make 'epoch' a hyperparam!
+maybe opt for length of window
 
 machine learning andrew ng
 
