@@ -79,11 +79,20 @@ only run setup_enc/decoder once
 * Bayesian Optimization
 - Nando into https://www.youtube.com/watch?v=4vGiHC35j9s
 - mathmonk intro https://www.youtube.com/watch?v=vU6AiEYED9E
-- 
+- http://nlpers.blogspot.com/2014/10/hyperparameter-search-bayesian.html
 - a tutorial on bayesian opt of expensive cost funcs
-- multivar gaussian theorem: go from joint to conditional
+- multivar gaussian theorem: go from joint to conditional.. why?
 - capture similarity of points with a 'kernel' 
-
+** GP
+- Why? b/c we can integrate for marginals
+- http://www.robots.ox.ac.uk/~mebden/reports/GPtutorial.pdf google link
+- better video http://videolectures.net/gpip06_mackay_gpb/ though if
+  by far. makes use of a computer to make
+  you google youll get nando's lecture
+coming fron sci and eng . tricky thnx engstats.com
+how to learn on your own. ive been out of classes for a while:
+1. find intro papers, and videos
+2. build a toy
 
 * Inbox
 need to consider temporal aspect.
