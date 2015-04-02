@@ -12,7 +12,8 @@
    constraint $||x||_2=1||$
    \[ x_j = \frac{ \omega_{ij}^{(1)} }
                  { \sqrt{\sum\limits_j\left(\omega_{ij}^{(1)}\right)^2} } \]
-
+		 
+** IDEA!: use RNN to guide finding covariance matrix for a GP!
 * Resources
 ** [[http://www.quora.com/Machine-Learning/Are-Deep-Belief-Networks-useful-for-Time-Series-Forecasting][Quora: Deep Nets for ts Forecasting]]
 ** mendely
@@ -83,16 +84,25 @@ only run setup_enc/decoder once
 - a tutorial on bayesian opt of expensive cost funcs
 - multivar gaussian theorem: go from joint to conditional.. why?
 - capture similarity of points with a 'kernel' 
+does hyperopt handle stochastic??
 ** GP
 - Why? b/c we can integrate for marginals
 - http://www.robots.ox.ac.uk/~mebden/reports/GPtutorial.pdf google link
 - better video http://videolectures.net/gpip06_mackay_gpb/ though if
   by far. makes use of a computer to make
   you google youll get nando's lecture
-coming fron sci and eng . tricky thnx engstats.com
+coming fron sci and eng . tricky thnx engstats.com. however it took
+my analytical function oriented mind to get around appealing to stats
+for "functions". 
+- REALLY understand joint, conditional, and marginal distributions in
+this more abstranct sense
 how to learn on your own. ive been out of classes for a while:
 1. find intro papers, and videos
-2. build a toy
+2. build a toy. use alpha blending
+[conditionals ov[[http://stats.stackexchange.com/questions/30588/deriving-the-conditional-distributions-of-a-multivariate-normal-distribution]]
+REALLY understand the differences b/w marginals, conditionals, and
+joints., and EV in this more abstract context
+gptools adds noise?
 
 * Inbox
 need to consider temporal aspect.
@@ -244,3 +254,6 @@ machine learning andrew ng
 
 cool uses:
 compressiion
+
+mcomp package
+http://yahoolabs.tumblr.com/post/114590420346/a-benchmark-dataset-for-time-series-anomaly?utm_content=buffer2047a&utm_medium=social&utm_source=twitter.com&utm_campaign=buffer
