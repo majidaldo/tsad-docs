@@ -1,0 +1,186 @@
+%%% Local Variables:
+%%% mode: latex
+%%% TeX-master: t
+%%% End:
+
+
+%%
+%% GMU LaTeX MS Thesis Format Template
+%%
+%% Developed by:
+%%      Daniel O. Awduche and Christopher A. St. Jean
+%%      Communications and Networking Lab
+%%      Dept. of Electrical and Computer Engineering
+%%
+%% Notes on usage can be found in the accompanying USAGE_NOTES.txt file.
+%%
+%%**********************************************************************
+%% Legal Notice:
+%% This code is offered as-is without any warranty either
+%% expressed or implied; without even the implied warranty of
+%% MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE!
+%% User assumes all risk.
+%% In no event shall any contributor to this code be liable for any damages
+%% or losses, including, but not limited to, incidental, consequential, or
+%% any other damages, resulting from the use or misuse of any information
+%% contained here.
+%%**********************************************************************
+%%
+%% $Id: GMU_thesis_template.tex,v 1.16 2007/05/02 02:20:11 Owner Exp $
+%%
+
+\documentclass[11 pt]{report}
+
+%%  The file ``gmuthesis.sty''  is the GMU latex style file and
+%%   should be placed in the same directory as your LaTeX files
+\usepackage{gmuthesis}
+
+%%
+%% other packages that need to be loaded
+%%
+\usepackage{graphicx}                    %   for imported graphics
+\usepackage{amsmath}                     %%
+\usepackage{amsfonts}                    %%  for AMS mathematics
+\usepackage{amssymb}                     %%
+\usepackage{amsthm}                      %%
+\usepackage[normalem]{ulem}              %   a nice standard underline package
+\usepackage[noadjust,verbose,sort]{cite} %   arranges reference citations neatly
+\usepackage{setspace}                    %   for line spacing commands
+
+%% The file ``mythesisabbrev.sty'' is an (optional) personalized file that
+%% may contain any and all LaTeX command (re)definitions that will be used
+%% throughout the document
+%\usepackage{mythesisabbrev}
+
+\beforedoc
+
+\begin{document}
+
+%% In this section, all of the user-specific fields to be used in the
+%% title pages are set
+\title{
+  Anomaly Detection in Time Series\\
+  with Recurrent Neural Networks}
+\onelinetitle{
+  Anomaly Detection in Time Series with Recurrent Neural Networks
+}
+\author{
+Majid S. alDosari
+}
+\degree{Master of Science}
+\subject{(Computational Science)}
+\doctype{Thesis}
+\dept{(Computational and Data Sciences)}
+
+\firstdeg{Bachelor of Science}
+\firstdegschool{Vanderbilt University}
+\firstdegyear{2003}
+
+\degreeyear{2015}
+
+% Note: semester name should be written in its full-form. For example, Fall Semester, not just Fall.
+\degreesemester{Fall Semester}
+
+\advisor{Estella Blaisten} %todo
+\firstmember{Kirk D. Borne}
+\secondmember{Igor Griva} %todo
+\depthead{Department Head} %todo
+
+% The current associate dean is Daniel A. Menasc\'{e}
+\deanresearch{Dean's Name}
+
+%%
+%% Introductory pages
+%%
+
+% Note: The signature sheet is set according to the requirements of the Volgenau School of
+% Information Technology and Engineering. If your college/school requirement is different,
+% please make appropriate changes in the "signaturepage" section of gmudissertation.sty file.
+\signaturepage
+
+\titlepage
+
+% copyright technically optional but should be included in to avoid potential pagination problems
+\copyrightpage
+
+%%
+%% Dedication page
+%%
+
+\dedicationpage
+
+\noindent I dedicate this thesis to my father, Saad F. al-Dosari who supported me in thie endeavor.
+
+%%
+%% Acknowledgements
+%%
+
+\acknowledgementspage
+
+\noindent
+I would like to primarily thank John Kaufhold for being responsive to my questions regaurding everything related to neural networks. I also would like to acknowledge Ted Dunning for his insights on anomaly detection. Also, Pankaj Malhotra whose work is simialar to this answered questions. theanets guy
+
+%%
+%% Table of contents, list of tables, and lists of figures
+%%
+
+\tableofcontents
+
+\listoftables
+
+\listoffigures
+
+%%
+%% Abstract
+%%
+\abstractpage
+
+This research approaches the problem of finding anomalies in time series by using more general and robust modeling provided by recent advances in recurrent neural networks (RNNs). The information from RNNs is used in an anomaly detection technique (tbd).
+
+%% Be sure to leave a line of whitespace immediately before this line!!!!!
+%% (If this comment segment runs together with the preceeding text, you might
+%%  see the second page of the abstract numbered "0".)
+%%
+%% If the abstract is more than one page, then place this line PRECISELY
+%% at the page break; otherwise, comment it out.  (See note about this line
+%% in the usage notes.)
+%%
+\abstractmultiplepage
+
+The second page of the abstract
+
+%%
+%%  the main body of the dissertation
+%%
+\startofchapters
+
+%% include the chapters one by one (or paste the chapter text in directly if desired)
+\include{introduction}
+\include{ad}
+
+%%
+%%  bibliography
+
+%% list all of the BibTeX files here for the WinEdt project (if applicable)
+%GATHER{bibfile.bib}
+
+%% any bibliography style can be used, but IEEEtran.bst is ideally suited to
+%% electrical engineering references
+
+%% include the following directives if there are any appendices
+\appendix
+\appendixeqnumbering
+\include{Appendix}
+
+\bibliographystyle{IEEEtran}
+\bibliography{IEEEfull,library}
+
+%%
+%% curriculum vitae
+%%
+\cvpage
+
+\noindent Include your \emph{curriculum vitae} here detailing your background,
+education, and professional experience.
+\end{document}
+
