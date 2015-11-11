@@ -1,0 +1,22 @@
+%%% Local Variables:
+%%% mode: latex
+%%% TeX-master: "thesis"
+%%% End:
+
+
+\chapter[Introduction]{Introduction}
+
+
+In the modern world, large amounts of time series data of various types are recorded.  Inexpensive and compact instrumentation and storage allows various types of processes to be recorded. For example, human activity being recorded includes physiological signals, automotive traffic, website navigation activity, and communication network traffic. Other kinds of data are captured from instrumentation in industrial processes, automobiles, space probes, telescopes, geological formations, oceans, power lines, and residential thermostats. Furthermore, the data can be machine generated for diagnostic purposes such as web server logs, system startup logs, and satellite status logs.
+
+Increasingly, these data are being analyzed. Inexpensive and ubiquitous networking has allowed the data to be transmitted for processing. At the same time, ubiquitous computing has allowed the data to be processed at the location of capture.
+
+While the data can be recorded for historical purposes, much value can be obtained from finding anomalous data. However, it is challenging to go through large and varied quantities of data to find anomalies. Even if a procedure can be developed for one type of data, it usually cannot be applied to another type of data.
+
+Hence, the problem that is addressed can be stated as follows: find anomalous points in an arbitrary time series. So, a solution must use the same procedure to analyze different types of time series data. In the language of machine learning, this problem is unsupervised.
+
+A literature search presents at least two such solutions (though not much more). In the acoustics domain, \cite{Marchi2015} transform audio signals into a sequence of spectral features which are then used as input to a denoising recurrent autoencoder. \cite{Malhotra2015} improve on this by using recurrent neural networks (directly) without the use of features (that are speific to acoustics) to multiple domains.
+
+This work closely resembles \cite{Malhotra2015} but with emphasis on automating the procedure so that it applies to many domains. But first, some background is given on anomaly detetion that explains the challenges of finding a solution. Second, recurrent neural networks are introduced as general sequence modelers. Then, experiments will be presented to show that recurrent neural networks can find anomalies in multiple domains. Concluding remarks finalize the thesis.
+
+%todo pcc project
