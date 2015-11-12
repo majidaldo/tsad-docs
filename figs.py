@@ -82,7 +82,7 @@ def latexify(fig_width=None
               'text.latex.preamble': ['\usepackage{gensymb}'],
               'axes.labelsize': 10, # fontsize for x and y labels (was 10)
               'axes.titlesize': 10,
-              'text.fontsize': 10, # was 10
+              'font.size': 10, # was 10
               'legend.fontsize': 10, # was 10
               'xtick.labelsize': 10,
               'ytick.labelsize': 10,
