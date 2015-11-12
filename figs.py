@@ -9,12 +9,9 @@ class fig(object):
     def data(self):pass
     def style(self):pass
     def plot(self):pass
+    def format(self):pass
     def save(self):pass
 
-def forceAspect(ax,aspect=1):
-    im = ax.get_images();
-    extent =  im[0].get_extent()
-    ax.set_aspect(abs((extent[1]-extent[0])/(extent[3]-extent[2]))/aspect)
 
 class anomtype(fig):
     T=200
@@ -23,9 +20,11 @@ class anomtype(fig):
         po.axes.get_yaxis().set_ticklabels([])
         po.axes.get_xaxis().set_label_text('$t$')
         plt.tight_layout(pad=0)
-        latexify(6,ratio=.3) #w,r=h*w
         return po
+    def format(self):
+        latexify(6,ratio=.3) #w,r=h*w
     def plot(self):
+        self.format()
         return self.style(plt.plot(self.data())[0])
     def save(self):
         self.plot().figure.savefig(
@@ -111,3 +110,9 @@ def format_axes(ax):
         axis.set_tick_params(direction='out', color=SPINE_COLOR)
 
     return ax
+
+
+if __name__=='__main__':
+    import sys
+    fignm=sys.argv[1]
+    eval(fignm+'().save()')
