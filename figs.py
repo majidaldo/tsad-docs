@@ -83,6 +83,7 @@ class discord_aper(anomtype):
         for al in [0.025,.1,.3,.6,.7,.9]: gs+=g(al)
         return gs+g(.5,s=.0025)
 
+    
 def latexify(fig_width=None
              , fig_height=None
              ,ratio='golden'
@@ -157,4 +158,8 @@ def format_axes(ax):
 if __name__=='__main__':
     import sys
     fignm=sys.argv[1]
-    eval(fignm+'().save()')
+    
+    if fignm=='all': fignm=registry.keys()
+    else: fignm=[fignam]
+    
+    for afn in fignm: eval(afn+'().save()')
