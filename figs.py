@@ -33,7 +33,7 @@ class oneline(fig):
     def plot(self):
         fig().plot();
         self.format();
-        return self.style(plt.plot(self.data())[0])
+        return self.style(plt.plot(self.data())[0]) #[0] b/c jst 1 line
 
 class ts(fig):
     def format(self):
@@ -42,6 +42,7 @@ class ts(fig):
 class anomtype(oneline,ts):
     T=500
     def style(self,po):
+        plt.setp(po,linewidth=1)
         po.axes.get_xaxis().set_ticklabels([])
         po.axes.get_yaxis().set_ticklabels([])
         po.axes.get_xaxis().set_label_text('$t$')
