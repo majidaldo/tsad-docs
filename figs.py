@@ -30,11 +30,12 @@ class fig(object):
 
     
 class anomtype(fig):
-    T=200
+    T=500
     def style(self,po):
         po.axes.get_xaxis().set_ticklabels([])
         po.axes.get_yaxis().set_ticklabels([])
         po.axes.get_xaxis().set_label_text('$t$')
+        po.axes.get_yaxis().set_label_text('$X$')
         plt.tight_layout(pad=0)
         return po
     def format(self):
@@ -67,13 +68,20 @@ def gaussian(x, mu, sig):
     return np.exp(n/d)
     
 @register
-class discord1(anomtype):
+class discord1_per(anomtype):#_periodic
     def data(self):
         ys=np.sin(np.linspace(0,2*np.pi,self.T)*8)
         mp=gaussian(np.linspace(-1,1,self.T),0,.1)
         return np.multiply((mp+1),ys)
 
-
+@register
+class discord_aper(anomtype):
+    def data(self):
+        def g(l,s=.01):
+            return gaussian(np.linspace(0,1,self.T),l,s)
+        gs=g(-999)
+        for al in [0.025,.1,.3,.6,.7,.9]: gs+=g(al)
+        return gs+g(.5,s=.0025)
 
 def latexify(fig_width=None
              , fig_height=None
