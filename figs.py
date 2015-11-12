@@ -13,13 +13,13 @@ def register(figcls):
     return figcls
 
 
-
 class fig(object):
     def data(self):pass
+    def plot(self): plt.close()
     def style(self):pass
-    def plot(self):pass
     def format(self):pass
-    def save(self):pass
+    def save(self):
+        self.plot().figure.savefig(self.path())
     def path(self):
         if not os.path.exists('figs'):
             os.makedirs('figs')
@@ -28,8 +28,18 @@ class fig(object):
         )
         return pth
 
+
+class oneline(fig):
+    def plot(self):
+        fig().plot();
+        self.format();
+        return self.style(plt.plot(self.data())[0])
+
+class ts(fig):
+    def format(self):
+        latexify(6,ratio=.333) #w,r=h*w
     
-class anomtype(fig):
+class anomtype(oneline,ts):
     T=500
     def style(self,po):
         po.axes.get_xaxis().set_ticklabels([])
@@ -38,13 +48,6 @@ class anomtype(fig):
         po.axes.get_yaxis().set_label_text('$X$')
         plt.tight_layout(pad=0)
         return po
-    def format(self):
-        latexify(6,ratio=.3) #w,r=h*w
-    def plot(self):
-        self.format()
-        return self.style(plt.plot(self.data())[0])
-    def save(self):
-        self.plot().figure.savefig(self.path())
 
 
 @register
@@ -160,6 +163,6 @@ if __name__=='__main__':
     fignm=sys.argv[1]
     
     if fignm=='all': fignm=registry.keys()
-    else: fignm=[fignam]
+    else: fignm=[fignm]
     
-    for afn in fignm: eval(afn+'().save()')
+    for afn in fignm: eval(afn+'().save()');
