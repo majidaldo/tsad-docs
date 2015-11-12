@@ -1,0 +1,34 @@
+
+
+\chapter[Anomaly Detection in Time Series]{Anomaly Detection in Time Series}
+
+\section[Introduction]{Introduction}
+
+The goal of this chapter is to show that the solution to the general problem of anomaly detection in time series is difficult. A typical general framework for anomaly detection in time series is explained with two advanced solutions as examples and their issues. The proposed solution, explained later, fits into the framework providing a basis for comparison.
+
+Describing the variety of solutions puts this difficulty in context. Few publications survery the problem of anomaly detection for time series in particular \cite{Cheboli2010} \cite{Gupta2013}.
+
+Solutions have been fragmented across a variety of application domains such as acoustics, communication networks, economics, environmental science, industrial process, biology, astronomy, and transportation. The fragmentation of application domains led to a variety of problem formulations \cite{Gupta2013}. Furthermore, there is no good understanding of how the solutions in different application domains compare to each other \cite{Cheboli2010}. Therefore, it is difficult to generalize the performance of a solution formulated in one application domain to its performance in another although they might have common elements at a higher level.
+
+Furthmore, adding to the difficulty of comparing solutions, the mechanics of anomaly detection have come from two disciplines: statistics and computer science. Solutions from statistics focus on mathematical rigor while solutions from computer science consider computational issues \cite{Gupta2013}.
+
+To focus the solution presented here, the problem will be stated as follows: given a finite time series $X$
+ \[ X=\{X_1,X_2,\ldots,X_T\}\]
+\[  X \in \mathbb{R}^n \]
+where $T$ is the length of the sequence and $n$ is the number of variables $X$ can have, find points in which can be considered anomalous. This statement makes sense only when anomlous points are a small part of the data.
+
+So elements of any solution to this problem must answer the following questions:
+
+\begin{enumerate}
+\item
+What is normal (as an anomaly is defined as what is \textit{not} normal)?
+\item
+What measure is used to indicate how anomalous point(s) are?
+\item
+How is the measure tested to decide if it is anomalous?
+\end{enumerate}
+
+%%% Local Variables:
+%%% mode: latex
+%%% TeX-master: "thesis"
+%%% End:
