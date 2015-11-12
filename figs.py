@@ -32,14 +32,18 @@ class anomtype(fig):
         )
 
 
+
 class trivial(anomtype):
     def data(self):
         ys=np.random.rand(self.T)
         ys[int(self.T*.5)]=1.5
         return ys
 
-
-
+class context(anomtype):
+    def data(self):
+        ys=np.sin(np.linspace(0,2*np.pi,self.T)*6)
+        ys[int(self.T*.5)]=.75
+        return ys
     
 def latexify(fig_width=None
              , fig_height=None
