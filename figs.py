@@ -8,6 +8,7 @@ class fig(object):
     def data(self):pass
     def style(self):pass
     def plot(self):pass
+    def save(self):pass
 
 
 class anomtype(fig):
@@ -19,6 +20,12 @@ class anomtype(fig):
         return po
     def plot(self):
         return self.style(plt.plot(self.data())[0])
+    def save(self):
+        self.plot().figure.savefig(
+            self.__class__.__name__+'.pdf'
+            ,bbox_inches='tight'
+            ,pad_inches=0
+        )
 
 #todo set golden ratio
 #figure.savefig('asdfsf.pdf')
