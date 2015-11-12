@@ -1,3 +1,5 @@
+import os
+
 import numpy as np
 import seaborn as sns
 import matplotlib
@@ -5,14 +7,28 @@ import matplotlib.pyplot as plt
 
 from math import sqrt
 
+registry={}
+def register(figcls):
+    registry[figcls.__name__]=figcls
+    return figcls
+
+
+
 class fig(object):
     def data(self):pass
     def style(self):pass
     def plot(self):pass
     def format(self):pass
     def save(self):pass
+    def path(self):
+        if not os.path.exists('figs'):
+            os.makedirs('figs')
+        pth=os.path.join('figs'
+                         ,self.__class__.__name__+'.pdf'
+        )
+        return pth
 
-
+    
 class anomtype(fig):
     T=200
     def style(self,po):
@@ -27,24 +43,38 @@ class anomtype(fig):
         self.format()
         return self.style(plt.plot(self.data())[0])
     def save(self):
-        self.plot().figure.savefig(
-            self.__class__.__name__+'.pdf'
-        )
+        self.plot().figure.savefig(self.path())
 
 
-
+@register
 class trivial(anomtype):
     def data(self):
         ys=np.random.rand(self.T)
         ys[int(self.T*.5)]=1.5
         return ys
 
+@register
 class context(anomtype):
     def data(self):
-        ys=np.sin(np.linspace(0,2*np.pi,self.T)*6)
+        ys=np.sin(np.linspace(0,2*np.pi,self.T)*8)
         ys[int(self.T*.5)]=.75
         return ys
+
     
+def gaussian(x, mu, sig):
+    n=-np.power(x - mu, 2.)
+    d=(2 * np.power(sig, 2.))
+    return np.exp(n/d)
+    
+@register
+class discord1(anomtype):
+    def data(self):
+        ys=np.sin(np.linspace(0,2*np.pi,self.T)*8)
+        mp=gaussian(np.linspace(-1,1,self.T),0,.1)
+        return np.multiply((mp+1),ys)
+
+
+
 def latexify(fig_width=None
              , fig_height=None
              ,ratio='golden'
