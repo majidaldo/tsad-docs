@@ -52,7 +52,7 @@ class anomtype(oneline,ts):#multiple inheritence! i LUV py!
 
 
 @register
-class trivial(anomtype):
+class point(anomtype):
     def data(self):
         ys=np.random.rand(self.T)
         ys[int(self.T*.5)]=1.5
