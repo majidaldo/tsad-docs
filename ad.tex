@@ -1,8 +1,7 @@
 
+\chapter[adts]{Anomaly Detection in Time Series}
 
-\chapter[Anomaly Detection in Time Series]{Anomaly Detection in Time Series}
-
-\section[Introduction]{Introduction}
+\section[adintro]{Introduction}
 
 The goal of this chapter is to show that the solution to the general problem of anomaly detection in time series is difficult. A typical general framework for anomaly detection in time series is explained with two advanced solutions as examples and their issues. The proposed solution, explained later, fits into the framework providing a basis for comparison.
 
@@ -13,9 +12,9 @@ Solutions have been fragmented across a variety of application domains such as a
 Furthmore, adding to the difficulty of comparing solutions, the mechanics of anomaly detection have come from two disciplines: statistics and computer science. Solutions from statistics focus on mathematical rigor while solutions from computer science consider computational issues \cite{Gupta2013}.
 
 To focus the solution presented here, the problem will be stated as follows: given a finite time series $X$
- \[ X=\{X_1,X_2,\ldots,X_T\}\]
+ \[ X=\{X_1,X_2,X_t,\ldots,X_T\}\]
 \[  X \in \mathbb{R}^n \]
-where $T$ is the length of the sequence and $n$ is the number of variables $X$ can have, find points in which can be considered anomalous. This statement makes sense only when anomlous points are a small part of the data.
+where $T$ is the length of the regularly spaced sequence and $n$ is the number of variables $X$ can have, find points in which can be considered anomalous. This statement makes sense only when anomlous points are a small part of the data.
 
 So elements of any solution to this problem must answer the following questions:
 
@@ -28,7 +27,59 @@ What measure is used to indicate how anomalous point(s) are?
 How is the measure tested to decide if it is anomalous?
 \end{enumerate}
 
+
+
+\section[adtypes]{Anomaly Types}
+
+The presense of different anomaly types can be a challenge for anomaly detection techniques. What follow are qualitative descriptions of anomalies classified in a way most relevent to this thesis. However, a taxonomy of anomalies will never encompass all anomalies as well as defining anomalies as points that are not normal.
+
+\subsection[ptanom]{Point Anomalies}
+
+Point anomalies are single points of interest.
+
+\textbf{Simple:} Simple point anomalies are just defined by their value. They are trivial to describe and detect. They are not of much interest in themselves but are mentioned because anomlaies in more complicated time series can be `converted' to resemble this simple type.
+
+\begin{figure}[H]
+  \centering
+  \includegraphics{figs/trivial.pdf}
+  \caption{Simple Point Anomaly}
+\end{figure}
+
+
+\textbf{Context:} Some anomalies are defined within a context. In Figure \ref{fig:contextanom}, the anomalous point's value is within the range of the overall time series. But if the cyclic nature of the series were removed, the anomaly is readily detected (`converted' to a simple point anomaly).
+
+\begin{figure}[H]
+  \centering
+  \includegraphics{figs/context.pdf}
+  \caption{Anomaly in a Periodic Context}
+  \label{fig:contextanom}
+\end{figure}
+
+
+\subsection{Discord}
+
+Anomalies over subsequences are called discords \cite{Cheboli2010}. In Figure \ref{fig:perdiscordanom}, about two cycles in a periodic time series are unlike the other cycles. The repeated units do not have to be periodic as in Figure \ref{fig:aperdiscordanom}. 
+
+\begin{figure}[H]
+  \centering
+  \includegraphics{figs/discord_per.pdf}
+  \caption{Discord Anomaly in a Periodic Time Series}
+  \label{fig:perdiscordanom}
+\end{figure}
+
+\begin{figure}[H]
+  \centering
+  \includegraphics{figs/discord_aper.pdf}
+  \caption{Discord Anomaly in an Aperiodic Time Series}
+  \label{fig:aperdiscordanom}
+\end{figure}
+
+\subsection{Multivariate}
+
+Multivariate time series add another element of complication for detecting anomalies in them and are not a focus of the thesis. \cite{Cheboli2010} classifies multivariate time series according to a combination of periodicity and synchronicity: Variables in a time series can be synchronous and periodic, syncronous and aperiodic, asynchronous and periodic, asyncronous and aperiodic. Therefore, any deviation from these properties are anomalies.
+
 %%% Local Variables:
 %%% mode: latex
 %%% TeX-master: "thesis"
 %%% End:
+
