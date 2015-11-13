@@ -39,7 +39,7 @@ class ts(fig):
     def format(self):
         latexify(6,ratio=.333) #w,r=h*w
     
-class anomtype(oneline,ts):
+class anomtype(oneline,ts):#multiple inheritence! i LUV py!
     T=500
     def style(self,po):
         plt.setp(po,linewidth=1)
