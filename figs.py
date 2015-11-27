@@ -76,7 +76,7 @@ class discord_per(anomtype):#_periodic
     def data(self):
         ys=np.sin(np.linspace(0,2*np.pi,self.T)*8)
         mp=gaussian(np.linspace(-1,1,self.T),0,.1)
-        return np.multiply((mp+1),ys)
+        return np.multiply((-.5*mp+1),ys)
 
 @register
 class discord_aper(anomtype):
