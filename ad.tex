@@ -167,12 +167,11 @@ Another issue to consider is the similarity of the arrangment of time series `po
 
 However, a recent empirical study \cite{Wang2013} suggests that, in general, there is little to differentiate between numerous time series representations. Only spectral transformations applied to periodic series showed some advantage but only in certain cases.
 
-%%% Local Variables:
-%%% mode: latex
-%%% TeX-master: "thesis"
-%%% End:
-
 \subsection[adtechnique]{Detection Technique}
+
+Discussion of detection techniques are discussed as a separate chapter.
+
+\chapter[adtechnique]{Detection Technique}
 
 The application of anomaly detection in a wide variety of application domains have led to the development of numerous detection techniques. Each of these applications defines anomalies in a different way;  some  may only be interested in single anomalous points while others are more concerned about anomalous subsquences. Furthermore, techniques are developed drawing on theory from statistics, machine learning, data mining, information theory, and spectral theory.
 
@@ -200,10 +199,44 @@ This leaves model-based techniques and proximity-based techniqes as potential so
 Obviously a good model is needed as well; recurrent neural networks will be introduced in the next chapter. However, proximity-based solutions are explored in this chapter as a benchmark for comparison as they are well-studied and have had numerous successful applications. Also, the hidden markov model is introduced as an example of model-based solutions in this chapter as another benchmark.
 
 
+\section[adprox]{Proximity}
+
+As previously mentioned, proximity-based techniques map time series as points of dimention $w$ in some space using some distance measure. The distance measure is used to evaluate how close a test time series is to others; anomalous time series are those that a far (dissimilar) from those considered normal.
+
+This the implies that the time series `points' are arranged in a certain way in the space. In two dimensions, the simplest distribution is portrayed in Figure \ref{fig:simple_dist}. Normal points, $\mathcal{N}_1$, are somewhat clustered. To test whether $p_1$ is an anomaly, it is easy to see, and calculate, that point $p_1$'s nearest neighbor is larger than the nearest neighbor distances of all other points.
+
+\begin{figure}[H]
+  \centering
+  \includegraphics{figs/simple_dist.pdf}
+  \caption{Simple Anomaly Distribution}
+  \label{fig:simple_dist}
+\end{figure}
+
+Practically, this idealization never occurs. It is not as simple to distinguish $p_1$ and $p_2$ from $\mathcal{N}_1$ and $\mathcal{N}_2$ in the situations depicted in Figure \ref{fig:hard_dist}.
+
+\begin{figure}[H]
+  \centering
+  \begin{subfigure}[H]{2in}
+    \includegraphics{figs/hard1_dist.pdf}
+    \caption{}
+    \label{fig:hard1_dist}
+  \end{subfigure}
+  \begin{subfigure}[H]{2in}
+    \includegraphics{figs/hard2_dist.pdf}
+    \caption{}
+    \label{fig:hard2_dist}
+  \end{subfigure}
+  \caption{Complex Anomaly Distribution}
+  \label{fig:hard_dist}
+\end{figure}
+
+Having complex distributions is the purview of anomaly detection in general and not a problem particular to time series data. However, issues influenced by the temporal nature of the data will the focus of the next two subsections.
+
+\subsection{Distance Measures}
 
 
 
-
-
-
-
+%%% Local Variables:
+%%% mode: latex
+%%% TeX-master: "thesis"
+%%% End:
