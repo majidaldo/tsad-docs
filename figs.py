@@ -1,6 +1,7 @@
 import os
 
 import numpy as np
+
 import seaborn as sns
 import matplotlib
 import matplotlib.pyplot as plt
@@ -28,7 +29,8 @@ class fig(object):
         )
         return pth
 
-
+# ts anomaly example figs
+    
 class oneline(fig):
     def plot(self):
         fig().plot();
@@ -54,6 +56,7 @@ class anomtype(oneline,ts):#multiple inheritence! i LUV py!
 @register
 class trivial(anomtype):
     def data(self):
+        np.random.seed(123)
         ys=np.random.rand(self.T)
         ys[int(self.T*.5)]=1.5
         return ys
@@ -88,6 +91,84 @@ class discord_aper(anomtype):
         return gs+g(.5,s=.0025)
 
     
+# clustering figs
+
+class xy(fig):
+    def plot(self,**kwargs):
+        #fig().plot()
+        self.format()
+        return self.style(plt.plot(*self.data(),**kwargs)[0])
+    
+
+def clusterdata(x,y,n=10,cv=[[.008,0],[0,0.008]]):
+    mn=[x,y]
+    np.random.seed(1999)
+    return np.random.multivariate_normal(mn,cv,n).T
+
+
+class cluster(xy):
+    def style(self,po,**kwargs):
+        plt.setp(po,linestyle='none',markersize=4,**kwargs)
+        po.axes.get_xaxis().set_ticklabels([])
+        po.axes.get_yaxis().set_ticklabels([])
+        plt.tight_layout(pad=0)
+        return po  
+    def format(self):
+        latexify(2,ratio=1) #w,r=h*w
+
+
+class densell(cluster):
+    def data(self): return clusterdata(.25,.25,30)
+class apt(cluster):
+    def data(self): return [[.25],[.8]]
+
+class clusters(cluster):
+    clusters=None
+    def plot(self):
+        for acc,stl,nt in self.clusters:
+            co=acc()
+            p=co.plot(**stl)
+            xy=np.array((np.median(p.get_xdata())
+                         ,.0+np.max(p.get_ydata())))
+            plt.annotate(nt,xy
+                         ,xytext=(10,0)
+                         ,textcoords='offset points')
+        return p
+
+@register
+class simple_dist(clusters):
+    clusters=[(densell
+               ,{'color':'darkblue','marker':'o'}
+               ,'$\mathcal{N}_1$')
+              ,(apt
+                ,{'color':'darkblue','marker':'^'}
+                ,'$p_1$')]
+    
+class apt2(cluster):
+    def data(self): return [[.27],[.7]]
+
+
+@register
+class hard1_dist(clusters):
+    clusters=simple_dist.clusters[:]\
+              +[(apt2
+                 ,{'color':'darkblue','marker':'^'}
+                 ,'$p_2$')]
+
+class sparse(cluster):
+    def data(self):
+        return clusterdata(1.5,2
+                           ,15
+                           ,[[.2,0],[0,.2]])
+
+@register
+class hard2_dist(clusters):
+    clusters=hard1_dist.clusters[:]\
+              +[(sparse
+                 ,{'color':'darkblue','marker':'s'}
+                 ,'$\mathcal{N}_2$')]
+    
+#----    
 def latexify(fig_width=None
              , fig_height=None
              ,ratio='golden'
@@ -166,4 +247,4 @@ if __name__=='__main__':
     if fignm=='all': fignm=registry.keys()
     else: fignm=[fignm]
     
-    for afn in fignm: eval(afn+'().save()');
+    for afn in fignm: plt.close(); eval(afn+'().save()');
