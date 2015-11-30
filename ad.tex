@@ -105,6 +105,7 @@ The procedure is rather straightforward. But, the process of finding what is nor
 \end{enumerate}
 
 \subsection{Sample Extraction}
+\label{sec:adsample}
 
 Many instances of data are needed to inform what is normal. So, subsequences need to be extracted from a (long) sequence.
 
@@ -149,7 +150,7 @@ However, by introduing a large enough hop, anomalies could be missed. Consider t
   \label{tbl:hop}
 \end{table}
 
-Another issue that needs to be considered when working with windows is that the window size must be large enough to capture an anomaly. Consider the sequence \emph{aaabbbccccaabbbcccaaabbbccc} where the fourth \emph{c} is anomalous. The window width must be at least 4 to capture the fourth \emph{c}. 
+Another issue that needs to be considered when working with windows is that the window size must be large enough to capture an anomaly. Consider the sequence \emph{aaabbbccccaabbbcccaaabbbccc} where the fourth \emph{c} is anomalous. The window width must be at least 4 to capture the fourth \emph{c}. In other words, the window size must be on the order of the anomalous behaviour.
 
 Now given $\mathcal{X}$ for some $w$, the problem may be posed as a multivariate anomaly detection problem. In this setting, assuming that $X$ is univariate, samples of $\mathcal{X}$ correspond to $w$ variables. However, doing so largely ignores the temporal nature of $X$. These issues will be discussed within the forthcoming parts of this chapter.
 
@@ -169,7 +170,7 @@ However, a recent empirical study \cite{Wang2013} suggests that, in general, the
 
 \subsection[adtechnique]{Detection Technique}
 
-Discussion of detection techniques are discussed as a separate chapter.
+Choosing the anomaly detection technique is the final step in setting up an anomaly detection process. Discussion of detection techniques are discussed as a separate chapter to allow for more development.
 
 \chapter[adtechnique]{Detection Technique}
 
@@ -232,7 +233,51 @@ Practically, this idealization never occurs. It is not as simple to distinguish 
 
 Having complex distributions is the purview of anomaly detection in general and not a problem particular to time series data. However, issues influenced by the temporal nature of the data will the focus of the next two subsections.
 
-\subsection{Distance Measures}
+\subsection{Distance Measure}
+
+The choice of distance measure is crucial for anomaly detection because it captures some intuitive notion of similarity between a pair of time series. It is possible to use the `ordinary' Eucilidean distance \cite{Keogh2002} but it does not always capture the desired similarity between a pair of time series. The comparison between time series should be invariant to the following factors:
+
+\begin{description}
+
+\item[Different Lengths] \hfill \\
+
+Sometimes it is desirable to be able to compare sequences of different lengths. Compare the sequence, \emph{ababababab}, to a shorter one, \emph{abababa}. There is reason to believe that both are at least highly similar.
+
+\item[Skew] \hfill \\
+
+Consider the sequence \emph{abaababaaabaabab} and \emph{aaababaababaabab} where occurances of \emph{b} are padded by an unpredictable number of \emph{a}'s. The sequences can be considered similar even if they are not strictly periodic.
+
+Dynamic Time Warping (DTW) \cite{Keogh2002} is capable of identifying similarity in such scenarios by `warping' the sequences to minimize dissimilarity (DTW is also capable of comparing sequences of different lengths.)
+
+\item[Translation] \hfill \\
+
+Typically, sequences that are shifted in time are considered similar. For example, \emph{abababab} is similar to \emph{babababa}. Despite the sophistication of DTW, a warping transformation would not make these two sequences similar.  Cross-correlation is a similarity measure that can handle translations \cite{Protopapas2005}.
+
+\item[Amplitude] \hfill \\
+
+Sometimes it is desirable to ignore differences in amplitude even if two time series are otherwise similar. Distance measures are usually sensitive to differences in amplitude unless the time series are normalized \cite{Keogh2002}. % todo is it NEEDED??
+
+\end{description}
+
+So simple measures, like the Eucilidean distance, are not able to accomodate these factors. Howerver, recently, in a comprehensive study of similarity measures, \cite{Wang2013} finds that, in large data sets, the clustering accuracy of `elastic' measures, such as DTW, converges with that of the Eucilidean distance. Nonetheless, the advantage of using DTW, as well as other elastic measures, is maintained for smaller data sets.
+
+Furthermore, in addition to addressing the previously mentioned factors, the distance measure must be compatible with the time series representation \cite{Chakrabarti2002}. 
+
+
+\subsection{Window Width}
+
+Section \ref{sec:adsample} introduced the use of sliding windows to extract samples of some width (or size or length), $w$. Here, the effect of the choice of $w$ will be explained when combined with a distance measure.
+
+Also section \cite{sec:adsamples}, mentioned that $w$ should be, at least, on the order of the length of the expected anomaly. But when $w$ is too large the distance measure becomes less effective at measuring similarity because the proportion of the anomalous subsequence becomes small compared to $w$. Furthermore, pairs of points become more equidistant in high-dimensional space \cite{Hinneburg2000,Beyer1999} which makes distinguishing between time series difficult (though this could be mitigated by using a dimension-reducing transformation \cite{Keogh2001}).
+
+
+\subsection{Sliding Windows}
+
+The mere action of extracting samples with a sliding window (with a small $h$) can have a profound effect on the distribution of the samples in the space. The effects challenge assumptions about the organization of (sliding window) points for the task of anomaly detection.
+
+\cite{Keogh2005} demonstrates that anomalous anomalous points do not necessarily located in sparse space. Conversely, repeated patterns are not necessarily located in dense space \cite{kitaguchi2004extracting,Chiu2003,Bentley1997}.
+
+Furthermore, in a paper challenging the status quo, \cite{Keogh2004} makes the bold claim that clustering of time series with sliding windows is meaningless. It finds no similarity between clusters found with a sliding window ($h<<w$) and clusters found when the windows did not overlap ($h>w$) which invalidated the results of previously published papers. However, some constraints were identified that may allow some data sets to be clustered. But a decade later, the issue of clustering subsequences of time series is unresolved \cite{Zolhavarieh2014}.
 
 
 
