@@ -84,7 +84,7 @@ Multivariate \footnote{In this text, dimensionality of the time series will refe
 
 
 
-\section[adproc]{Detection Technique}
+\section{Procedure}
 
 
 In this section, a procedure to find anomalies in time series will be outlined to help answer the questions posed in the introduction of this chapter. The focus will be on issues related to time series as opposed to the general anomaly detection problem. However, there will be a focus on the issues related to solving the general problem of finding anomalies in (an arbitrary) time series as opposed to finding anomalies in a particular application domain. Also, computational issues will not be emphasized.
@@ -200,7 +200,8 @@ This leaves model-based techniques and proximity-based techniqes as potential so
 Obviously a good model is needed as well; recurrent neural networks will be introduced in the next chapter. However, proximity-based solutions are explored in this chapter as a benchmark for comparison as they are well-studied and have had numerous successful applications. Also, the hidden markov model is introduced as an example of model-based solutions in this chapter as another benchmark.
 
 
-\section[adprox]{Proximity}
+\section{Proximity}
+\label{sec:adproximity}
 
 As previously mentioned, proximity-based techniques map time series as points of dimention $w$ in some space using some distance measure. The distance measure is used to evaluate how close a test time series is to others; anomalous time series are those that a far (dissimilar) from those considered normal.
 
@@ -231,9 +232,12 @@ Practically, this idealization never occurs. It is not as simple to distinguish 
   \label{fig:hard_dist}
 \end{figure}
 
-Having complex distributions is the purview of anomaly detection in general and not a problem particular to time series data. However, issues influenced by the temporal nature of the data will the focus of the next two subsections.
 
-\subsection{Distance Measure}
+\subsection{Effects on Point Distribution}
+
+Having complex distributions is the purview of anomaly detection in general and not a problem particular to time series data. However, issues influenced by the temporal nature of the data will the focus of the next three subsections.
+
+\subsubsection{Distance Measure}
 
 The choice of distance measure is crucial for anomaly detection because it captures some intuitive notion of similarity between a pair of time series. It is possible to use the `ordinary' Eucilidean distance \cite{Keogh2002} but it does not always capture the desired similarity between a pair of time series. The comparison between time series should be invariant to the following factors:
 
@@ -264,14 +268,15 @@ So simple measures, like the Eucilidean distance, are not able to accomodate the
 Furthermore, in addition to addressing the previously mentioned factors, the distance measure must be compatible with the time series representation \cite{Chakrabarti2002}. 
 
 
-\subsection{Window Width}
+\subsubsection{Window Width}
 
 Section \ref{sec:adsample} introduced the use of sliding windows to extract samples of some width (or size or length), $w$. Here, the effect of the choice of $w$ will be explained when combined with a distance measure.
 
-Also section \cite{sec:adsamples}, mentioned that $w$ should be, at least, on the order of the length of the expected anomaly. But when $w$ is too large the distance measure becomes less effective at measuring similarity because the proportion of the anomalous subsequence becomes small compared to $w$. Furthermore, pairs of points become more equidistant in high-dimensional space \cite{Hinneburg2000,Beyer1999} which makes distinguishing between time series difficult (though this could be mitigated by using a dimension-reducing transformation \cite{Keogh2001}).
+Also section \ref{sec:adsamples}, mentioned that $w$ should be, at least, on the order of the length of the expected anomaly. But when $w$ is too large the distance measure becomes less effective at measuring similarity because the proportion of the anomalous subsequence becomes small compared to $w$. Furthermore, pairs of points become more equidistant in high-dimensional space \cite{Hinneburg2000,Beyer1999} which makes distinguishing between time series difficult (though this could be mitigated by using a dimension-reducing transformation \cite{Keogh2001}).
 
 
-\subsection{Sliding Windows}
+\subsubsection{Sliding Windows}
+\label{sec:sliding}
 
 The mere action of extracting samples with a sliding window (with a small $h$) can have a profound effect on the distribution of the samples in the space. The effects challenge assumptions about the organization of (sliding window) points for the task of anomaly detection.
 
@@ -279,7 +284,113 @@ The mere action of extracting samples with a sliding window (with a small $h$) c
 
 Furthermore, in a paper challenging the status quo, \cite{Keogh2004} makes the bold claim that clustering of time series with sliding windows is meaningless. It finds no similarity between clusters found with a sliding window ($h<<w$) and clusters found when the windows did not overlap ($h>w$) which invalidated the results of previously published papers. However, some constraints were identified that may allow some data sets to be clustered. But a decade later, the issue of clustering subsequences of time series is unresolved \cite{Zolhavarieh2014}.
 
+These findings place restrictions on selecting a proximity-based anomaly detection algorithm.
 
+
+\subsection{Data Classification}
+
+In this section, data classification techniques (that facilitate anomaly detection) will be discussed. The techniques are not particular to time series data. However, finding anomalous windows of time series data referred to as discord detection in literature.
+
+\subsubsection{Local versus Global Techniques}
+
+First it is instructive make a general note about how they work regardless of how they are classified.
+
+Proximity-based anomaly detection techniques can use a global context (all) data points or a local context to test whether a point is an anomaly. Going back to Figure \ref{fig:simple_dist}, it was mentioned that it is trivial to find the anomalous point using all data points. However, in \ref{fig:hard2_dist}, it is not trivial to distinguish $p1$ and $p_2$ as anomalous in this global view due to their proximity to $\mathcal{N}_1$. An anomaly detection approach that considers the (local) neighborhood of points $p_1$ and $p_2$ must be used.
+
+\subsection{Nearest-Neighbor Techniques}
+
+Nearest-neighbor techniques assume that normal points are in dense neighborhoods while anomalies are far from them.
+
+In the beginning of \ref{sec:adproxy}, it was noted how simple it is to determine that point $p_1$ in Figure \ref{fig:simple_dist} is anomalous. However, given the discussion about sliding windows in Section \ref{sec:sliding}, it is not as straightforward when dealing with data points generated from sliding windows.
+
+The problem comes from adjacent windows being close to each other in space. Consider the windows of width equal to 3 for the sequence \emph{abcabcXXXabcababc} \cite{Keogh2005} in Figure \ref{tbl:selfmatch}. Obviously, the subsequence \emph{XXX} stands out as the most anomalous after \emph{bab}. But \emph{XXX} has the nearest matches \emph{cXX} and \emph{XXa} one step away as can be seen in the subsequences generated by advancing a window on every step ($h=1$). This makes the subsequence \emph{bab} as more anomalous because is it different by two from its nearest match \emph{aba}. In contrast, when examining windows with no overlap ($h=3$), \emph{XXX} is far from all other subsequences.
+
+\begin{table}[h]
+  \centering
+  \begin{tabular}{|c|c|}
+    \hline
+    $h=1$ & $h=3$ \\
+    \hline
+    \hline
+    \emph{abc} & \emph{abc} \\
+    \emph{bca} & \\
+    \emph{cab} & \\
+    \hline
+    \emph{abc} & \emph{abc} \\
+    \emph{bcX} & \\
+    \emph{cXX} & \\
+    \hline
+    \emph{XXX} & \emph{XXX} \\
+    \emph{XXa} & \\
+    \emph{Xab} & \\
+    \hline
+    \emph{abc} & \emph{abc} \\
+    \emph{bca} & \\
+    \emph{cab} & \\
+    \hline
+    \emph{aba} & \emph{aba} \\ 
+    \emph{bab} & \\
+    \emph{abc} & \\
+    \hline
+  \end{tabular}
+  \caption{Windows of \emph{abcabcXXXabcababc}}
+  \label{tbl:selfmatch}
+\end{table}
+
+However, it is still possible to use overlapping windows to find subsequences like \emph{DDD}. The solution proposed is to use non-self matches as outlined in \cite{Keogh2005}. So when when calculating distances (similarity) to neighbors of \emph{XXX}, only those that are at least one window width away are considered. In this calculation, \emph{XXX} would not have any neighbors with \emph{X}.
+
+Furthermore, the solution in \cite{Keogh2005} improves upon the brute force discord search by employing a heuristic called HOT SAX: Heuristically Ordered Time series using Symoblic Aggregate approXimation. But the time series is discretized as part of its process.
+
+If the issues with sliding windows can be mitigated, it is possible to use anomaly detection techniques that are not specific to time series. Nearest-neighbor techniques can use either the $k$th nearest neighbor (kNN) distance or the relative density of a point in the calculation of its anomaly score.
+
+For example, the kNN distance can be used to identify that $p_1$ and $p_2$ are anomalies in Figure \ref{fig:hard1_dist}. By choosing, say, $k=4$, the fourth nearest neighbor of points $p_1$ and $p_2$ would be a point in \emph{far} away in $\mathcal{N}_1$. While the fourth nearest neighbor for a point in $\mathcal{N}_1$ is always a \emph{nearby} point within $\mathcal{N}_1$. 
+
+The HOT SAX technique was introduced as, what is essentially, a $k=1$ kNN technique. But it can be generalized to an arbitrary $k$ \cite{Keogh2007} \cite{Yankov2008}.
+
+However, kNN techniques cannot deal with data sets of varying density. Going back to Figure \ref{fig:hard1_dist}, if $\mathcal{N}_1$ were denser, so that distances between points in $\mathcal{N}_1$ were less than the distance between $p_1$ and $p_2$, then $k$ would only need to be equal to 2. Generally, $k$ would need to be equal to the number of anomalous points as long as the clustering of $\mathcal{N}_1$ is denser than the clustering of $p_k$. But since some distances between between pairs of points in $\mathcal{N}_1$ are similar to the distance between $p_1$ and $p_2$, $k$ has to be greater than 2. Furthermore, a further complication can be considered if another normal set of points, $\mathcal{N}_2$, is included as in Figure \ref{fig:hard2_dist}. Here, it is not simple to find a value of $k$ that would not distinguish $p_1$ and $p_2$ due to the varying densities in $\mathcal{N}_1$ and $\mathcal{N}_2$.
+
+But by using local density information, techniques based on the relative density of a point can mitigate this problem. For example, \cite{Breunig1999} defines a Local Outlier Factor (LOF) for a point that is the ratio of the average local density of its $k$ nearest neighbors to the local density of the point itself. The local density is defined as $k$ divided by the volume of the smallest hypersphere that contains $k$ nearest neighbors. In other words, a point is likely to be an anomaly if its neighbors are in dense regions while it is in a less dense region. Applied to Figure \ref{fig:hard2_dist}, the LOF for points in $\mathcal{N}_1$ and $\mathcal{N}_2$ is similar. But for points $p_1$ and $p_2$, if two nearest neighbors are considered, the second nearest neighbor would be the closest point in $\mathcal{N}_1$ where its local density is high compared to the local density of $p_1$ and $p_2$ resulting in a LOF that is higher than the LOF of points in $\mathcal{N}_1$ and $\mathcal{N}_2$. This is true for any $k>2$.
+
+In any case, nearest neighbor techniques rely on normal points being in denser regions. But given the discussion in \ref{sec:sliding} it is not clear how these techniques would be generally applicable to time series data.
+
+\cite{Chandola2009} provides a more thorough treatment.
+
+
+\subsection{Clustering Techniques}
+
+Clustering algorithms are used to group similar points. Typically they are not used to find anomalies but they can be adapted to do so if some assumptions are made.
+
+One assumption that could be made is to assume that normal points belong to clusters while anomalies do not. This requires algorithms that do not force all points to belong to a cluster such as the well-known DBSCAN \cite{Ester1996} algorithm where such points are considered noise. Still, such algorithms are optimized to find clusters. So anomalous points could incorrectly be included in a cluster.
+
+Another assumption that could be made resembles nearest neighbor technques; anomalous points are far from their nearest cluster's centroid while normal points are not. Any clustering algorithm could be used such as K-means \cite{Munz2007}. However, this assumption would misclassify anomalous points that form clusters themselves.
+
+A third assumption could be that normal points are in large and dense clusters while anomalous points are in small and sparse clusters. In similar fashion to LOF, described previously, a Cluster-Based Local Outlier Factor (CBLOF) was introduced in \cite{He2003}. But, again, given the discussion in \ref{sec:sliding} it is not clear how these techniques would be generally applicable to time series data.
+
+\cite{Chandola2009} provides a more thorough treatment.
+
+
+\section{Models}
+
+Instead of comparing a point to other points, like in proximity-based solutions, a point can be compared to what is expected from a model. 
+
+For example, Hidden Markov Models (HMM) are advanced sequence modelers and therefore can be used for anomaly detection \cite{Zhang2003,Qiao2002,qiao2002anomaly,Florez-Larrahondo2005}. To use in anomaly detection, first, a HMM maximizes the probability of a set of training data. Then the probability of a test instance is calculated for comparison. The comparison is only meaningful if the training data can be modeled by the hidden Markovian process.
+
+Moreover, sequence modelers typically require training examples of fixed length which restricts the `memory' of the model.
+
+
+\section{Conclusions} 
+
+Some general comments can be made regarding the strengths and weaknesses of general anomaly detection techniques as in Section 11 of \cite{Chandola2009} for example. However this does not provide any rigorous and objective evaluation. An objective evaluation is needed in order to select the most appropriate algorithm for the problem. In \cite{Chandola2010} and \cite{Chandola2008} some qualitative explanation is given for the performance of several time series anomaly detection technques over various data sets. Still, this does not objectively determine why one technique performs better.
+
+Exceptionally however, \cite{Schubert2014} outlines a theoretical framework for local outlier detection in which different methods are assessed in this common view. Perhaps surprisingly, different methods were found to be similar including those used in quite different application domains. Simliarly, \cite{knorr1997unified} unify anomalies identified based on some distance with anomalies identified based on a statistical model.
+
+For the techniques discussed in this text, a number of issues specific to time series data (as well as issues not specific to time series data) combine in the process of using a proximity-based (discriminative) technique for anomaly discussion. The choices of similarity measure, sliding window width, sliding window hop, and classification technique must be compatible. 
+
+The case is made for generative model-based solutions due to these complications. Models provide a better summary of data which gives it a robustness that is preferred for the task of anomaly detection. Given this preference, proximity-based methods would be preferrable if modeling the time series is difficult (disregarding computational issues).
+
+this guides the next discussion.
+
+% quick intro about hmm vs rnn? or leave it to next ch?
 
 %%% Local Variables:
 %%% mode: latex
