@@ -1,0 +1,17 @@
+
+\documentclass{standalone}
+
+\usepackage{pgf}
+\usepackage{tikz}
+\usetikzlibrary{arrows,automata,matrix}
+\usepackage[latin1]{inputenc}
+\begin{document}
+\begin{tikzpicture}[->,>=stealth'
+	,shorten >=0pt
+	,auto
+	,node distance=2.8cm,
+              semithick]
+  \tikzstyle{every state}=[minimum size={10pt+width("$x_{t-1}$")}]
+
+      \matrix (m) [matrix of nodes
+      ,row sep=.25in,column sep=.25in]

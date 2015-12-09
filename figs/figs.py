@@ -22,9 +22,9 @@ class fig(object):
     def save(self):
         self.plot().figure.savefig(self.path())
     def path(self):
-        if not os.path.exists('figs'):
-            os.makedirs('figs')
-        pth=os.path.join('figs'
+#        if not os.path.exists('figs'):
+#            os.makedirs('figs')
+        pth=os.path.join(''
                          ,self.__class__.__name__+'.pdf'
         )
         return pth
