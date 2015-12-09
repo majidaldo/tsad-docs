@@ -33,25 +33,25 @@
     \node[state](otp1) {$o^{(t+1)}$};
     \\
     % 5 hns
-    \node[state,dashed](hndm) {$h_n^{(\ldots)}$}; &
-    \node[state,dashed](hntm1) {$h_n^{(t-1)}$}; &
-    \node[state,dashed](hnt) {$h_n^{(t)}$}; &
-    \node[state,dashed](hntp1) {$h_n^{(t+1)}$}; &
-    \node[state,dashed](hndp) {$h_n^{(\ldots)}$};
+    \node[state,dashdotted](hndm) {$h_n^{(\ldots)}$}; &
+    \node[state,dotted](hntm1) {$h_n^{(t-1)}$}; &
+    \node[state,dotted](hnt) {$h_n^{(t)}$}; &
+    \node[state,dotted](hntp1) {$h_n^{(t+1)}$}; &
+    \node[state,dashdotted](hndp) {$h_n^{(\ldots)}$};
     \\
     % 5 h2s
-    \node[state](h2dm) {$h_2^{(\ldots)}$}; &
+    \node[state,dashed](h2dm) {$h_2^{(\ldots)}$}; &
     \node[state](h2tm1) {$h_2^{(t-1)}$}; &
     \node[state](h2t) {$h_2^{(t)}$}; &
     \node[state](h2tp1) {$h_2^{(t+1)}$}; &
-    \node[state](h2dp) {$h_2^{(\ldots)}$};
+    \node[state,dashed](h2dp) {$h_2^{(\ldots)}$};
     \\
     % 5 h1s
-    \node[state](h1dm) {$h_1^{(\ldots)}$}; &
+    \node[state,dashed](h1dm) {$h_1^{(\ldots)}$}; &
     \node[state](h1tm1) {$h_1^{(t-1)}$}; &
     \node[state](h1t) {$h_1^{(t)}$}; &
     \node[state](h1tp1) {$h_1^{(t+1)}$}; &
-    \node[state](h1dp) {$h_1^{(\ldots)}$}; 
+    \node[state,dashed](h1dp) {$h_1^{(\ldots)}$}; 
     \\
     % 3 xs
     &
@@ -63,37 +63,37 @@
   % left to right, top to bottom.
   % each layer outgoing and within itself arrows
   % minus ... 
-  \path [dashed] (hndm)  edge  node {$W_n$} (hntm1);
-  \path [      ] (h2dm)  edge  node {$W_2$} (h2tm1);
-  \path [      ] (h1dm)  edge  node {$W_1$} (h1tm1);
+  \path [dashdotted] (hndm)  edge  node {$W_n$} (hntm1);
+  \path [dashed] (h2dm)  edge  node {$W_2$} (h2tm1);
+  \path [dashed] (h1dm)  edge  node {$W_1$} (h1tm1);
   % t-1
   \path [      ] (ytm1)  edge  node {     } (Ltm1);
   \path [      ] (otm1)  edge  node {     } (Ltm1);
-  \path [dashed] (hntm1) edge  node {$V_n$} (otm1);
+  \path [dotted] (hntm1) edge  node {$V_n$} (otm1);
   \path [      ] (h2tm1) edge  node {$V_2$} (hntm1);
   \path [      ] (h1tm1) edge  node {$V_1$} (h2tm1);
   \path [      ] (xtm1)  edge  node {$U$}   (h1tm1);
-  \path [dashed] (hntm1) edge  node {$W_n$} (hnt);
+  \path [dotted] (hntm1) edge  node {$W_n$} (hnt);
   \path [      ] (h2tm1) edge  node {$W_2$} (h2t);
   \path [      ] (h1tm1) edge  node {$W_1$} (h1t);
   % t
   \path [      ] (yt)    edge  node {     } (Lt);
   \path [      ] (ot)    edge  node {     } (Lt);
-  \path [dashed] (hnt)   edge  node {$V_n$} (ot);
+  \path [dotted] (hnt)   edge  node {$V_n$} (ot);
   \path [      ] (h2t)   edge  node {$V_2$} (hnt);
   \path [      ] (h1t)   edge  node {$V_1$} (h2t);
   \path [      ] (xt)    edge  node {$U$}   (h1t);
-  \path [dashed] (hnt)   edge  node {$W_n$} (hntp1);
+  \path [dotted] (hnt)   edge  node {$W_n$} (hntp1);
   \path [      ] (h2t)   edge  node {$W_2$} (h2tp1);
   \path [      ] (h1t)   edge  node {$W_1$} (h1tp1);
   % t+1
   \path [      ] (ytp1)  edge  node {     } (Ltp1);
   \path [      ] (otp1)  edge  node {     } (Ltp1);
-  \path [dashed] (hntp1) edge  node {$V_n$} (otp1);
+  \path [dotted] (hntp1) edge  node {$V_n$} (otp1);
   \path [      ] (h2tp1) edge  node {$V_2$} (hntp1);
   \path [      ] (h1tp1) edge  node {$V_1$} (h2tp1);
   \path [      ] (xtp1)  edge  node {$U$}   (h1tp1);
-  \path [dashed] (hntp1) edge  node {$W_n$} (hndp);
+  \path [dotted] (hntp1) edge  node {$W_n$} (hndp);
   \path [      ] (h2tp1) edge  node {$W_2$} (h2dp);
   \path [      ] (h1tp1) edge  node {$W_1$} (h1dp);
 

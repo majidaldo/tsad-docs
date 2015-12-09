@@ -15,7 +15,7 @@
     \node[state](y) {$y$}; \\
     \node[state](L) {$L$}; \\
     \node[state](o) {$o$}; \\
-    \node[state,dashed](hn) {$h_n$}; \\
+    \node[state,dotted](hn) {$h_n$}; \\
     \node[state](h2) {$h_2$}; \\
     \node[state](h1) {$h_1$}; \\
     \node[state](x) {$x$}; \\
@@ -31,7 +31,7 @@
   (o) edge  node {} (L)
   (y) edge  node {} (L)
   ;
-  \path [dashed] 
+  \path [dotted] 
   (hn) edge  node {$V_n$} (o)
   (hn) edge [loop right] node {$W_n$} (hn)
   ;
