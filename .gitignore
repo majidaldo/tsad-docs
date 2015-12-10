@@ -1,0 +1,19 @@
+#latex
+*.log
+*.aux
+*.lot
+*.toc
+*.bbl
+*.blg
+*.lof
+
+#??
+*.bak
+*.part
+_*
+
+#emacs
+*~
+
+#these are generated so make an exception otherwise
+*.pdf
