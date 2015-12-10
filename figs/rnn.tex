@@ -1,39 +1,42 @@
-
 \documentclass{standalone}
-
 \usepackage{pgf}
 \usepackage{tikz}
+\input{../custom}
+
 \usetikzlibrary{arrows,automata,matrix}
 \usepackage[latin1]{inputenc}
 \begin{document}
-\begin{tikzpicture}[->,>=stealth',shorten >=0pt,auto,node distance=2.8cm,
+
+\begin{tikzpicture}[->,>=stealth'
+  ,shorten >=0pt
+  ,auto,node distance=2.8cm,
   semithick]
   \tikzstyle{every state}=[]
 
   \matrix (m) [matrix of nodes
   ,row sep=.25in,column sep=.25in] {
-    \node[state](y) {$y$}; \\
+    \node[state](y) {$\vc{y}$}; \\
     \node[state](L) {$L$}; \\
-    \node[state](o) {$o$}; \\
-    \node[state,dotted](hn) {$h_n$}; \\
-    \node[state](h2) {$h_2$}; \\
-    \node[state](h1) {$h_1$}; \\
-    \node[state](x) {$x$}; \\
+    \node[state](o) {$\vc{o}$}; \\
+    \node[state,dotted](hn) {$\vc{h}_n$}; \\
+    \node[state](h2) {$\vc{h}_2$}; \\
+    \node[state](h1) {$\vc{h}_1$}; \\
+    \node[state](x) {$\vc{x}$}; \\
   };
 
   \path
-  (x) edge    node {$U$} (h1)
-  (h1) edge [loop right] node {$W_1$} (h1)
-  (h2) edge [loop right] node {$W_2$} (h2)
-  (h1) edge  node {$V_1$} (h2)
-  (h1) edge  node {$V_1$} (h2)
-  (h2) edge  node {$V_2$} (hn)
-  (o) edge  node {} (L)
-  (y) edge  node {} (L)
+  (x)  edge   node            {$\mt{U}$}   (h1)
+  (h1) edge [loop right] node {$\mt{W}_1$} (h1)
+  (h2) edge [loop right] node {$\mt{W}_2$} (h2)
+  (h1) edge  node {}                       (h2)
+  (h1) edge  node {}                       (h2)
+  (h2) edge  node {}                       (hn)
+  (o)  edge  node {}                       (L)
+  (y)  edge  node {}                       (L)
   ;
   \path [dotted] 
-  (hn) edge  node {$V_n$} (o)
-  (hn) edge [loop right] node {$W_n$} (hn)
+  (hn) edge  node {$\mt{V}$} (o)
+  (hn) edge [loop right] node {$\mt{W}_n$} (hn)
   ;
   
 \end{tikzpicture}

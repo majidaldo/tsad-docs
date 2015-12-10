@@ -1,5 +1,5 @@
 \documentclass{standalone}
-
+\input{../custom}
 \usepackage{pgf}
 \usepackage{tikz}
 \usetikzlibrary{arrows,automata,matrix}
@@ -10,22 +10,23 @@
   ,auto
   ,node distance=2.8cm,
   semithick]
-  \tikzstyle{every state}=[minimum size={10pt+width("$x^{(t-1)}$")}]
+  \tikzstyle{every state}=[
+  minimum size={10pt+width("$x^{(t-1)}$")}]
 
   \matrix (m) [matrix of nodes
   ,row sep=.25in,column sep=.25in]
   {
     % 5 s's top row
-    \node[state,dashed](sd) {$s^{(\ldots)}$};	&
-    \node[state](stm1) {$s^{(t-1)}$};	 	&
-    \node[state](st) {$s^{(t)}$}; 		&
-    \node[state](stp1) {$s^{(t+1)}$};		&
-    \node[state,dashed](sd2) {$s^{(\ldots)}$}; 	\\
+    \node[state,dashed](sd) {$\vc{s}^{(\ldots)}$};&
+    \node[state](stm1) {$\vc{s}^{(t-1)}$};	&
+    \node[state](st) {$\vc{s}^{(t)}$}; 		&
+    \node[state](stp1) {$\vc{s}^{(t+1)}$};	&
+    \node[state,dashed](sd2) {$\vc{s}^{(\ldots)}$};\\
     % 3 xs btm
     &
-    \node[state](xtm1) {$x^{(t-1)}$}; 		&
-    \node[state](xt) {$x^{(t)}$}; 		&
-    \node[state](xtp1) {$x^{(t+1)}$} ;		\\
+    \node[state](xtm1) {$\vc{x}^{(t-1)}$}; 		&
+    \node[state](xt) {$\vc{x}^{(t)}$}; 		&
+    \node[state](xtp1) {$\vc{x}^{(t+1)}$} ;		\\
   };
   
   \path[dashed]  (sd) edge       node {} (stm1);

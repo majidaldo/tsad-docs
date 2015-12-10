@@ -1,4 +1,5 @@
 \documentclass[]{standalone}
+\input{../custom}
 
 \usepackage{pgf}
 \usepackage{tikz}
@@ -10,15 +11,16 @@
 	,auto
 	,node distance=2.8cm,
               semithick]
-  \tikzstyle{every state}=[minimum size={10pt+width("$x^{(t-1)}$")}]
+  \tikzstyle{every state}
+  =[minimum size={10pt+width("$x^{(t-1)}$")}]
 
   \matrix (m) [matrix of nodes
   ,row sep=.25in,column sep=.25in] {
     % 3 ys
     &
-    \node[state](ytm1) {$y^{(t-1)}$}; &
-    \node[state](yt) {$y^{(t)}$};    &
-    \node[state](ytp1) {$y^{(t+1)}$}; 
+    \node[state](ytm1) {$\vc{y}^{(t-1)}$}; &
+    \node[state](yt) {$\vc{y}^{(t)}$};    &
+    \node[state](ytp1) {$\vc{y}^{(t+1)}$}; 
     \\
     % 3 Ls
     &
@@ -28,75 +30,75 @@
     \\
     % 3 os
     &
-    \node[state](otm1) {$o^{(t-1)}$}; &
-    \node[state](ot) {$o^{(t)}$}; &
-    \node[state](otp1) {$o^{(t+1)}$};
+    \node[state](otm1) {$\vc{o}^{(t-1)}$}; &
+    \node[state](ot) {$\vc{o}^{(t)}$}; &
+    \node[state](otp1) {$\vc{o}^{(t+1)}$};
     \\
     % 5 hns
-    \node[state,dashdotted](hndm) {$h_n^{(\ldots)}$}; &
-    \node[state,dotted](hntm1) {$h_n^{(t-1)}$}; &
-    \node[state,dotted](hnt) {$h_n^{(t)}$}; &
-    \node[state,dotted](hntp1) {$h_n^{(t+1)}$}; &
-    \node[state,dashdotted](hndp) {$h_n^{(\ldots)}$};
+    \node[state,dashdotted](hndm) {$\vc{h}_n^{(\ldots)}$}; &
+    \node[state,dotted](hntm1) {$\vc{h}_n^{(t-1)}$}; &
+    \node[state,dotted](hnt) {$\vc{h}_n^{(t)}$}; &
+    \node[state,dotted](hntp1) {$\vc{h}_n^{(t+1)}$}; &
+    \node[state,dashdotted](hndp) {$\vc{h}_n^{(\ldots)}$};
     \\
     % 5 h2s
-    \node[state,dashed](h2dm) {$h_2^{(\ldots)}$}; &
-    \node[state](h2tm1) {$h_2^{(t-1)}$}; &
-    \node[state](h2t) {$h_2^{(t)}$}; &
-    \node[state](h2tp1) {$h_2^{(t+1)}$}; &
-    \node[state,dashed](h2dp) {$h_2^{(\ldots)}$};
+    \node[state,dashed](h2dm) {$\vc{h}_2^{(\ldots)}$}; &
+    \node[state](h2tm1) {$\vc{h}_2^{(t-1)}$}; &
+    \node[state](h2t) {$\vc{h}_2^{(t)}$}; &
+    \node[state](h2tp1) {$\vc{h}_2^{(t+1)}$}; &
+    \node[state,dashed](h2dp) {$\vc{h}_2^{(\ldots)}$};
     \\
     % 5 h1s
-    \node[state,dashed](h1dm) {$h_1^{(\ldots)}$}; &
-    \node[state](h1tm1) {$h_1^{(t-1)}$}; &
-    \node[state](h1t) {$h_1^{(t)}$}; &
-    \node[state](h1tp1) {$h_1^{(t+1)}$}; &
-    \node[state,dashed](h1dp) {$h_1^{(\ldots)}$}; 
+    \node[state,dashed](h1dm) {$\vc{h}_1^{(\ldots)}$}; &
+    \node[state](h1tm1) {$\vc{h}_1^{(t-1)}$}; &
+    \node[state](h1t) {$\vc{h}_1^{(t)}$}; &
+    \node[state](h1tp1) {$\vc{h}_1^{(t+1)}$}; &
+    \node[state,dashed](h1dp) {$\vc{h}_1^{(\ldots)}$}; 
     \\
     % 3 xs
     &
-    \node[state](xtm1) {$x^{(t-1)}$}; &
-    \node[state](xt) {$x^{(t)}$};    &
-    \node[state](xtp1) {$x^{(t+1)}$};
+    \node[state](xtm1) {$\vc{x}^{(t-1)}$}; &
+    \node[state](xt) {$\vc{x}^{(t)}$};    &
+    \node[state](xtp1) {$\vc{x}^{(t+1)}$};
     \\
   };
   % left to right, top to bottom.
   % each layer outgoing and within itself arrows
   % minus ... 
-  \path [dashdotted] (hndm)  edge  node {$W_n$} (hntm1);
-  \path [dashed] (h2dm)  edge  node {$W_2$} (h2tm1);
-  \path [dashed] (h1dm)  edge  node {$W_1$} (h1tm1);
+  \path [dashdotted] (hndm)  edge  node {$\mt{V}_n$} (hntm1);
+  \path [dashed] (h2dm)  edge  node {$\mt{V}_2$} (h2tm1);
+  \path [dashed] (h1dm)  edge  node {$\mt{V}_1$} (h1tm1);
   % t-1
   \path [      ] (ytm1)  edge  node {     } (Ltm1);
   \path [      ] (otm1)  edge  node {     } (Ltm1);
-  \path [dotted] (hntm1) edge  node {$V_n$} (otm1);
-  \path [      ] (h2tm1) edge  node {$V_2$} (hntm1);
-  \path [      ] (h1tm1) edge  node {$V_1$} (h2tm1);
-  \path [      ] (xtm1)  edge  node {$U$}   (h1tm1);
-  \path [dotted] (hntm1) edge  node {$W_n$} (hnt);
-  \path [      ] (h2tm1) edge  node {$W_2$} (h2t);
-  \path [      ] (h1tm1) edge  node {$W_1$} (h1t);
+  \path [dotted] (hntm1) edge  node {$\mt{V}$}   (otm1);
+  \path [      ] (h2tm1) edge  node {}      (hntm1);
+  \path [      ] (h1tm1) edge  node {}      (h2tm1);
+  \path [      ] (xtm1)  edge  node {$\mt{U}$}   (h1tm1);
+  \path [dotted] (hntm1) edge  node {$\mt{W}_n$} (hnt);
+  \path [      ] (h2tm1) edge  node {$\mt{W}_2$} (h2t);
+  \path [      ] (h1tm1) edge  node {$\mt{W}_1$} (h1t);
   % t
   \path [      ] (yt)    edge  node {     } (Lt);
   \path [      ] (ot)    edge  node {     } (Lt);
-  \path [dotted] (hnt)   edge  node {$V_n$} (ot);
-  \path [      ] (h2t)   edge  node {$V_2$} (hnt);
-  \path [      ] (h1t)   edge  node {$V_1$} (h2t);
-  \path [      ] (xt)    edge  node {$U$}   (h1t);
-  \path [dotted] (hnt)   edge  node {$W_n$} (hntp1);
-  \path [      ] (h2t)   edge  node {$W_2$} (h2tp1);
-  \path [      ] (h1t)   edge  node {$W_1$} (h1tp1);
+  \path [dotted] (hnt)   edge  node {$\mt{V}$}   (ot);
+  \path [      ] (h2t)   edge  node {}      (hnt);
+  \path [      ] (h1t)   edge  node {}      (h2t);
+  \path [      ] (xt)    edge  node {$\mt{U}$}   (h1t);
+  \path [dotted] (hnt)   edge  node {$\mt{W}_n$} (hntp1);
+  \path [      ] (h2t)   edge  node {$\mt{W}_2$} (h2tp1);
+  \path [      ] (h1t)   edge  node {$\mt{W}_1$} (h1tp1);
   % t+1
   \path [      ] (ytp1)  edge  node {     } (Ltp1);
   \path [      ] (otp1)  edge  node {     } (Ltp1);
-  \path [dotted] (hntp1) edge  node {$V_n$} (otp1);
-  \path [      ] (h2tp1) edge  node {$V_2$} (hntp1);
-  \path [      ] (h1tp1) edge  node {$V_1$} (h2tp1);
-  \path [      ] (xtp1)  edge  node {$U$}   (h1tp1);
+  \path [dotted] (hntp1) edge  node {$\mt{V}$}   (otp1);
+  \path [      ] (h2tp1) edge  node {}      (hntp1);
+  \path [      ] (h1tp1) edge  node {}      (h2tp1);
+  \path [      ] (xtp1)  edge  node {}      (h1tp1);
   % plus ...
-  \path [dotted] (hntp1) edge  node {$W_n$} (hndp);
-  \path [      ] (h2tp1) edge  node {$W_2$} (h2dp);
-  \path [      ] (h1tp1) edge  node {$W_1$} (h1dp);
+  \path [dotted] (hntp1) edge  node {$\mt{W}_n$} (hndp);
+  \path [      ] (h2tp1) edge  node {$\mt{W}_2$} (h2dp);
+  \path [      ] (h1tp1) edge  node {$\mt{W}_1$} (h1dp);
 
   
 \end{tikzpicture}
