@@ -173,21 +173,9 @@ train 1st one could help train the next?
 if you just do a sliding window, it def wont remember anything beyond
 size of win. so it requires user intervention.
 
-elman more useful i guess b/c it can capture more complex things
-coming from hidden state.
-
 next task:
 read on the difficulty of training rnn
 
-
-HF optimizaion quick intro:
-http://andrew.gibiansky.com/blog/machine-learning/hessian-free-optimization/
-
-HF for real-valued b/c we want twice diff
-
-want most automated way. don't want to impose
-
-structural damping incorporates like "memory units"?
 
 do the long term effect captured if they are outside the bptt?
 
@@ -257,3 +245,13 @@ compressiion
 
 mcomp package
 http://yahoolabs.tumblr.com/post/114590420346/a-benchmark-dataset-for-time-series-anomaly?utm_content=buffer2047a&utm_medium=social&utm_source=twitter.com&utm_campaign=buffer
+http://nikhilbuduma.com/2015/01/11/a-deep-dive-into-recurrent-neural-networks/
+three layers of optimization
+furutre: practical issue: reduce fidelity of ts w/o losing features
+future: multivariate
+perfect reproduction. identity function
+problem: assume validation set has no anomaly?
+argument for multiple lstm layers https://wiki.inf.ed.ac.uk/twiki/pub/CSTR/ListenTerm1201415/sak2.pdf
+they beat me to it!!! https://www.elen.ucl.ac.be/Proceedings/esann/esannpdf/es2015-56.pdf
+different lstms are about the same http://colah.github.io/posts/2015-08-Understanding-LSTMs/
+
