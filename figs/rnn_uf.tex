@@ -69,32 +69,32 @@
   \path [dashed] (h2dm)  edge  node {$\mt{V}_2$} (h2tm1);
   \path [dashed] (h1dm)  edge  node {$\mt{V}_1$} (h1tm1);
   % t-1
-  \path [      ] (ytm1)  edge  node {     } (Ltm1);
-  \path [      ] (otm1)  edge  node {     } (Ltm1);
+  \path [      ] (ytm1)  edge  node {     }      (Ltm1);
+  \path [      ] (otm1)  edge  node {     }      (Ltm1);
   \path [dotted] (hntm1) edge  node {$\mt{V}$}   (otm1);
-  \path [      ] (h2tm1) edge  node {}      (hntm1);
-  \path [      ] (h1tm1) edge  node {}      (h2tm1);
+  \path [      ] (h2tm1) edge  node {}           (hntm1);
+  \path [      ] (h1tm1) edge  node {}           (h2tm1);
   \path [      ] (xtm1)  edge  node {$\mt{U}$}   (h1tm1);
   \path [dotted] (hntm1) edge  node {$\mt{W}_n$} (hnt);
   \path [      ] (h2tm1) edge  node {$\mt{W}_2$} (h2t);
   \path [      ] (h1tm1) edge  node {$\mt{W}_1$} (h1t);
   % t
-  \path [      ] (yt)    edge  node {     } (Lt);
-  \path [      ] (ot)    edge  node {     } (Lt);
+  \path [      ] (yt)    edge  node {     }      (Lt);
+  \path [      ] (ot)    edge  node {     }      (Lt);
   \path [dotted] (hnt)   edge  node {$\mt{V}$}   (ot);
-  \path [      ] (h2t)   edge  node {}      (hnt);
-  \path [      ] (h1t)   edge  node {}      (h2t);
+  \path [      ] (h2t)   edge  node {}           (hnt);
+  \path [      ] (h1t)   edge  node {}           (h2t);
   \path [      ] (xt)    edge  node {$\mt{U}$}   (h1t);
   \path [dotted] (hnt)   edge  node {$\mt{W}_n$} (hntp1);
   \path [      ] (h2t)   edge  node {$\mt{W}_2$} (h2tp1);
   \path [      ] (h1t)   edge  node {$\mt{W}_1$} (h1tp1);
   % t+1
-  \path [      ] (ytp1)  edge  node {     } (Ltp1);
-  \path [      ] (otp1)  edge  node {     } (Ltp1);
+  \path [      ] (ytp1)  edge  node {     }      (Ltp1);
+  \path [      ] (otp1)  edge  node {     }      (Ltp1);
   \path [dotted] (hntp1) edge  node {$\mt{V}$}   (otp1);
-  \path [      ] (h2tp1) edge  node {}      (hntp1);
-  \path [      ] (h1tp1) edge  node {}      (h2tp1);
-  \path [      ] (xtp1)  edge  node {}      (h1tp1);
+  \path [      ] (h2tp1) edge  node {}           (hntp1);
+  \path [      ] (h1tp1) edge  node {}           (h2tp1);
+  \path [      ] (xtp1)  edge  node {$\mt{U}$}   (h1tp1);
   % plus ...
   \path [dotted] (hntp1) edge  node {$\mt{W}_n$} (hndp);
   \path [      ] (h2tp1) edge  node {$\mt{W}_2$} (h2dp);
