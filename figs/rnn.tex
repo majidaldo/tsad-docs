@@ -18,25 +18,25 @@
     \node[     ](y) {$\vc{y}$}; \\
     \node[state](L) {$L$}; \\
     \node[state](o) {$\vc{o}$}; \\
-    \node[state,dotted](hn) {$\vc{h}_n$}; \\
-    \node[state](h2) {$\vc{h}_2$}; \\
-    \node[state](h1) {$\vc{h}_1$}; \\
+    \node[state,dotted](sn) {$\vc{s}_n$}; \\
+    \node[state](s2) {$\vc{s}_2$}; \\
+    \node[state](s1) {$\vc{s}_1$}; \\
     \node[     ](x) {$\vc{x}$}; \\
   };
 
   \path
-  (x)  edge  node             {$\mt{W}_{xh_1}$}   (h1)
-  (h1) edge [loop right] node {$\mt{\mathcal{W}}_{h_1h_1}$} (h1)
-  (h2) edge [loop right] node {$\mt{\mathcal{W}}_{h_2h_2}$} (h2)
-  (h1) edge  node {}                              (h2)
-  (h1) edge  node {}                              (h2)
-  (h2) edge  node {}                              (hn)
-  (o)  edge  node {}                              (L)
-  (y)  edge  node {}                              (L)
+  (x)  edge  node             {$\mt{\st{W}}_{xs_1}$}   (s1)
+  (s1) edge [loop right] node {$\mt{\st{W}}_{s_1s_1}$} (s1)
+  (s2) edge [loop right] node {$\mt{\st{W}}_{s_2s_2}$} (s2)
+  (s1) edge  node {}                                   (s2)
+  (s1) edge  node {}                                   (s2)
+  (s2) edge  node {}                                   (sn)
+  (o)  edge  node {}                                   (L)
+  (y)  edge  node {}                                   (L)
   ;
   \path [dotted] 
-  (hn) edge  node {$\mt{W}_{h_no}$} (o)
-  (hn) edge [loop right] node {$\mt{\mathcal{W}}_{h_nh_n}$} (hn)
+  (sn) edge  node {$\mt{W}_{s_no}$}                    (o)
+  (sn) edge [loop right] node {$\mt{\st{W}}_{s_ns_n}$} (sn)
   ;
   
 \end{tikzpicture}
