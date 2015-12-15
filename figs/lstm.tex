@@ -1,0 +1,208 @@
+\documentclass{standalone}
+\usepackage{pgf}
+\usepackage{tikz}
+\input{../custom}
+
+\usetikzlibrary{
+  calc
+  ,arrows
+  ,matrix
+  ,fit
+}
+
+
+\usepackage[latin1]{inputenc}
+\begin{document}
+% todo put Ws1s2 ?
+
+\tikzstyle{op}=[circle,thin,draw,inner sep=0pt] %operation
+\tikzstyle{gt}=[rectangle,thick,draw,inner sep=5pt] %gate
+\tikzstyle{sqsh}=[circle,thick,draw,inner sep=3pt] %squash
+\tikzstyle{conc}=[circle,inner sep=1.25pt,fill=black] %concat 
+
+
+% \tikzset{
+%     triple/.style args={[#1] in [#2] in [#3]}{
+%         #1,preaction={preaction={draw,#3},draw,#2}
+%     }
+% } 
+
+\newlength\triplesep \newlength\triplelinewidth \setlength\triplesep{.5pt} \setlength\triplelinewidth{.5pt}
+\tikzset{trpl/.style={line width=\triplelinewidth,black, preaction={ preaction={draw,line width=2\triplesep+3\triplelinewidth,black}, draw,line width=2\triplesep+\triplelinewidth,white} } }
+
+\tikzset{dbl/.style={double,double distance=3pt}}
+
+\begin{tikzpicture}[->,>=stealth'
+  ,shorten >=0pt
+  ,auto
+  ,node distance=.25in,
+  semithick]
+
+  \matrix (m) [matrix of nodes
+  ,row sep=.25in,column sep=.25in
+  ,nodes={
+    anchor=center
+    ,line width=0mm}
+  ] {
+    &
+    &
+    &
+    &
+    & 
+    &
+    &
+    \node[](ht1) {$\vc{h_t}$}; &
+    &
+    \\
+    \node[](ctm1) {$\vc{c}_{t-1}$}; &
+    \coordinate[](ctm1taps); &
+    \node[op](mulct){$\odot$};&
+    &
+    \node[op](cplus){$+$};&
+    \coordinate[](cttape);&
+    &
+    \coordinate[](htxct);&
+    \node[](ct) {$\vc{c_t}$}; &
+    \\
+    &
+    &
+    &
+    &
+    \node[op](mulcp1){$\odot$};&
+    \coordinate[](otos);&
+    \coordinate[](otoe);&
+    &
+    &
+    \\
+    &
+    &
+    \node[gt](sigmaf) {$\sigma$};&
+    \node[gt](sigmai) {$\sigma$};&
+    \node[sqsh](tauc) {$\tau$};&
+    \node[gt](sigmao) {$\sigma$};&
+    \node[sqsh](tauh) {$\tau$};&
+    &
+    &
+    \\
+    \node[](htm1) {$\vc{h}_{t-1}$};& 
+    \coordinate[conc](htm1xt);&
+    &
+    &
+    \coordinate[](hxtau1); &
+    &
+    \node[op](mulh) {$\odot$};& 
+    &
+    \node[](ht) {$\vc{h}_{t}$};&
+    \\
+    &
+    \node[](xt) {$\vc{x}_{t}$};&
+    &
+    &
+    &
+    &
+    &
+    &
+    &
+    \\
+  };
+
+
+  % bounding box
+  \coordinate[](bne) at ($(ct)!.5!(ht1)$);
+  \coordinate[](bsw) at ($(xt)!.5!(htm1)$);
+   \node[draw, draw=lightgray,rounded corners   
+   ,fill=lightgray 
+   ,fill opacity=.2
+   ,fit=(bne)(bsw)
+   ,inner sep=0in]{}; 
+
+
+  %  lil func ins
+
+  % concatenation  for  x_t,h_t-1,ct-1
+  \coordinate[conc] (ctm1htm1xt) 
+  at ($(htm1xt)!.5!(sigmaf)$);
+  \coordinate[](ctm1tap) 
+  at ($(ctm1taps)!.5!(mulct)$);
+  \path[draw,-,rounded corners]
+  (ctm1) -- (ctm1tap) -- (ctm1htm1xt);
+  \path[draw,-,trpl,rounded corners]
+  (ctm1htm1xt) -| (sigmaf) ;
+  \path[draw,-,trpl,rounded corners]
+  (ctm1htm1xt) -| (sigmai) ;
+  \path[draw,-,double,rounded corners] 
+  (htm1xt) -| (ctm1htm1xt);
+
+  % concat for h_t-1,x_t
+  \path[draw,-,double,rounded corners] 
+  (htm1xt) -| (tauc);
+  \path[draw,-,rounded corners] 
+  (xt) -- (htm1xt);
+  \path[draw,-,rounded corners]
+  (htm1) --  (htm1xt);
+
+
+  % concat for x_t,h_t-1,ct-1
+  \coordinate[conc] (cthtm1xt) 
+  at ($(hxtau1)!.5!(sigmao)$);
+  \coordinate[](cttap)
+  at ($(cplus)!.5!(cttape)$);
+  \path[draw,-,rounded corners] 
+  (cplus) -- (cttap) -- (cthtm1xt);
+  \path[draw,-,double,rounded corners]
+  (htm1xt) -| (cthtm1xt);
+  \path[draw,-,trpl,rounded corners]
+  (cthtm1xt) -| (sigmao);
+
+
+  % lil func outs
+  
+  %ft
+  \path[draw,->,rounded corners] 
+  (sigmaf) 
+  edge [] node[very near start]{$\vc{f_t}$} 
+  (mulct);
+
+  %fi
+  \path[draw,->,rounded corners]
+  (sigmai)  |-
+  node[very near start]{$\vc{i_t}$}
+  (mulcp1);
+
+  % ot
+  \coordinate[](otobend)
+  at ($(otos)!.5!(otoe)$);
+  \path[draw,->,rounded corners]
+  (sigmao)  |-
+  node[very near start]{$\vc{o_t}$}
+  (otobend) |-
+  (mulh) 
+  ;
+
+
+  %ct
+  \path[draw,-,rounded corners]
+  (tauc) -- (mulcp1) -- (cplus);% -- (ct) ;
+  \path[draw,->,rounded corners]
+  (ctm1) -- (mulct) -- (cplus) -- (ct) ;
+ 
+  % ht 
+  %lil jumper
+  \filldraw[-
+  ,color=black
+  ,fill opacity=1
+  ,fill=lightgray!25]
+  ($(htxct)+(-.03in,0-.005in)$) arc (180:0:.03in); 
+
+  \path[draw,->,rounded corners]
+  (cplus) -| (tauh) -- (mulh) -- (ht); 
+  \path[draw,->,rounded corners]
+  (mulh) -| (ht1); 
+
+
+
+
+  
+\end{tikzpicture}
+
+\end{document}
