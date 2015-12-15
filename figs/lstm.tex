@@ -1,4 +1,4 @@
-\documentclass{standalone}
+\documentclass[tikz,border=0]{standalone} 
 \usepackage{pgf}
 \usepackage{tikz}
 \input{../custom}
@@ -40,8 +40,11 @@
 
   \matrix (m) [matrix of nodes
   ,row sep=.25in,column sep=.25in
+  ,inner sep=0.0in
+  , outer sep=0.0in
   ,nodes={
     anchor=center
+    ,inner sep=0.05in, outer sep=0in
     ,line width=0mm}
   ] {
     &
@@ -52,7 +55,6 @@
     &
     &
     \node[](ht1) {$\vc{h_t}$}; &
-    &
     \\
     \node[](ctm1) {$\vc{c}_{t-1}$}; &
     \coordinate[](ctm1taps); &
@@ -62,7 +64,7 @@
     \coordinate[](cttape);&
     &
     \coordinate[](htxct);&
-    \node[](ct) {$\vc{c_t}$}; &
+    \node[](ct) {$\vc{c_t}$}; 
     \\
     &
     &
@@ -72,7 +74,7 @@
     \coordinate[](otos);&
     \coordinate[](otoe);&
     &
-    &
+    
     \\
     &
     &
@@ -81,7 +83,6 @@
     \node[sqsh](tauc) {$\tau$};&
     \node[gt](sigmao) {$\sigma$};&
     \node[sqsh](tauh) {$\tau$};&
-    &
     &
     \\
     \node[](htm1) {$\vc{h}_{t-1}$};& 
@@ -92,11 +93,10 @@
     &
     \node[op](mulh) {$\odot$};& 
     &
-    \node[](ht) {$\vc{h}_{t}$};&
+    \node[](ht) {$\vc{h}_{t}$};
     \\
     &
     \node[](xt) {$\vc{x}_{t}$};&
-    &
     &
     &
     &
@@ -187,11 +187,11 @@
   (ctm1) -- (mulct) -- (cplus) -- (ct) ;
  
   % ht 
-  %lil jumper
+  %lil jumper. HACKY!
   \filldraw[-
   ,color=black
   ,fill opacity=1
-  ,fill=lightgray!25]
+  ,fill=lightgray!25] 
   ($(htxct)+(-.03in,0-.005in)$) arc (180:0:.03in); 
 
   \path[draw,->,rounded corners]
