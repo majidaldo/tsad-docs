@@ -28,8 +28,8 @@
 
   \path
   (x)  edge  node             {$\vc{\theta}_{xs_1}$}  (s1)
-  (s1) edge [loop right] node {$\vc{\theta}_{s_1s_1}$} (s1)
-  (s2) edge [loop right] node {$\vc{\theta}_{s_2s_2}$} (s2)
+  (s1) edge [loop right] node {$\vc{\theta}_{s_1s_1}\tm{-1}$} (s1)
+  (s2) edge [loop right] node {$\vc{\theta}_{s_2s_2}\tm{-1}$} (s2)
   (s1) edge  node {}                                 (s2)
   (s1) edge  node {}                                 (s2)
   (s2) edge  node {}                                 (sn)
@@ -38,7 +38,7 @@
   ;
   \path [dotted] 
   (sn) edge  node {$\vc{\theta}_{s_no}$}               (o)
-  (sn) edge [loop right] node {$\vc{\theta}_{s_ns_n}$} (sn)
+  (sn) edge [loop right] node {$\vc{\theta}_{s_ns_n}\tm{-1}$} (sn)
   ;
   
 \end{tikzpicture}
