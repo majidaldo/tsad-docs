@@ -29,14 +29,14 @@
     \node[     ](xtp1) {$\vc{x}^{(t+1)}$} ;		\\
   };
   
-  \path[dashed]  (sd) edge       node {} (stm1);
+  \path[dashed]  (sd) edge       node {$\vc{\theta}$} (stm1);
   \path 
   (xtm1) edge  node {} (stm1)
-  (stm1) edge       node {} (st)
+  (stm1) edge       node {$\vc{\theta}$} (st)
   (xt) edge  node {} (st)
-  (st) edge       node {} (stp1)
+  (st) edge       node {$\vc{\theta}$} (stp1)
   (xtp1) edge  node {} (stp1);
-  \path[dashed] (stp1) edge       node {} (sd2)
+  \path[dashed] (stp1) edge       node {$\vc{\theta}$} (sd2)
   ;
   
 \end{tikzpicture}

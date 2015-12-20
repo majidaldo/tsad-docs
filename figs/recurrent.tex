@@ -8,8 +8,8 @@
 \begin{document}
 \begin{tikzpicture}[->,>=stealth',shorten >=1pt,auto,node distance=2.8cm,
                     semithick]
-  \tikzstyle{every state}=[]
-
+  \tikzstyle{every state}=[
+  minimum size={10pt+width("$x^{(t-1)}$")}]
       \matrix (m) [matrix of nodes
       ,row sep=.25in,column sep=.25in] {
       \node[state](s) {$\vc{s}$}; \\
@@ -18,7 +18,7 @@
     
 
   \path (x) edge              node {} (s)
-        (s) edge [loop right] node {} (s);
+        (s) edge [loop right] node {$\vc{\theta}$} (s);
  
 \end{tikzpicture}
 

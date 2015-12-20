@@ -65,40 +65,40 @@
   % left to right, top to bottom.
   % each layer outgoing and within itself arrows
   % minus ... 
-  \path [dashdotted] (sndm)  edge  node {$\st{W}_{s_ns_n}$} (sntm1);
-  \path [dashed] (s2dm)  edge  node {$\st{W}_{s_2s_2}$}     (s2tm1);
-  \path [dashed] (s1dm)  edge  node {$\st{W}_{s_1s_1}$}     (s1tm1);
+  \path [dashdotted] (sndm)  edge  node {$\vc{\theta}_{s_ns_n}$} (sntm1);
+  \path [dashed] (s2dm)  edge  node {$\vc{\theta}_{s_2s_2}$}     (s2tm1);
+  \path [dashed] (s1dm)  edge  node {$\vc{\theta}_{s_1s_1}$}     (s1tm1);
   % t-1
   \path [      ] (ytm1)  edge  node {     }                 (Ltm1);
   \path [      ] (otm1)  edge  node {     }                 (Ltm1);
-  \path [dotted] (sntm1) edge  node {$\mt{W}_{s_ns_o}$}     (otm1);
+  \path [dotted] (sntm1) edge  node {$\vc{\theta}_{s_ns_o}$}     (otm1);
   \path [      ] (s2tm1) edge  node {}                      (sntm1);
   \path [      ] (s1tm1) edge  node {}                      (s2tm1);
-  \path [      ] (xtm1)  edge  node {$\st{W}_{xs_1}$}       (s1tm1);
-  \path [dotted] (sntm1) edge  node {$\st{W}_{s_ns_n}$}     (snt);
-  \path [      ] (s2tm1) edge  node {$\st{W}_{s_2s_2}$}     (s2t);
-  \path [      ] (s1tm1) edge  node {$\st{W}_{s_1s_1}$}     (s1t);
+  \path [      ] (xtm1)  edge  node {$\vc{\theta}_{xs_1}$}       (s1tm1);
+  \path [dotted] (sntm1) edge  node {$\vc{\theta}_{s_ns_n}$}     (snt);
+  \path [      ] (s2tm1) edge  node {$\vc{\theta}_{s_2s_2}$}     (s2t);
+  \path [      ] (s1tm1) edge  node {$\vc{\theta}_{s_1s_1}$}     (s1t);
   % t
   \path [      ] (yt)    edge  node {     }                 (Lt);
   \path [      ] (ot)    edge  node {     }                 (Lt);
-  \path [dotted] (snt)   edge  node {$\mt{W}_{s_ns_o}$}     (ot);
+  \path [dotted] (snt)   edge  node {$\vc{\theta}_{s_ns_o}$}     (ot);
   \path [      ] (s2t)   edge  node {}                      (snt);
   \path [      ] (s1t)   edge  node {}                      (s2t);
-  \path [      ] (xt)    edge  node {$\st{W}_{xs_1}$}       (s1t);
-  \path [dotted] (snt)   edge  node {$\st{W}_{s_ns_n}$}     (sntp1);
-  \path [      ] (s2t)   edge  node {$\st{W}_{s_2s_2}$}     (s2tp1);
-  \path [      ] (s1t)   edge  node {$\st{W}_{s_1s_1}$}     (s1tp1);
+  \path [      ] (xt)    edge  node {$\vc{\theta}_{xs_1}$}       (s1t);
+  \path [dotted] (snt)   edge  node {$\vc{\theta}_{s_ns_n}$}     (sntp1);
+  \path [      ] (s2t)   edge  node {$\vc{\theta}_{s_2s_2}$}     (s2tp1);
+  \path [      ] (s1t)   edge  node {$\vc{\theta}_{s_1s_1}$}     (s1tp1);
   % t+1
   \path [      ] (ytp1)  edge  node {     }                 (Ltp1);
   \path [      ] (otp1)  edge  node {     }                 (Ltp1);
-  \path [dotted] (sntp1) edge  node {$\mt{W}_{s_ns_o}$}     (otp1);
+  \path [dotted] (sntp1) edge  node {$\vc{\theta}_{s_ns_o}$}     (otp1);
   \path [      ] (s2tp1) edge  node {}                      (sntp1);
   \path [      ] (s1tp1) edge  node {}                      (s2tp1);
-  \path [      ] (xtp1)  edge  node {$\st{W}_{xs_1}$}       (s1tp1);
+  \path [      ] (xtp1)  edge  node {$\vc{\theta}_{xs_1}$}       (s1tp1);
   % plus ...
-  \path [dotted] (sntp1) edge  node {$\st{W}_{s_ns_n}$}     (sndp);
-  \path [      ] (s2tp1) edge  node {$\st{W}_{s_2s_2}$}     (s2dp);
-  \path [      ] (s1tp1) edge  node {$\st{W}_{s_1s_1}$}     (s1dp);
+  \path [dotted] (sntp1) edge  node {$\vc{\theta}_{s_ns_n}$}     (sndp);
+  \path [      ] (s2tp1) edge  node {$\vc{\theta}_{s_2s_2}$}     (s2dp);
+  \path [      ] (s1tp1) edge  node {$\vc{\theta}_{s_1s_1}$}     (s1dp);
 
   
 \end{tikzpicture}
