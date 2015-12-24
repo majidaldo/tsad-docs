@@ -14,10 +14,12 @@ Solutions have been fragmented across a variety of application domains such as c
 
 Furthmore, adding to the difficulty of comparing solutions, the mechanics of anomaly detection have come from two disciplines: statistics and computer science. Solutions from statistics focus on mathematical rigor while solutions from computer science consider computational issues \cite{Gupta2013}.
 
+% to do. use small \x and v for n. ..for multiVariate
+
 \cite{Gupta2013} offers a survey of of anomaly detection problems in a variety of settings such as streaming data, distributed data, and databases. To focus the solution presented here, the problem will be stated as follows: given a finite time series $X$
  \[ X=\{X_1,X_2,X_t,\ldots,X_T\}\]
-\[  X \in \mathbb{R}^n \]
-where $T$ is the length of the regularly spaced sequence and $n$ is the number of variables $X$ can have, find points in which can be considered anomalous. This statement makes sense only when anomlous points are a small part of the data. Furthermore, anomalies may not even be present.
+\[  X \in \mathbb{R}^v \]
+where $T$ is the length of the regularly spaced sequence and $v$ is the number of variables $X$ can have, find points in which can be considered anomalous. This statement makes sense only when anomlous points are a small part of the data. Furthermore, anomalies may not even be present.
 
 So elements of any solution to this problem must answer the following questions:
 

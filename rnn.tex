@@ -7,7 +7,7 @@ In the previous chapter, an argument was made for the use of models to for the p
 
 RNNs have acheived state-of-the-art performance in supervised tasks such as handwriting recognition \cite{Graves2009}, and speech recognition  \cite{Graves2013}. RNNs can also be trained unsupervised to generate  music  \cite{Boulanger-Lewandowski2012}, text \cite{Martens2011a,Graves2013b}, and handwriting \cite{Graves2013b}. Given these impressive feats, RNNs can be effectively used for anomaly detection in sequences \cite{Marchi2015,Malhotra2015}.
 
-Like HMMs, RNNs have hidden states. But, in contrast to HMMs, RNNs make a more efficient use of its hidden state \cite{ZacharyC.Lipton2015}. In a HMM, the hidden state depends only on the previous state. So to incorporate information about a window of previous states, the hidden state must grow exponentially large making them computationally impractical. While in RNNs, the state is shared over time; the hidden state of a RNN contains information from an arbitrarily long window. The next section will explain this.
+Like HMMs, RNNs have hidden states. But, in contrast to HMMs, RNNs make a more efficient use of its hidden state \cite{ZacharyC.Lipton2015}. In a HMM, the hidden state depends only on the previous state which must store possible configurations of the sequence. So to incorporate information about a window of previous states, the hidden state must grow exponentially large making them computationally impractical. While in RNNs, the state is shared over time; the hidden state of a RNN contains information from an arbitrarily long window. The next section will explain this.
 
 In addition, RNNs do not make a Markovian assumption. In fact, they are so general, that RNNs have been shown to be equivalent to finite state automata \cite{Minsky1967}, equivalent to turing machines \cite{Siegelmann1995}, and more powerful than turing machines \cite{Siegelmann1993} even.
 
@@ -53,30 +53,66 @@ It can be difficult to follow recurrent computations by looking at mathematical 
     \begin{center}
     \includegraphics[]{figs/recurrent.pdf}
     \end{center}
-    \caption{folded}
+    \caption{cyclic}
     \label{fig:recurrent}
   \end{subfigure}
   \begin{subfigure}[]{.79\textwidth}
     \begin{center}
     \includegraphics[]{figs/recurrent_uf.pdf}
     \end{center}
-    \caption{unfolded}
+    \caption{acyclic (unfolded)}
     \label{fig:recurrent_uf}
   \end{subfigure}
-  \caption{Recurrence}
+  \caption{Recurrence Graph Views}
   \label{fig:recurrence}
 \end{figure}
 
 
-\section{Basic RNN}
+\section{Basic Recurrent Neural Network}
 
-The functionality of a basic RNN resembles that of a traditional neural network with the addition of a shared hidden state over time.
-
-A RNN can be formulated to predict a sequence as follows:
+The functionality of a basic RNN resembles that of a traditional neural network with the addition of a state variable shared over time.
 
 
+The core RNN functionality can be formulated as Equations \ref{eqn:rnn} describe. Each equation represents a `layer' or `node' in the network.
+% no new para
+\begin{subequations}  
+  \label{eqn:rnn}
+  \begin{align}
+    \s\tm{t}&=
+              \mathrm{\tanh}(
+              \mt{W}_{ss}
+              \s\tm{t-1}
+              +
+              \mt{W}_{xs}
+              \x\tm{t}
+              +
+              \vc{b}_s
+              ) 
+              \label{eqn:rnns} \\ 
+    \vc{o}\tm{t}&=
+             \mt{W}_{so}
+             \s\tm{t}
+             +
+             \vc{b}_{o} \label{eqn:rnno}
+  \end{align}
+\end{subequations}
+\noindent 
+The output at time $t$, $\vc{o}\tm{t}$, depends on current state, $\s\tm{t}$, which, in turn, depends on the previous state, $\s\tm{t-1}$, and the current input, $\x\tm{t}$, through associated weight matrices, $\mt{W}$. The weight matrices are subscripted with two variables to associate an input with an output. The input variable is the first subscript while the output variable is the second. For example, $\mt{W}_{so}$ connects the input from $\s$ to output, $\vc{o}$. Also, bias vectors, $\vc{b}$ allow values to be adjusted additively (offset). Finally, the hyperbolic tangent, $\tanh$, provides a non-linearity that allows the RNN to summarize arbitrarily complex sequences.
 
-the abs time of an event is meaningless
+The output, $\vc{o}$, needs to be need to be compared to a `target', $\vc{y}$, through a loss function, $L$. For predicting sequences as targets, the mean squared error is a common choice for the loss function. Squared differences are summed and averaged over and the number of variables of the sequence resulting in a scalar as shown in Equation \ref{eqn:mse}.
+
+\begin{equation}
+  \label{eqn:mse}
+  L(\vc{o},\vc{y}) = \frac{1}{TV} \sum_t \sum_v(
+  \vc{o}\tm{t}_v - \vc{y}\tm{t}_v
+  )^2,
+\end{equation}
+\noindent
+$V$ and $T$ are the number of variables and the length of the sequences respectively indexed by $t$ and $v$ respectively.
+
+Equations \ref{eqn:mse} and \ref{eqn:rnn}, together, define the framework for a basic RNN. One way to enhance this is to `stack' states so that the output from one state is input into another state in the same time step. So the last, $n$th, layer produces $\vc{o}$.  There is evidence that stacking the state layers leads to the network being able to learn time series at multiple time scales \cite{Hermans2013} \cite{Pascanu2013a}.
+
+The stacking can be seen graphically in \ref{fig:rnn}.
 
 \begin{figure}[H]
   \centering
@@ -84,19 +120,89 @@ the abs time of an event is meaningless
     \begin{center}
     \includegraphics[]{figs/rnn.pdf}
     \end{center}
-    \caption{folded}
+    \caption{cyclic}
     \label{fig:rnn_f}
   \end{subfigure}
   \begin{subfigure}[]{.79\textwidth}
     \begin{center}
     \includegraphics[]{figs/rnn_uf.pdf}
     \end{center}
-    \caption{unfolded}
+    \caption{acyclic}
     \label{fig:rnn_uf}
   \end{subfigure}
-  \caption{Recurrence}
+  \caption{Recurrent Neural Network Graph Views}
   \label{fig:rnn}
 \end{figure}
+\noindent
+Bias terms are omitted for clarity but are included as elements in $\vc{\theta}$ along with elements from $\W$. The notation of $\vc{\theta}$ follows that of $\mt{W}$ but captures more variables by vectorizing each component for concatenation into a single vector. $\vc{\theta}_{ss} = (\W_{ss},\vc{b}_s)$, $\vc{\theta}_{xs} = (\W_{xs})$, and $\vc{\theta}_{so} = (\W_{so},\vc{b}_o)$ (mathematical operations to produce the vector are implied).
+
+Notice that the unfolded view allows one to see that information can flow through many paths in time and layers (horizontally and vertically respectively). So `depth' can be used to describe the number of operations in these two directions with depth in the time direction being typically much greater. This makes RNNs, among `deep learning' architectures, the deepest networks!
+
+
+\section{Training}
+
+%use s_(l)ayers. todo
+
+To train the network, the loss function is used to  minimize (optimized) an objective function given pairs of training examples, $(\x,\vc{y})$, by adjusting the parameters $\vc{\theta}$. Unfortunately, training neural networks in general, let alone recurrent neural networks, are challenging optimization and computational problems \cite{Blum1992}. However, a flavor of the relatively simple mini-batch stochastic gradient descent (SGD) has remained successful in training a variety of networks \cite{Bengio2012b} despite the availability of other, perhaps more sophisticated, optimization algorithms. %practical recs for training deep. todo 2014+ ref?
+
+In plain mini-batch SGD, parameters are updated with a `learning reate', $\alpha$, for a selected `mini-batch' example set (from the training set), $M$, according to Equation \ref{eqn:sgd} until a convergence critereon is met.
+
+\begin{equation}
+  \label{eqn:sgd}
+   \Delta \vc{\theta} =
+   -\alpha
+   \frac{1}{|M|} \sum_{(\vc{x}_m,\vc{y}_m) \in M}
+   \frac{\partial{L}(\vc{o}(\x_m;\vc{\theta}),\vc{y}_m)}
+   {\partial{\vc{\theta}}}
+\end{equation}
+%todo: make  summation bigger
+
+Unfortunately, RNNs can suffer acutely from the vanishing (and exploding) gradient problem which makes learning long range dependencies difficult \cite{Hochreiter,Bengio1994,Doya1992,Pascanu2013c}.
+
+The problem is understood through the calculation of $\partial{L}/\partial{\vc{W}_{ss}}$ for a `history' of $T$ points prior to $t$.
+An involved application of the (backpropagated) chain rule to the loss function using the \emph{basic} (unfolded) RNN defined in Equations \ref{eqn:rnn} leads to Equation \ref{eqn:dLdtheta}.
+
+\begin{equation}
+  \label{eqn:dLdtheta}
+  \frac{\partial{L}\tm{t}}{\partial{\vc{W}_{ss}}} = 
+  \sum_{i=0}^T
+  \frac{\partial{    L}\tm{ t}}{\partial{\vc{o}\tm{t}}}
+  \frac{\partial{\vc{o}}\tm{t}}{\partial{\vc{s}\tm{t}}}
+  \left(
+    \prod_{j=i+1}^{T}
+    \frac{\partial{\vc{s}}\tm{j}}{\partial{\vc{s}\tm{j-1}}}
+  \right)
+  \frac{\partial{\vc{s}}\tm{i}}{\partial{\vc{W}_{ss}}}
+\end{equation}
+\noindent
+Equation \ref{eqn:dldtheta} shows that there are multiplicative `chains' of differentials for each previous time step.
+
+
+%todo vector notation for W in  theta= ( ->W, .. ,...)
+
+draw chain
+
+then show ch10 ways to deal with them.
+most notable. lstm. HF opt. 
+
+1st order 2nd order 
+
+'Equilibrated adaptive learning rates for non-convex
+optimization' -rmsprop is good. sgd good but issue is just how to adjust weights.
+
+although second order. 1st order still competitive.
+
+
+lstm:
+CECs are
+the main reason why LSTM nets can learn to discover the importance of (and memorize) events that
+happened thousands of discrete time steps ago, while previous RNNs already failed in case of minimal
+time lags of 10 steps
+
+
+for detailed trning: 'How large should the batch size be for stochastic gradient descent?'
+
+
 
 %%% Local Variables:
 %%% mode: latex
