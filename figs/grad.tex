@@ -79,16 +79,16 @@
   \path[->,dashed] (L1) edge node {} (y1);
   %-0
   \path[->,dashed] (x0) edge node {} (s0);
-  \path[->,dashed] (s0) edge node {} (o0);
-  \path[->,dashed] (o0) edge node {} (L0);
+  \path[->,solid ] (s0) edge node {} (o0);
+  \path[->,solid ] (o0) edge node {} (L0);
   \path[->,dashed] (L0) edge node {} (y0);
   % horizontals
   %-3
-  \path[->,dashed] (Wss)  edge node {} (s4);
-  \path[->,dashed] (s4) edge node {} (s3);
-  \path[->,dashed] (s3) edge node {} (s2);
-  \path[->,dashed] (s2) edge node {} (s1);
-  \path[->,dashed] (s1) edge node {} (s0);
+  \path[->,solid ] (Wss)  edge node {} (s4);
+  \path[->,solid ] (s4) edge node {} (s3);
+  \path[->,solid ] (s3) edge node {} (s2);
+  \path[->,solid ] (s2) edge node {} (s1);
+  \path[->,solid ] (s1) edge node {} (s0);
 
 
 \tikzset{every edge/.append style={font=\Large}}
