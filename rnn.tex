@@ -134,7 +134,7 @@ The stacking can be seen graphically in \ref{fig:rnn}.
   \label{fig:rnn}
 \end{figure}
 \noindent
-Bias terms are omitted for clarity but are included as elements in $\vc{\theta}$ along with elements from $\W$. The notation of $\vc{\theta}$ follows that of $\mt{W}$ but captures more variables by vectorizing each component for concatenation into a single vector. $\vc{\theta}_{ss} = (\W_{ss},\vc{b}_s)$, $\vc{\theta}_{xs} = (\W_{xs})$, and $\vc{\theta}_{so} = (\W_{so},\vc{b}_o)$ (mathematical operations to produce the vector are implied).
+Bias terms are omitted for clarity but are included as elements in $\vc{\theta}$ along with elements from $\W$. The notation of $\vc{\theta}$ follows that of $\mt{W}$ but captures more variables by vectorizing each component for concatenation into a single vector. $\vc{\theta}_{ss} = (\vc{W}_{ss},\vc{b}_s)$, $\vc{\theta}_{xs} = (\vc{W}_{xs})$, and $\vc{\theta}_{so} = (\vc{W}_{so},\vc{b}_o)$ (mathematical operations to produce the vector are implied).
 
 Notice that the unfolded view allows one to see that information can flow through many paths in time and layers (horizontally and vertically respectively). So `depth' can be used to describe the number of operations in these two directions with depth in the time direction being typically much greater. This makes RNNs, among `deep learning' architectures, the deepest networks!
 
@@ -160,10 +160,10 @@ In plain mini-batch SGD, parameters are updated with a `learning reate', $\alpha
 Unfortunately, RNNs can suffer acutely from the vanishing (and exploding) gradient problem which makes learning long range dependencies difficult \cite{Hochreiter,Bengio1994,Doya1992,Pascanu2013c}.
 
 The problem is understood through the calculation of $\partial{L}/\partial{\vc{W}_{ss}}$ for a `history' of $T$ points prior to $t$.
-An involved application of the (backpropagated) chain rule to the loss function using the \emph{basic} (unfolded) RNN defined in Equations \ref{eqn:rnn} leads to Equation \ref{eqn:dLdtheta}.
+An involved application of the (backpropagated) differential chain rule to the loss function using the \emph{basic} (unfolded) RNN defined in Equations \ref{eqn:rnn} leads to Equation \ref{eqn:grad}.
 
 \begin{equation}
-  \label{eqn:dLdtheta}
+  \label{eqn:grad}
   \frac{\partial{L}\tm{t}}{\partial{\vc{W}_{ss}}} = 
   \sum_{i=0}^T
   \frac{\partial{    L}\tm{ t}}{\partial{\vc{o}\tm{t}}}
@@ -175,12 +175,18 @@ An involved application of the (backpropagated) chain rule to the loss function 
   \frac{\partial{\vc{s}}\tm{i}}{\partial{\vc{W}_{ss}}}
 \end{equation}
 \noindent
-Equation \ref{eqn:dldtheta} shows that there are multiplicative `chains' of differentials for each previous time step.
+Equation \ref{eqn:grad} shows that there are multiplicative `chains' of differentials for each preceding time step. 
 
+The computational graph in Figure \ref{fig:grad}, represents Equation \ref{eqn:grad} for $T=4$.
 
-%todo vector notation for W in  theta= ( ->W, .. ,...)
-
-draw chain
+\begin{figure}[H]
+  \centering
+  \includegraphics[]{figs/grad.pdf}
+  \caption{Gradient Calculation for a Basic RNN}
+  \label{fig:grad}
+\end{figure}
+\noindent
+Several quantities are distinguished. Dash-dotted lines are the independent inputs, $\x$, $\vc{y}$, and $\vc{W}$, to the loss function, $L$, while the dashed lines represent intermediate quantities in the graph. 
 
 then show ch10 ways to deal with them.
 most notable. lstm. HF opt. 
