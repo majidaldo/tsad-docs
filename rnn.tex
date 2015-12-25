@@ -160,6 +160,7 @@ In plain mini-batch SGD, parameters are updated with a `learning reate', $\alpha
 Unfortunately, RNNs can suffer acutely from the vanishing (and exploding) gradient problem which makes learning long range dependencies difficult \cite{Hochreiter,Bengio1994,Doya1992,Pascanu2013c}.
 
 The problem is understood through the calculation of $\partial{L}/\partial{\vc{W}_{ss}}$ for a `history' of $T$ points prior to $t$.
+%
 An involved application of the (backpropagated) differential chain rule to the loss function using the \emph{basic} (unfolded) RNN defined in Equations \ref{eqn:rnn} leads to Equation \ref{eqn:grad}.
 
 \begin{equation}
@@ -174,19 +175,30 @@ An involved application of the (backpropagated) differential chain rule to the l
   \right)
   \frac{\partial{\vc{s}}\tm{i}}{\partial{\vc{W}_{ss}}}
 \end{equation}
+%
 \noindent
 Equation \ref{eqn:grad} shows that there are multiplicative `chains' of differentials for each preceding time step. 
 
 The computational graph in Figure \ref{fig:grad}, represents Equation \ref{eqn:grad} for $T=4$.
-
+%
 \begin{figure}[H]
   \centering
   \includegraphics[]{figs/grad.pdf}
-  \caption{Gradient Calculation for a Basic RNN}
+  \caption{Partial derivative chain for a basic RNN for a history of 4 time steps (biases not shown)}
   \label{fig:grad}
 \end{figure}
+%
 \noindent
-Several quantities are distinguished. Dash-dotted lines are the independent inputs, $\x$, $\vc{y}$, and $\vc{W}$, to the loss function, $L$, while the dashed lines represent intermediate quantities in the graph. 
+Several quantities are distinguished. Dash-dotted lines are the independent inputs, $\x$, $\vc{y}$, and $\vc{W}_{ss}$, to the loss function, $L$, while the dashed lines represent intermediate quantities in the graph.
+%
+The path formed by the curved solid lines follows the chain rule to get one summand for $\partial{L}\tm{t}/\partial{\vc{W}_{ss}}$.
+%
+Dotted quantities are not involved in the calculation (for $T=4$).
+
+
+Now that the graph is associated with the equation, the origin of the vanishing granient can be seen.
+%
+The vanishing gradient is due to successive multiplications of the derivative of $\tanh$ which is bound in $(0,1]$ (Again, see \cite{Hochreiter,Bengio1994,Doya1992,Pascanu2013c} for details).
 
 then show ch10 ways to deal with them.
 most notable. lstm. HF opt. 
