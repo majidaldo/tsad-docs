@@ -39,7 +39,7 @@
   semithick]
 
   \matrix (m) [matrix of nodes
-  ,row sep=.25in,column sep=.25in
+  ,row sep=.35in,column sep=.35in
   ,inner sep=0.0in
   , outer sep=0.0in
   ,nodes={
@@ -54,9 +54,9 @@
     & 
     &
     &
-    \node[](ht1) {$\vc{h_t}$}; &
+    \node[](ht1) {$\vc{h}\tm{t}$}; &
     \\
-    \node[](ctm1) {$\vc{c}_{t-1}$}; &
+    \node[](ctm1) {$\vc{c}\tm{t-1}$}; &
     \coordinate[](ctm1taps); &
     \node[op](mulct){$\odot$};&
     &
@@ -64,7 +64,7 @@
     \coordinate[](cttape);&
     &
     \coordinate[](htxct);&
-    \node[](ct) {$\vc{c_t}$}; 
+    \node[](ct) {$\vc{c}\tm{t}$}; 
     \\
     &
     &
@@ -85,7 +85,7 @@
     \node[sqsh](tauh) {$\tau$};&
     &
     \\
-    \node[](htm1) {$\vc{h}_{t-1}$};& 
+    \node[](htm1) {$\vc{h}\tm{t-1}$};& 
     \coordinate[conc](htm1xt);&
     &
     &
@@ -93,10 +93,10 @@
     &
     \node[op](mulh) {$\odot$};& 
     &
-    \node[](ht) {$\vc{h}_{t}$};
+    \node[](ht) {$\vc{h}\tm{t}$};
     \\
     &
-    \node[](xt) {$\vc{x}_{t}$};&
+    \node[](xt) {$\vc{x}\tm{t}$};&
     &
     &
     &
@@ -160,13 +160,13 @@
   %ft
   \path[draw,->,rounded corners] 
   (sigmaf) 
-  edge [] node[very near start]{$\vc{f_t}$} 
+  edge [] node[very near start]{$\vc{f}\tm{t}$} 
   (mulct);
 
   %fi
   \path[draw,->,rounded corners]
   (sigmai)  |-
-  node[very near start]{$\vc{i_t}$}
+  node[very near start]{$\vc{i}\tm{t}$}
   (mulcp1);
 
   % ot
@@ -174,7 +174,7 @@
   at ($(otos)!.5!(otoe)$);
   \path[draw,->,rounded corners]
   (sigmao)  |-
-  node[very near start]{$\vc{o_t}$}
+  node[very near start]{$\vc{o}\tm{t}$}
   (otobend) |-
   (mulh) 
   ;
