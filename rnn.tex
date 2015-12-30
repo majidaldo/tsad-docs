@@ -1,3 +1,4 @@
+% go over ideas..not 
 
 \chapter[]{Recurrent Neural Networks}
 
@@ -93,11 +94,16 @@ The core RNN functionality can be formulated as Equations \ref{eqn:rnn} describe
              \mt{W}_{so}
              \s\tm{t}
              +
-             \vc{b}_{o} \label{eqn:rnno}
+             \vc{b}_{o}
+             \label{eqn:rnno}
   \end{align}
 \end{subequations}
 \noindent 
 The output at time $t$, $\vc{o}\tm{t}$, depends on current state, $\s\tm{t}$, which, in turn, depends on the previous state, $\s\tm{t-1}$, and the current input, $\x\tm{t}$, through associated weight matrices, $\mt{W}$. The weight matrices are subscripted with two variables to associate an input with an output. The input variable is the first subscript while the output variable is the second. For example, $\mt{W}_{so}$ connects the input from $\s$ to output, $\vc{o}$. Also, bias vectors, $\vc{b}$ allow values to be adjusted additively (offset). Finally, the hyperbolic tangent, $\tanh$, provides a non-linearity that allows the RNN to summarize arbitrarily complex sequences.
+
+A `size' can be specified that measures the capacity of $\s$; the dimension of $\s$ is a (free) parameter (obviously the dimensions of other quantities in Equation \ref{eqn:rnns} need to be compatible).
+%
+No size is associated with $\vc{o}$ because it is restricted by the dimension of a given output, $\vc{y}$ (read further).
 
 The output, $\vc{o}$, needs to be need to be compared to a `target', $\vc{y}$, through a loss function, $L$. For predicting sequences as targets, the mean squared error is a common choice for the loss function. Squared differences are summed and averaged over and the number of variables of the sequence resulting in a scalar as shown in Equation \ref{eqn:mse}.
 
@@ -134,7 +140,13 @@ The stacking can be seen graphically in \ref{fig:rnn}.
   \label{fig:rnn}
 \end{figure}
 \noindent
-Bias terms are omitted for clarity but are included as elements in $\vc{\theta}$ along with elements from $\W$. The notation of $\vc{\theta}$ follows that of $\mt{W}$ but captures more variables by vectorizing each component for concatenation into a single vector. $\vc{\theta}_{ss} = (\vc{W}_{ss},\vc{b}_s)$, $\vc{\theta}_{xs} = (\vc{W}_{xs})$, and $\vc{\theta}_{so} = (\vc{W}_{so},\vc{b}_o)$ (mathematical operations to produce the vector are implied).
+%
+Bias terms are omitted for clarity but are included as elements in $\vc{\theta}$ along with elements from $\W$.
+%
+The notation of $\vc{\theta}$ follows that of $\mt{W}$ but captures more variables by vectorizing each component for concatenation into a single vector.
+%
+$\vc{\theta}_{ss} = (\vc{W}_{ss},\vc{b}_s)$, $\vc{\theta}_{xs} = (\vc{W}_{xs})$, and $\vc{\theta}_{so} = (\vc{W}_{so},\vc{b}_o)$ (mathematical operations to produce the vector are implied).
+
 
 Notice that the unfolded view allows one to see that information can flow through many paths in time and layers (horizontally and vertically respectively). So `depth' can be used to describe the number of operations in these two directions with depth in the time direction being typically much greater. This makes RNNs, among `deep learning' architectures, the deepest networks!
 
@@ -152,7 +164,9 @@ In plain mini-batch SGD, parameters are updated with a `learning reate', $\alpha
    \Delta \vc{\theta} =
    -\alpha
    \frac{1}{|M|} \sum_{(\vc{x}_m,\vc{y}_m) \in M}
-   \frac{\partial{L}(\vc{o}(\x_m;\vc{\theta}),\vc{y}_m)}
+   \frac{\partial{L}(
+     \vc{o}%(\x_m;\vc{\theta})
+     ,\vc{y}_m)}
    {\partial{\vc{\theta}}}
 \end{equation}
 %todo: make  summation bigger
@@ -196,20 +210,167 @@ The path formed by the curved solid lines follows the chain rule to get one summ
 Dotted quantities are not involved in the calculation (for $T=4$).
 
 
-Now that the graph is associated with the equation, the origin of the vanishing granient can be seen.
+Now that the graph is associated with the equation, the origin of the vanishing granient can be seen;
 %
-The vanishing gradient is due to successive multiplications of the derivative of $\tanh$ which is bound in $(0,1]$ (Again, see \cite{Hochreiter,Bengio1994,Doya1992,Pascanu2013c} for details).
+the vanishing gradient is due to successive multiplications of the derivative of $\tanh$ which is bound in $(0,1]$ (Again, see \cite{Hochreiter,Bengio1994,Doya1992,Pascanu2013c} for details).
 
-then show ch10 ways to deal with them.
-most notable. lstm. HF opt. 
 
-1st order 2nd order 
+\cite{Bengio-et-al-2015-Book} (sec. 10.7) lists ways in which the problem can be mitigated by applying different RNN architectures or enhancing the optimization process.
+%
+For example, Hessian-free optimization \cite{Martens2010a} uses second order information that can make use of the ratio of small gradients to small curvature to more directly find optimal parameters.
+%
+\cite{Martens2011} uses Hessian-free optimization to train (a basic) RNN to achieve remarkable results.
+%
+However, this comes at a computational cost.
+%
+For practical reasons, it might be preferrable to use well-established SGD-based methods over second order methods \cite{Bengio2012,Dauphin} as long as the RNN architecture facilitates learning long range dependencies;
+%
+the Long Short Term Memory (LSTM) RNN \cite{Hochreiter1997} uses a `memory cell' to recall (past) information only when needed thereby working around the vanishing gradient problem.
 
-'Equilibrated adaptive learning rates for non-convex
-optimization' -rmsprop is good. sgd good but issue is just how to adjust weights.
 
-although second order. 1st order still competitive.
 
+
+\section{Long Short Term Memory}
+
+LSTM models have acheived impressive benchmarks recently.
+%
+Networks with LSTM elements have been used for
+text-to-speech synthesis \cite{Fan2014},
+language identification from speech \cite{Gonzalez-Dominguez2014},
+large-vocabulary speech recognition \cite{Sak2014},
+English-to-French translation  \cite{Sutskever2014},
+identifying non-verbal cues from speech \cite{Brueckner2014},
+Arabic handwriting recongition \cite{Bluche},
+image caption generation \cite{Vinyals2015},
+video to text description \cite{Venugopalan2014},
+and generating realistic talking heads \cite{Fan2015}.
+
+
+There are a few variants of LSTM but they all have a linear self-loop that gradients can flow through for a long time.
+%
+The equations describing the LSTM state involve significantly more steps than the basic RNN state equation, Equation \ref{eqn:rnn}.
+%
+So, the mathematical procedure for the LSTM state is presented with a figure.
+%
+The LSTM variant presented in Figure \ref{fig:lstmfig} is found in \cite{Graves2013c}.
+
+\begin{figure}[H]
+  \centering
+  \begin{subfigure}[]{\textwidth}
+    \begin{center}
+    \includegraphics[]{figs/lstm.pdf}
+    \end{center}
+    \caption{calculation flow diagram (biases omitted, inspired by \cite{Colah2015})}
+    \label{fig:lstm} 
+  \end{subfigure}
+  \begin{subfigure}[]{\textwidth}
+    \begin{subequations}
+      \begin{align}
+        \vc{i}\tm{t} 
+        &= 
+          \sigma
+          (
+          \mt{W}_i \cdot
+          (
+          \x\tm{t},
+          \vc{h}\tm{t-1},
+          \vc{c}\tm{t-1}
+          )
+          +\vc{b}_i
+          ) 
+        \\
+        \vc{f}\tm{t} 
+        &=
+          \sigma
+          (
+          \mt{W}_f \cdot
+          (
+          \x\tm{t},
+          \vc{h}\tm{t-1},
+          \vc{c}\tm{t-1}
+          )
+          +\vc{b}_f
+          )
+        \\
+        \vc{c}\tm{t} 
+        &= 
+          \vc{f}\tm{t}   \odot \vc{c}\tm{t-1}
+          + \vc{i}\tm{t} \odot \tanh
+          (
+          \mt{W}_c \cdot
+          (
+          \x\tm{t},
+          \vc{h}\tm{t-1}
+          )
+          +\vc{b}_c
+          )
+        \\
+        \vc{o}\tm{t}
+        &=
+          \sigma
+          (
+          \mt{W}_o \cdot
+          (
+          \x\tm{t},
+          \vc{h}\tm{t-1},
+          \vc{c}\tm{t-1}
+          )
+          +\vc{b}_o
+          )
+        \\
+        \vc{h}\tm{t}
+        &=
+          \vc{o}\tm{t} \odot
+          \tanh
+          (
+          \vc{c}\tm{t}
+          )
+      \end{align}
+    \end{subequations}
+    \caption{equations}
+    \label{eqn:lstm}
+  \end{subfigure}
+  \caption{Long Short Term Memory Module}
+  \label{fig:lstmfig}
+\end{figure}
+\noindent
+%
+$\sigma$ stands for the logistic sigmoid function while $\tau$ stands for $\tanh$.
+%
+Elementwise multiplication is represented by the $\odot$ symbol.
+%
+For brevity and clarity, a (single) weight matrix combines the weights associated with more than one input to a single output (unlike the typical notation used in literature).
+%
+For example, $\mt{W}_i \cdot(\x\tm{t},\vc{h}\tm{t-1},\vc{c}\tm{t-1})=\mt{W}_{xi}\vc{x}\tm{t}+\mt{W}_{hi}\vc{h}\tm{t-1}+\mt{W}_{ci}\vc{c}\tm{t-1}$ where the input vectors, $\x$, $\vc{h}$, and $\vc{c}$ are concatenated into a vector  and weight matrices $\mt{W}_{xi}$, $\mt{W}_{hi}$, and $\mt{W}_{ci}$ are augmented horizontally. %todo.. chk dim in theanets code
+%
+In the diagram, the concatenation is represented by black dots combining single lines into more than one line.
+%
+Furthermore, $\mt{W}_{ci}$, $\mt{W}_{cf}$, and $\mt{W}_{co}$ are diagonal matrices so the number of weights associated with each multiplication by $\vc{c}\tm{t-1}$ equals $v$.
+
+The size that can be attributed to the LSTM module is the dimension of $\vc{i}$, $\vc{f}$, $\vc{c}$, $\vc{o}$, or $\vc{h}$ which are equal.
+
+
+Very briefly, the central element in a LSTM module is the `memory cell', $\vc{c}$, that works to keep information unchanged over many time steps (can be called a conveyor belt).
+%
+Information flow is controlled through input, forget, and output `gates', elements $\vc{i}$, $\vc{f}$, and $\vc{o}$ respectively.
+%
+The input gate 
+%
+The following enumeration conceptually outlines the operation of the LSTM module.
+
+\begin{enumerate}
+\item[1. ] sfd
+\end{enumerate}
+
+proc
+1
+2
+3
+
+
+math that shows lstm gets around vanishing grad
+
+notice how it can be stacked
 
 lstm:
 CECs are
@@ -218,8 +379,13 @@ happened thousands of discrete time steps ago, while previous RNNs already faile
 time lags of 10 steps
 
 
-for detailed trning: 'How large should the batch size be for stochastic gradient descent?'
 
+
+for detailed overall trning: 'How large should the batch size be for stochastic gradient descent?'
+
+
+'advances in optimizing recurrent nn' enhanced sgd still competitive or better
+'Equilibrated adaptive learning rates for non-convex optimization' -rmsprop is good. sgd good but issue is just how to adjust weights.
 
 
 %%% Local Variables:
