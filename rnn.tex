@@ -217,7 +217,7 @@ the vanishing gradient is due to successive multiplications of the derivative of
 
 \cite{Bengio-et-al-2015-Book} (sec. 10.7) lists ways in which the problem can be mitigated by applying different RNN architectures or enhancing the optimization process.
 %
-For example, Hessian-free optimization \cite{Martens2010a} uses second order information that can make use of the ratio of small gradients to small curvature to more directly find optimal parameters.
+For example, Hessian-free optimization \cite{Martens2010} uses second order information that can make use of the ratio of small gradients to small curvature to more directly find optimal parameters.
 %
 \cite{Martens2011} uses Hessian-free optimization to train (a basic) RNN to achieve remarkable results.
 %
@@ -230,7 +230,7 @@ the Long Short Term Memory (LSTM) RNN \cite{Hochreiter1997} uses a `memory cell'
 
 
 
-\section{Long Short Term Memory}
+\section{Long Short-Term Memory} %todo check hyphenations
 
 LSTM models have acheived impressive benchmarks recently.
 %
@@ -238,21 +238,25 @@ Networks with LSTM elements have been used for
 text-to-speech synthesis \cite{Fan2014},
 language identification from speech \cite{Gonzalez-Dominguez2014},
 large-vocabulary speech recognition \cite{Sak2014},
-English-to-French translation  \cite{Sutskever2014},
+English-to-French text translation  \cite{Sutskever2014},
 identifying non-verbal cues from speech \cite{Brueckner2014},
 Arabic handwriting recongition \cite{Bluche},
 image caption generation \cite{Vinyals2015},
 video to text description \cite{Venugopalan2014},
 and generating realistic talking heads \cite{Fan2015}.
+%
+Futhermore, LSTM RNNs have remained competitive against other RNN types \cite{Jozefowicz2015}.
 
 
 There are a few variants of LSTM but they all have a linear self-loop that gradients can flow through for a long time.
+%
+LSTM variants have not shown to differ greatly in performance \cite{Greff2015}.
 %
 The equations describing the LSTM state involve significantly more steps than the basic RNN state equation, Equation \ref{eqn:rnn}.
 %
 So, the mathematical procedure for the LSTM state is presented with a figure.
 %
-The LSTM variant presented in Figure \ref{fig:lstmfig} is found in \cite{Graves2013c}.
+The LSTM variant presented in Figure \ref{fig:lstmfig} is found in \cite{Graves2013b}.
 
 \begin{figure}[H]
   \centering
@@ -292,10 +296,9 @@ The LSTM variant presented in Figure \ref{fig:lstmfig} is found in \cite{Graves2
           +\vc{b}_f
           )
         \\
-        \vc{c}\tm{t} 
-        &= 
-          \vc{f}\tm{t}   \odot \vc{c}\tm{t-1}
-          + \vc{i}\tm{t} \odot \tanh
+        \vc{g}\tm{t}
+        &=
+          \tanh
           (
           \mt{W}_c \cdot
           (
@@ -305,6 +308,11 @@ The LSTM variant presented in Figure \ref{fig:lstmfig} is found in \cite{Graves2
           +\vc{b}_c
           )
         \\
+        \vc{c}\tm{t} 
+        &= 
+          \vc{f}\tm{t}   \odot \vc{c}\tm{t-1}
+          + \vc{i}\tm{t} \odot \vc{g}\tm{t}
+        \label{eqn:lstms}\\
         \vc{o}\tm{t}
         &=
           \sigma
@@ -330,7 +338,7 @@ The LSTM variant presented in Figure \ref{fig:lstmfig} is found in \cite{Graves2
     \caption{equations}
     \label{eqn:lstm}
   \end{subfigure}
-  \caption{Long Short Term Memory Module}
+  \caption{Long Short-Term Memory Module}
   \label{fig:lstmfig}
 \end{figure}
 \noindent
@@ -345,40 +353,60 @@ For example, $\mt{W}_i \cdot(\x\tm{t},\vc{h}\tm{t-1},\vc{c}\tm{t-1})=\mt{W}_{xi}
 %
 In the diagram, the concatenation is represented by black dots combining single lines into more than one line.
 %
-Furthermore, $\mt{W}_{ci}$, $\mt{W}_{cf}$, and $\mt{W}_{co}$ are diagonal matrices so the number of weights associated with each multiplication by $\vc{c}\tm{t-1}$ equals $v$.
-
-The size that can be attributed to the LSTM module is the dimension of $\vc{i}$, $\vc{f}$, $\vc{c}$, $\vc{o}$, or $\vc{h}$ which are equal.
+Furthermore, $\mt{W}_{ci}$, $\mt{W}_{cf}$, and $\mt{W}_{co}$ are diagonal matrices so the number of weights associated with each $\vc{c}$ equals the LSTM `size'.
 
 
-Very briefly, the central element in a LSTM module is the `memory cell', $\vc{c}$, that works to keep information unchanged over many time steps (can be called a conveyor belt).
+The size that can be attributed to the LSTM module is the dimension of $\vc{i}$, $\vc{f}$, $\vc{c}$, $\vc{g}$, $\vc{o}$, or $\vc{h}$ which are equal.
+
+
+Very briefly, the central element in a LSTM module is the `memory cell', $\vc{c}$, that works to keep information unchanged over many time steps (likened to a conveyor belt through time).
 %
 Information flow is controlled through input, forget, and output `gates', elements $\vc{i}$, $\vc{f}$, and $\vc{o}$ respectively.
 %
-The input gate 
+The input gate controls information into the memory cell.
 %
-The following enumeration conceptually outlines the operation of the LSTM module.
+The output gate controls when information should flow to the next time step.
+%
+The forget gate zeros out elements in the memory cell.
+%
+The gates make their decisions based on the input, $\x$, the `hidden' state, $\vc{h}$, and content already in the memory cell.
+%
+%g is a c candidate
 
-\begin{enumerate}
-\item[1. ] sfd
-\end{enumerate}
+%c has stuff nominally 0-1 while h has -1,1 behaves more like regular rnn
+% how c 0,1 if g can be -1,1
+% i can imagine if c had a 1. there would be a way for it to stay
+%things could be simpler in alt. to LSTMS!
+%original lstm paper to know whys of everything
 
-proc
-1
-2
-3
+% The following enumeration conceptually outlines the operation of the LSTM module.
+
+% \begin{enumerate}
+% \item[1. ] sfd
+% \end{enumerate}
+
+% proc
+% 1
+% 2
+% 3
+
+% math that shows lstm gets around vanishing grad
+
+Unlike the recurrence of the basic RNN (Equation \ref{eqn:rnns}), information can be kept for a long time in the recurrence chain of $\vc{s}$ (Equation \ref{eqn:lstms}). 
+%
+There is a way for information to propagate without successive multiplication of fractions (as in the derivative of $\tanh$).
 
 
-math that shows lstm gets around vanishing grad
-
-notice how it can be stacked
-
-lstm:
-CECs are
-the main reason why LSTM nets can learn to discover the importance of (and memorize) events that
-happened thousands of discrete time steps ago, while previous RNNs already failed in case of minimal
-time lags of 10 steps
+Note how the LSTM modules can be stacked (vertically) in similar fashion to the basic RNN.
+%
+The output of the lower module, $\vc{h}\tm{t}$, becomes the input, $\x\tm{t}$, of the upper module.
 
 
+% lstm:
+% CECs are
+% the main reason why LSTM nets can learn to discover the importance of (and memorize) events that
+% happened thousands of discrete time steps ago, while previous RNNs already failed in case of minimal
+% time lags of 10 steps
 
 
 for detailed overall trning: 'How large should the batch size be for stochastic gradient descent?'
