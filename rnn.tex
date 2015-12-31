@@ -392,12 +392,17 @@ The gates make their decisions based on the input, $\x$, the `hidden' state, $\v
 
 % math that shows lstm gets around vanishing grad
 
-Unlike the recurrence of the basic RNN (Equation \ref{eqn:rnns}), information can be kept for a long time in the recurrence chain of $\vc{s}$ (Equation \ref{eqn:lstms}). 
+Unlike the recurrence of the basic RNN (Equation \ref{eqn:rnns}), information can be kept for a long time in the recurrence chain of $\vc{c}$ (Equation \ref{eqn:lstms}). 
 %
-There is a way for information to propagate without successive multiplication of fractions (as in the derivative of $\tanh$).
+There is a way for information to propagate without successive multiplication of fractions (as in the derivative of $\tanh$):
+%
+Consider an element in (vector) $\vc{c}$ with a value of 1.
+%
+It can be retained indefinitely as long as the corresponding element in $\vc{f}$ is 1 and the corresponding element in $\vc{i}\tm{t}$ is 0.
+%
+In other words, the derivative is constant.
 
-
-Note how the LSTM modules can be stacked (vertically) in similar fashion to the basic RNN.
+Finally, note how the LSTM modules can be stacked (vertically) in similar fashion to the basic RNN.
 %
 The output of the lower module, $\vc{h}\tm{t}$, becomes the input, $\x\tm{t}$, of the upper module.
 
@@ -407,13 +412,6 @@ The output of the lower module, $\vc{h}\tm{t}$, becomes the input, $\x\tm{t}$, o
 % the main reason why LSTM nets can learn to discover the importance of (and memorize) events that
 % happened thousands of discrete time steps ago, while previous RNNs already failed in case of minimal
 % time lags of 10 steps
-
-
-for detailed overall trning: 'How large should the batch size be for stochastic gradient descent?'
-
-
-'advances in optimizing recurrent nn' enhanced sgd still competitive or better
-'Equilibrated adaptive learning rates for non-convex optimization' -rmsprop is good. sgd good but issue is just how to adjust weights.
 
 
 %%% Local Variables:
