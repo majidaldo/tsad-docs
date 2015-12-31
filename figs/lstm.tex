@@ -163,7 +163,7 @@
   edge [] node[very near start]{$\vc{f}\tm{t}$} 
   (mulct);
 
-  %fi
+  %it
   \path[draw,->,rounded corners]
   (sigmai)  |-
   node[very near start]{$\vc{i}\tm{t}$}
@@ -179,10 +179,16 @@
   (mulh) 
   ;
 
+  %gt
+  \path[draw,->,rounded corners]
+  (tauc)  --
+  node[very near start]{$\vc{g}\tm{t}$}
+  (mulcp1);
 
   %ct
   \path[draw,-,rounded corners]
-  (tauc) -- (mulcp1) -- (cplus);% -- (ct) ;
+  %(tauc) -- 
+  (mulcp1) -- (cplus);% -- (ct) ;
   \path[draw,->,rounded corners]
   (ctm1) -- (mulct) -- (cplus) -- (ct) ;
  
