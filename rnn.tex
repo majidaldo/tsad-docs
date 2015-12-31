@@ -396,9 +396,9 @@ Unlike the recurrence of the basic RNN (Equation \ref{eqn:rnns}), information ca
 %
 There is a way for information to propagate without successive multiplication of fractions (as in the derivative of $\tanh$):
 %
-Consider an element in (vector) $\vc{c}$ with a value of 1.
+Consider an element in (vector) $\vc{c}\tm{t-1}$ with a value of 1.
 %
-It can be retained indefinitely as long as the corresponding element in $\vc{f}$ is 1 and the corresponding element in $\vc{i}\tm{t}$ is 0.
+It can be retained indefinitely as long as the corresponding element in $\vc{f}\tm{t}$ is 1 and the corresponding element in $\vc{i}\tm{t}$ is 0.
 %
 In other words, the derivative is constant.
 
@@ -406,6 +406,8 @@ Finally, note how the LSTM modules can be stacked (vertically) in similar fashio
 %
 The output of the lower module, $\vc{h}\tm{t}$, becomes the input, $\x\tm{t}$, of the upper module.
 
+
+With such configurations, the next chapter will show how LSTM RNNs can be used to model time series to find anomalies.
 
 % lstm:
 % CECs are
