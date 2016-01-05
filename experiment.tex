@@ -1,11 +1,117 @@
-% experiment is different from conclusions
-
 \chapter[]{Anomaly Detection Using Recurrent Neural Networks}
 
 
-Chapters \ref{ch:ad} and \ref{ch:rnn}, separately, introduced anomaly detection in time series and recurrent neural networks as time series modelers. Now RNNs 
+\section{Introduction}
 
-in ch ad we talked about. in ch rnn we talked about
+Chapters \ref{ch:ad} and \ref{ch:rnn}, separately, introduced anomaly detection in time series and recurrent neural networks as time series modelers.
+%
+This chapter outlines a procedure for finding anomalies using RNNs with the goal of mitigating many of the problems associated with anomaly detection that were discussed in \ref{ch:ad}.
+%
+As much as possible, the same procedure is applied to some time series.
+
+
+The outlines describes:
+%
+\begin{description}
+%
+\item[sampling:] the time series used for training and its associated sampling process
+%
+\item[recurrent autoencoders:] the specific form of the RNN
+%
+\item[training:] the training algorithm used on the RNN
+%
+\item[Bayesian optimization:] the search for optimized parameters for the procedure
+%
+\end{description}
+
+
+
+\section{Sampling}
+
+
+Some time series with anomalies were chosen or generated to test the anomaly detection process.
+%
+While there is only one `master' time series to train on (in each test), the RNN needs to see many `samples' from the master time series.
+%
+The sliding window procedure, described in \ref{sec:adsample}, is used to get samples of some window length.
+%
+Additionally, since RNNs do not need a fixed window, sliding windows are obtained for more than one window length.
+%
+Furthermore, the samples are organized into `mini-batches' (of the same window length) to be more compatible with the training procedure.
+%
+The window length is incremented (size skip) from some minimum until it is not possible to obtain a mini-batch (so the largest window will be close to the length of the time series).
+
+
+Table \ref{tbl:winspec} specifies the relevent sizes and increments for the sampling process.
+%
+The values were adjusted manually until a `reasonable' number of samples were found.
+%
+However, the minimum window length was chosen such that meaningful dynamics were captured (regardless of the scale of the anomaly).
+
+\begin{table}[H]
+\centering
+\begin{tabular}{|l||c|c|c|c|c||c|}
+  \hline
+  series & length & min. win. & slide skip & size skip & batch size & $\Rightarrow$ num. samples
+  \\ \hline \hline
+  sine (gen.) & 1000 & 100 & 10 & 10 & 30 & 96 
+  \\ \hline
+  ecg \cite{PhysioNet} & 3277 & 300 & 20 & 20 & 30 & 300
+  \\ \hline
+  spike (gen.) & 800 & 80 & 8 & 8 & 10 & 378
+  \\ \hline
+  power \cite{Keogh2005} & 7008 & 100 & 100 & 20 & 30 & 121
+  \\ \hline
+  sleep \cite{this} & 2560 & 300 & 20 & 20 & 30 & 165
+  \\ \hline
+\end{tabular}
+\caption[]{Time series sample specifications} %todo: what case?
+\label{tbl:winspec}
+\end{table}
+
+
+
+   % ts=get_series(id)
+   %  tnth=int(.1*len(ts))
+   %  kwargs.setdefault('min_winsize',        int(    tnth))
+   %  kwargs.setdefault('slide_jump' ,        int(.10*tnth))
+   %  kwargs.setdefault('winsize_jump',       int(.10*tnth))
+   %  kwargs.setdefault('batch_size',         10           )
+    
+   %  if 'ecg'==id:
+   %      kwargs['min_winsize']=  300
+   %      kwargs['slide_jump']=   20
+   %      kwargs['winsize_jump']= 20
+   %      kwargs['batch_size']=   30
+
+   %  elif 'sleep'==id:
+   %      kwargs['min_winsize']=  300
+   %      kwargs['slide_jump']=   20
+   %      kwargs['winsize_jump']= 20
+   %      kwargs['batch_size']=   30
+
+   %  elif 'sin'==id:
+   %      kwargs['batch_size']=   30
+
+   %  elif 'twitter'==id:
+   %      kwargs['batch_size']=   30
+   %      kwargs['min_winsize']=  4000
+
+   %  elif 'power'==id:
+   %      kwargs['min_winsize']=  1000
+   %      kwargs['slide_jump']=   500
+   %      kwargs['winsize_jump']= 200
+   %      kwargs['batch_size']=   30
+
+
+
+
+
+
+
+
+
+\section{Training}
 
 for detailed overall trning: 'How large should the batch size be for stochastic gradient descent?'
 
