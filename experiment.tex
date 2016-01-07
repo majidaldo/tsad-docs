@@ -7,7 +7,7 @@ Chapters \ref{ch:ad} and \ref{ch:rnn}, separately, introduced anomaly detection 
 %
 This chapter outlines a procedure for finding anomalies using RNNs with the goal of mitigating many of the problems associated with anomaly detection that were discussed in \ref{ch:ad}.
 %
-As much as possible, the same procedure is applied to some time series.
+As much as possible, the same procedure is applied for each time series used to test the procedure.
 
 
 The outlines describes:
@@ -29,7 +29,7 @@ The outlines describes:
 \section{Sampling}
 
 
-Some time series with anomalies were chosen or generated to test the anomaly detection process.
+Some univariate time series \emph{with} anomalies were chosen or generated to test the anomaly detection process.
 %
 While there is only one `master' time series to train on (in each test), the RNN needs to see many `samples' from the master time series.
 %
@@ -37,7 +37,7 @@ The sliding window procedure, described in \ref{sec:adsample}, is used to get sa
 %
 Additionally, since RNNs do not need a fixed window, sliding windows are obtained for more than one window length.
 %
-Furthermore, the samples are organized into `mini-batches' (of the same window length) to be more compatible with the training procedure.
+Furthermore, the samples are collected into `mini-batches' (of the same window length) to be more compatible with the training procedure.
 %
 The window length is incremented (size skip) from some minimum until it is not possible to obtain a mini-batch (so the largest window will be close to the length of the time series).
 
@@ -60,7 +60,7 @@ However, the minimum window length was chosen such that meaningful dynamics were
   \\ \hline
   spike (gen.) & 800 & 80 & 8 & 8 & 10 & 378
   \\ \hline
-  power \cite{Keogh2005} & 7008 & 100 & 100 & 20 & 30 & 121
+  power \cite{Keogh2005} & 7008 & 100 & 100 & 20 & 30 & 252
   \\ \hline
   sleep \cite{this} & 2560 & 300 & 20 & 20 & 30 & 165
   \\ \hline
@@ -70,48 +70,57 @@ However, the minimum window length was chosen such that meaningful dynamics were
 \end{table}
 
 
+\section{RNN Setup: Autoencoder}
 
-   % ts=get_series(id)
-   %  tnth=int(.1*len(ts))
-   %  kwargs.setdefault('min_winsize',        int(    tnth))
-   %  kwargs.setdefault('slide_jump' ,        int(.10*tnth))
-   %  kwargs.setdefault('winsize_jump',       int(.10*tnth))
-   %  kwargs.setdefault('batch_size',         10           )
-    
-   %  if 'ecg'==id:
-   %      kwargs['min_winsize']=  300
-   %      kwargs['slide_jump']=   20
-   %      kwargs['winsize_jump']= 20
-   %      kwargs['batch_size']=   30
+The RNN needs to learn what normal time series behaviour is.
+%
+So an autoencoder is used which can learn expected behavior by setting the target, $\vc{y}$, to be the input, $\vc{x}$.
+%
+The loss function is MSE (Equation \ref{eqn:mse}).
+%
+Furthermore, to prevent the RNN from learning trivial identity functions, Gaussian noise is added to the input where the standard deviation is equal to .75 the standard deviation of the whole time series.
 
-   %  elif 'sleep'==id:
-   %      kwargs['min_winsize']=  300
-   %      kwargs['slide_jump']=   20
-   %      kwargs['winsize_jump']= 20
-   %      kwargs['batch_size']=   30
-
-   %  elif 'sin'==id:
-   %      kwargs['batch_size']=   30
-
-   %  elif 'twitter'==id:
-   %      kwargs['batch_size']=   30
-   %      kwargs['min_winsize']=  4000
-
-   %  elif 'power'==id:
-   %      kwargs['min_winsize']=  1000
-   %      kwargs['slide_jump']=   500
-   %      kwargs['winsize_jump']= 200
-   %      kwargs['batch_size']=   30
-
-
-
-
-
-
-
+\begin{equation*}
+ \tilde{\x} = \x
+ + \mathcal{N}(0,(0.75\sigma_{\mathrm{std}}(\x))^2)
+\end{equation*}
+\noindent
+%
+Note the comparison in the loss function is between the (uncorrupted) signal, $\x$, and the output from the network, $\vc{o}$, given $\x$: $L(\vc{o}(\tilde{\x}),\x)$.
+%
+With this setup, a denoising autoencoder, the data generating process, $p(\x)$, is implictly learned \cite{Bengio2013}.
 
 
 \section{Training}
+
+
+SGD with RMSprop \cite{Tieleman2012} for weight updates has been demonstrated to provide results that are similar to more sophisticated second-order methods but with significantly less computational cost \cite{Dauphin}.
+%
+Another benefit of RMSprop is that it is designed to work with mini-batch learning.
+%
+Since the training data is highly redunant (from sliding windows), it is expected that computing the gradient (to update parameters) from a subset of the data (mini-batch) is more efficient than computing the gradient for all the data.
+
+
+For each derivative in the gradient, RMSprop keeps an exponentially-weighted moving average of derivative magnitudes which normalizes the gradient by its root-mean-squared.
+
+rms prop: div learning rate for a weight by a running avg of recent gradiants
+
+alpha is learning rate
+rms_halflife=14
+rms_reg=1e-8
+
+1. split ts into 75pct for trainig 25 validation
+2. shuffle trning data
+2a. for each data in trning epoch
+for each param p in theta
+calc grad/der
+update for each params_i
+keep lowest validation
+stop if improvement in validation is less than .005 5 times in a row
+
+spec details in ref gen seq w rnn
+
+theanets.
 
 for detailed overall trning: 'How large should the batch size be for stochastic gradient descent?'
 
