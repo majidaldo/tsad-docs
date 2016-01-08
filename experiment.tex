@@ -27,7 +27,7 @@ The outlines describes:
 
 
 \section{Sampling}
-
+\label{sec:sampling}
 
 Some univariate time series \emph{with} anomalies were chosen or generated to test the anomaly detection process.
 %
@@ -94,40 +94,126 @@ With this setup, a denoising autoencoder, the data generating process, $p(\x)$, 
 \section{Training}
 
 
-SGD with RMSprop \cite{Tieleman2012} for weight updates has been demonstrated to provide results that are similar to more sophisticated second-order methods but with significantly less computational cost \cite{Dauphin}.
+SGD with RMSprop \cite{Tieleman2012} for parameter updates has been demonstrated to provide results that are similar to more sophisticated second-order methods but with significantly less computational cost \cite{Dauphin}.
 %
 Another benefit of RMSprop is that it is designed to work with mini-batch learning.
 %
 Since the training data is highly redunant (from sliding windows), it is expected that computing the gradient (to update parameters) from a subset of the data (mini-batch) is more efficient than computing the gradient for all the data.
 
 
-For each derivative in the gradient, RMSprop keeps an exponentially-weighted moving average of derivative magnitudes which normalizes the gradient by its root-mean-squared.
+For each derivative in the gradient, RMSprop keeps an exponentially-weighted moving average of derivative magnitudes which normalizes the derivative by its root-mean-squared.
+%
+More specifically, the (overall) training procedure is outlined as follows:
 
-rms prop: div learning rate for a weight by a running avg of recent gradiants
+\begin{algorithm}
+\begin{algorithmic}
+\STATE \STATE
 
-alpha is learning rate
-rms_halflife=14
-rms_reg=1e-8
+\STATE \COMMENT{obtain mini-batches (as Section \ref{sec:sampling})}
+\STATE $\mathcal{X} \gets \mathrm{sampling}(\x)$
+\STATE \STATE
 
-1. split ts into 75pct for trainig 25 validation
-2. shuffle trning data
-2a. for each data in trning epoch
-for each param p in theta
-calc grad/der
-update for each params_i
-keep lowest validation
-stop if improvement in validation is less than .005 5 times in a row
+\STATE \COMMENT{randomly split mini-batches into training and validation sets}
+\STATE $\mathcal{X}_t \gets \mathrm{choose(75\%,\mathcal{X})}$
+\STATE $\mathcal{X}_v \gets \mathcal{X} - \mathcal{X}_t$
+\STATE \STATE
+
+\STATE \COMMENT{initalize}
+\STATE $\vc{\theta} \gets \vc{0}$
+\COMMENT{initial RNN parameters are 0}
+\STATE \COMMENT{set training parameters}
+\STATE $\alpha = 10^{-4}$
+\COMMENT{learning rate}
+\STATE $h = 14$
+\COMMENT {RMS `halflife'}
+\STATE $\gamma \gets e^{\frac{-\ln{2}}{h}}$
+\STATE $r = 10^{-8}$
+\COMMENT{RMS regularizer}
+\STATE patience = 5
+\COMMENT{stopping criterion parameter}
+\STATE min\_improvement = $.005$
+\COMMENT{stopping criterion parameter}
+\STATE \STATE
+
+%\STATE $i \gets 1$
+\FOR{epoch $i$}
+\STATE{ $\mathcal{X}_t \gets  \mathrm{shuffle}(\mathcal{X}_t)$}
+
+\FOR{minibatch $M$ in $\mathcal{X}_t$ }
+
+\FOR{parameter $p$ in $\vc{\theta}$}
+\STATE{} \COMMENT{update parameters according to RMSprop
+(per parameter, indices to $p$ omitted)}
+\STATE{
+  \begin{flalign*}
+    f_{i+1}
+    &\gets 
+    \gamma f_i 
+    +
+    (1 - \gamma) 
+    \frac{\partial{L}}{\partial{p}} && 
+    \\
+    g_{i+1}
+    &\gets
+    \gamma g_i
+    +
+    (1 - \gamma)
+    \left(
+      \frac{\partial{L}}{\partial{p}}
+    \right)^2 && 
+    \\
+    p_{i+1}
+    &\gets 
+    p_i
+    - 
+    \frac{\alpha}{
+      \sqrt{g_{t+1} 
+        - f_{t+1}^2 
+        + r}
+    }
+    \frac{\partial{L}}{\partial{p}} &&
+  \end{flalign*}
+}
+\ENDFOR
+\ENDFOR
+
+\STATE \COMMENT{compute average loss on validation set}
+\STATE{
+  $
+  v_i
+  \gets
+  \frac{1}{|\mathcal{X}_v|}
+  \sum_{\x_v \in \mathcal{X}_v}
+  L(\x_v,\vc{o})
+  $
+}
+
+
+\STATE \COMMENT{stop when no improvement patience times}
+\IF{
+$v_{min}-v_{i}> v_{min} \cdot \mathrm{min\_improvement}$
+}
+\STATE{$v_{min} \gets v_i$}
+\STATE{$i_{min} \gets i$}
+\ENDIF
+
+\IF{$i - i_{min} > \mathrm{patience}$}
+\STATE{STOP} \COMMENT{return $\vc{\theta}$}
+\ENDIF
+
+\STATE{$i \gets i+1$}
+\ENDFOR
+
+\STATE% \STATE
+\end{algorithmic}
+\end{algorithm}
+
+%todo: use s=h in lstm
+
 
 spec details in ref gen seq w rnn
-
-theanets.
-
-for detailed overall trning: 'How large should the batch size be for stochastic gradient descent?'
-
-
-'advances in optimizing recurrent nn' enhanced sgd still competitive or better
-'Equilibrated adaptive learning rates for non-convex optimization' -rmsprop is good. sgd good but issue is just how to adjust weights.
-
+theanets which relies on theano fn: ad feature
+prediction init state is zero.
 
 %%% Local Variables:
 %%% mode: latex
