@@ -103,9 +103,9 @@ Since the training data is highly redunant (from sliding windows), it is expecte
 
 For each derivative in the gradient, RMSprop keeps an exponentially-weighted moving average of derivative magnitudes which normalizes the derivative by its root-mean-squared.
 %
-More specifically, the (overall) training procedure is outlined as follows:
+More specifically, the (overall) training procedure is outlined in the following box.
 
-\begin{algorithm}
+\begin{algorithm}{Training Procedure}
 \begin{algorithmic}
 \STATE \STATE
 
@@ -142,7 +142,7 @@ More specifically, the (overall) training procedure is outlined as follows:
 \FOR{minibatch $M$ in $\mathcal{X}_t$ }
 
 \FOR{parameter $p$ in $\vc{\theta}$}
-\STATE{} \COMMENT{update parameters according to RMSprop
+\STATE{} \COMMENT{update parameters according to RMSprop\cite{Graves2013b}
 (per parameter, indices to $p$ omitted)}
 \STATE{
   \begin{flalign*}
@@ -210,10 +210,14 @@ $v_{min}-v_{i}> v_{min} \cdot \mathrm{min\_improvement}$
 
 %todo: use s=h in lstm
 
+The \texttt{theanets} \cite{Johnson2015} implementation of RNNs
+\footnote{With every calculation of $\vc{o}$, the RNN states are initialized to 0.}.
+%
+\texttt{theanets} is based on the computational graph compiler \texttt{theano} \cite{Bergstra2010}.
+%
+Gradients were computed using \texttt{theano}'s automatic differentiation feature instead of explicitly-defined backpropagation \cite{Rumelhart1986}.
 
-spec details in ref gen seq w rnn
-theanets which relies on theano fn: ad feature
-prediction init state is zero.
+
 
 %%% Local Variables:
 %%% mode: latex
