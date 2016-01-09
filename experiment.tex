@@ -26,7 +26,7 @@ The outlines describes:
 
 
 
-\section{Sampling}
+\section{Sampling: Sliding Windows}
 \label{sec:sampling}
 
 Some univariate time series \emph{with} anomalies were chosen or generated to test the anomaly detection process.
@@ -103,7 +103,7 @@ Since the training data is highly redunant (from sliding windows), it is expecte
 
 For each derivative in the gradient, RMSprop keeps an exponentially-weighted moving average of derivative magnitudes which normalizes the derivative by its root-mean-squared.
 %
-More specifically, the (overall) training procedure is outlined in the following box.
+More specifically, the (overall) RNN training procedure is outlined in the following box.
 
 \begin{algorithm}{Training Procedure}
 \begin{algorithmic}
@@ -142,8 +142,8 @@ More specifically, the (overall) training procedure is outlined in the following
 \FOR{minibatch $M$ in $\mathcal{X}_t$ }
 
 \FOR{parameter $p$ in $\vc{\theta}$}
-\STATE{} \COMMENT{update parameters according to RMSprop\cite{Graves2013b}
-(per parameter, indices to $p$ omitted)}
+\STATE{} \COMMENT{per-parameter, update $p$ according to RMSprop \cite{Graves2013b}
+(indices to $p$ omitted)}
 \STATE{
   \begin{flalign*}
     f_{i+1}
@@ -189,7 +189,7 @@ More specifically, the (overall) training procedure is outlined in the following
 }
 
 
-\STATE \COMMENT{stop when no improvement patience times}
+\STATE \COMMENT{stop when no improvement more than patience times}
 \IF{
 $v_{min}-v_{i}> v_{min} \cdot \mathrm{min\_improvement}$
 }
@@ -204,18 +204,36 @@ $v_{min}-v_{i}> v_{min} \cdot \mathrm{min\_improvement}$
 \STATE{$i \gets i+1$}
 \ENDFOR
 
-\STATE% \STATE
+%\STATE% \STATE
 \end{algorithmic}
 \end{algorithm}
 
 %todo: use s=h in lstm
 
-The \texttt{theanets} \cite{Johnson2015} implementation of RNNs
-\footnote{With every calculation of $\vc{o}$, the RNN states are initialized to 0.}.
+The \texttt{theanets} \cite{Johnson2015} implementation of RNNs and RMSprop
+\footnote{With every calculation of $\vc{o}$, the RNN states are initialized to 0.}
+was used.
 %
-\texttt{theanets} is based on the computational graph compiler \texttt{theano} \cite{Bergstra2010}.
+\texttt{theanets} is based on the mathematical expression compiler, \texttt{theano} \cite{Bergstra2010}.
 %
 Gradients were computed using \texttt{theano}'s automatic differentiation feature instead of explicitly-defined backpropagation \cite{Rumelhart1986}.
+
+%\section{Hyper-parameter Optimization}
+%In the previous section, 
+
+Although the training procedure optimizes $\vc{\theta}$, there are other parameters that could be adjusted to minimize the loss.
+%
+The number of layers, $n_l$, and the `size' of each layer, $n_s$, corresponding the dimension of vector $\vc{s}$ (which equals the cell state mem), were chosen as `hyperparameters' for optimization in a Bayesian optimization process.
+%
+Bayesian optimization is suited for training RNNs because
+1) it tries to minimize the number (expensive, objective) function calls and
+2) it considers the stochasticity of the function as the selection of training and validation data are random in addition to the training data shuffling on each epoch.
+%
+The \texttt{spearmint} \cite{snoek2012practical} package was used to drive the hyper-parameter optimization process.
+
+
+\section{Results}
+
 
 
 
