@@ -37,9 +37,43 @@ class oneline(fig):
         self.format();
         return self.style(plt.plot(self.data())[0]) #[0] b/c jst 1 line
 
+class dualyaxis(fig):
+    yl=['y1','y2']
+    yc=['b','g']
+    yms=['.','.']
+    yls=['-','--']; ylsd=['solid','dashed']
+    def style(self,po,which):
+        plt.setp(po,linewidth=1)
+        # po.axes.get_xaxis().set_ticklabels([])
+        # po.axes.get_yaxis().set_ticklabels([])
+        po.axes.get_xaxis().set_label_text('$t$')
+        po.axes.get_yaxis().set_label_text(self.yl[which]
+                                           +' ('+self.ylsd[which]+')')
+        plt.tight_layout(pad=0)
+        return po
+    def plot(self):
+        fig().plot();
+        self.format()
+        data=self.data();
+        ax2= self.style(   plt.plot(self.data()[0]
+                                    ,linestyle=self.yls[0]
+                                    ,color=self.yc[0])[0],0 ).axes.twinx()
+        return self.style( ax2.plot(self.data()[1]
+                                    ,linestyle=self.yls[1]
+                                    ,color=self.yc[1])[0],1 )
+#import analysis
+#import data
+class test2(dualyaxis):
+    def data(self):
+        er=analysis.errs('sin',200)
+        ts=data.get_series('sin')[:,0]
+#        return ts,er
+        return [1,2,3],[5,2,9]
+
 class ts(fig):
     def format(self):
         latexify(6,ratio=.333) #w,r=h*w
+
     
 class anomtype(oneline,ts):#multiple inheritence! i LUV py!
     T=500
@@ -51,7 +85,7 @@ class anomtype(oneline,ts):#multiple inheritence! i LUV py!
         po.axes.get_yaxis().set_label_text('$X$')
         plt.tight_layout(pad=0)
         return po
-
+#todo: vector (small) x
 
 @register
 class trivial(anomtype):
