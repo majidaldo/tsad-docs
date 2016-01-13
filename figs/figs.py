@@ -60,6 +60,7 @@ class sharexaxis(fig):
         fig().plot();
         fg,ax=plt.subplots(2,1,sharex=True)
         ax[1].xaxis.set_major_locator(ticker.MaxNLocator(integer=True))
+        ax[0].yaxis.set_major_locator(ticker.MaxNLocator(4))
         ax[1].yaxis.set_major_locator(ticker.MaxNLocator(4))
         #pdb.set_trace()
 #        fg.subplots_adjust(hspace=0)
