@@ -37,43 +37,119 @@ class oneline(fig):
         self.format();
         return self.style(plt.plot(self.data())[0]) #[0] b/c jst 1 line
 
-class dualyaxis(fig):
+
+import pdb
+import matplotlib.ticker as ticker
+class sharexaxis(fig):
     yl=['y1','y2']
     yc=['b','g']
     yms=['.','.']
-    yls=['-','--']; ylsd=['solid','dashed']
+    yls=['-','-']; ylsd=['solid','solid']
+    xl=None;xu=None #none: lim as is
     def style(self,po,which):
         plt.setp(po,linewidth=1)
         # po.axes.get_xaxis().set_ticklabels([])
         # po.axes.get_yaxis().set_ticklabels([])
         po.axes.get_xaxis().set_label_text('$t$')
         po.axes.get_yaxis().set_label_text(self.yl[which]
-                                           +' ('+self.ylsd[which]+')')
+        #                                   +' ('+self.ylsd[which]+')'
+        )
         plt.tight_layout(pad=0)
         return po
     def plot(self):
         fig().plot();
+        fg,ax=plt.subplots(2,1,sharex=True)
+        ax[1].xaxis.set_major_locator(ticker.MaxNLocator(integer=True))
+        ax[1].yaxis.set_major_locator(ticker.MaxNLocator(4))
+        #pdb.set_trace()
+#        fg.subplots_adjust(hspace=0)
         self.format()
         data=self.data();
-        ax2= self.style(   plt.plot(self.data()[0]
+        ax2= self.style(   ax[0].plot( self.data()[0]
                                     ,linestyle=self.yls[0]
-                                    ,color=self.yc[0])[0],0 ).axes.twinx()
-        return self.style( ax2.plot(self.data()[1]
+                                    ,color=self.yc[0])[0],0 )
+        xd=list(ax[0].get_xlim())
+        if self.xl!=None: xd[0]=self.xl
+        if self.xu!=None: xd[1]=self.xu
+        print xd,self.xu
+        ax[0].set_xlim(xd)
+        return self.style( ax[1].plot(self.data()[1]
                                     ,linestyle=self.yls[1]
                                     ,color=self.yc[1])[0],1 )
-#import analysis
-#import data
-class test2(dualyaxis):
-    def data(self):
-        er=analysis.errs('sin',200)
-        ts=data.get_series('sin')[:,0]
-#        return ts,er
-        return [1,2,3],[5,2,9]
+
 
 class ts(fig):
     def format(self):
         latexify(6,ratio=.333) #w,r=h*w
 
+class ts2(fig):
+    def format(self):
+        latexify(6,ratio=.333*2) #w,r=h*w
+
+
+class recon(sharexaxis,ts2):
+    yl=['$x$','$\epsilon$']
+    yc=['darkblue','red']
+
+
+class test2(recon):
+    xl=1;xu=None
+    def data(self):
+        tsd=[1,2,3];er=[6,8,2]
+        return tsd,er
+
+
+import tsad
+import analysis
+import data
+    
+@register
+class sin50(recon):
+    xl=690;xu=930
+    def data(self):
+        er=analysis.errs('sin',50)
+        tsd=data.get_series('sin')
+        return tsd,er
+
+@register
+class sin150(recon):
+    xl=690;xu=930
+    def data(self):
+        er=analysis.errs('sin',150)
+        tsd=data.get_series('sin')
+        return tsd,er
+
+@register
+class ecg50(recon):
+    xl=1280;xu=1840
+    def data(self):
+        er=analysis.errs('ecg',50)
+        tsd=data.get_series('ecg')
+        return tsd,er
+
+@register
+class ecg150(recon):
+    xl=1280;xu=1840
+    def data(self):
+        er=analysis.errs('ecg',150)
+        tsd=data.get_series('ecg')
+        return tsd,er
+
+@register
+class spike20(recon):
+    xl=None;xu=None
+    def data(self):
+        er=analysis.errs('spike',20)
+        tsd=data.get_series('spike')
+        return tsd,er
+
+@register
+class spike50(recon):
+    xl=None;xu=None
+    def data(self):
+        er=analysis.errs('spike',50)
+        tsd=data.get_series('spike')
+        return tsd,er
     
 class anomtype(oneline,ts):#multiple inheritence! i LUV py!
     T=500
