@@ -1,6 +1,7 @@
 import os
 
 import numpy as np
+import scipy as sp
 
 import seaborn as sns
 import matplotlib
@@ -38,7 +39,6 @@ class oneline(fig):
         return self.style(plt.plot(self.data())[0]) #[0] b/c jst 1 line
 
 
-import pdb
 import matplotlib.ticker as ticker
 class sharexaxis(fig):
     yl=['y1','y2']
@@ -46,15 +46,11 @@ class sharexaxis(fig):
     yms=['.','.']
     yls=['-','-']; ylsd=['solid','solid']
     xl=None;xu=None #none: lim as is
-    def style(self,po,which):
-        plt.setp(po,linewidth=1)
+    def style(self,po):
+        plt.setp(po,linewidth=1.5)
         # po.axes.get_xaxis().set_ticklabels([])
         # po.axes.get_yaxis().set_ticklabels([])
-        po.axes.get_xaxis().set_label_text('$t$')
-        po.axes.get_yaxis().set_label_text(self.yl[which]
-        #                                   +' ('+self.ylsd[which]+')'
-        )
-        plt.tight_layout(pad=0)
+        plt.tight_layout(pad=-.5)
         return po
     def plot(self):
         fig().plot();
@@ -62,21 +58,41 @@ class sharexaxis(fig):
         ax[1].xaxis.set_major_locator(ticker.MaxNLocator(integer=True))
         ax[0].yaxis.set_major_locator(ticker.MaxNLocator(4))
         ax[1].yaxis.set_major_locator(ticker.MaxNLocator(4))
-        #pdb.set_trace()
-#        fg.subplots_adjust(hspace=0)
+        fg.subplots_adjust(hspace=0)
         self.format()
         data=self.data();
         ax2= self.style(   ax[0].plot( self.data()[0]
                                     ,linestyle=self.yls[0]
-                                    ,color=self.yc[0])[0],0 )
+                                    ,color=self.yc[0])[0] )
+        ax[1].get_xaxis().set_label_text('$t$')
+        ax[0].get_yaxis().set_label_text(self.yl[0])
+        ax[1].get_yaxis().set_label_text(self.yl[0])
         xd=list(ax[0].get_xlim())
         if self.xl!=None: xd[0]=self.xl
         if self.xu!=None: xd[1]=self.xu
-        print xd,self.xu
-        ax[0].set_xlim(xd)
-        return self.style( ax[1].plot(self.data()[1]
+        ax[0].set_xlim(xd); ax[1].set_xlim(xd)
+        ret= self.style( ax[1].plot(self.data()[1]
                                     ,linestyle=self.yls[1]
-                                    ,color=self.yc[1])[0],1 )
+                                    ,color=self.yc[1])[0]  )
+        yed=ax[1].lines[0].get_ydata()
+        yed=yed[~np.isnan(yed)];
+        eax=ret.axes#.twinx(); eax.axes.get_yaxis().set_ticklabels([])
+        eax.set_xlim(xd)
+        kde=sp.stats.gaussian_kde(yed)
+        kdexs=np.linspace(min(yed)#-.05*(max(yed)-min(yed)) #a lil less than 0
+                          ,max(yed)
+                          ,300)
+        kde=kde(kdexs)
+        kde=kde/max(kde)*.1*(xd[1]-xd[0])#make dist 10% of x axis
+        kde=kde+xd[0] #shift to start
+        eax.plot(kde,kdexs,linewidth=1.5,color='darkred')
+
+        ax[0].set_ylim(
+             min(    data[0][xd[0]:xd[1]]    )
+            ,max(    data[0][xd[0]:xd[1]]    )
+        ) # just to make use of the spc
+        ax[1].autoscale(axis='y',tight=True); # to show the anom is at max err
+        return ret
 
 
 class ts(fig):
@@ -90,20 +106,31 @@ class ts2(fig):
 
 class recon(sharexaxis,ts2):
     yl=['$x$','$\epsilon$']
-    yc=['darkblue','red']
+    yc=['darkgreen','red']
 
 
 class test2(recon):
-    xl=1;xu=None
+    xl=10;xu=30
     def data(self):
-        tsd=[1,2,3];er=[6,8,2]
+        np.random.seed(123)
+        tsd=np.random.normal(0,size=100);
+        er=np.random.normal(0,size=100)
+        er[4]=np.nan;
         return tsd,er
 
 
 import tsad
 import analysis
 import data
-    
+
+@register
+class sin0(recon):
+    xl=690;xu=930
+    def data(self):
+        er=analysis.errs('sin',0)
+        tsd=data.get_series('sin')
+        return tsd,er
+
 @register
 class sin50(recon):
     xl=690;xu=930
@@ -121,6 +148,14 @@ class sin150(recon):
         return tsd,er
 
 @register
+class ecg0(recon):
+    xl=1280;xu=1840
+    def data(self):
+        er=analysis.errs('ecg',0)
+        tsd=data.get_series('ecg')
+        return tsd,er
+    
+@register
 class ecg50(recon):
     xl=1280;xu=1840
     def data(self):
@@ -136,6 +171,15 @@ class ecg150(recon):
         tsd=data.get_series('ecg')
         return tsd,er
 
+
+@register
+class spike0(recon):
+    xl=None;xu=None
+    def data(self):
+        er=analysis.errs('spike',0)
+        tsd=data.get_series('spike')
+        return tsd,er
+
 @register
 class spike20(recon):
     xl=None;xu=None
@@ -146,10 +190,54 @@ class spike20(recon):
 
 @register
 class spike50(recon):
-    xl=None;xu=None
+    xl=480;xu=None
     def data(self):
         er=analysis.errs('spike',50)
         tsd=data.get_series('spike')
+        return tsd,er
+
+
+@register
+class power0(recon):
+    xl=1800;xu=3000
+    def data(self):
+        er=analysis.errs('power',0)
+        tsd=data.get_series('power')
+        return tsd,er
+
+
+
+@register
+class power200(recon):
+    xl=1800;xu=3000
+    def data(self):
+        er=analysis.errs('power',200)
+        tsd=data.get_series('power')
+        return tsd,er
+
+
+@register
+class power300(recon):
+    xl=1800;xu=3000
+    def data(self):
+        er=analysis.errs('power',300)
+        tsd=data.get_series('power')
+        return tsd,er
+
+@register
+class sleep0(recon):
+    xl=1330;xu=1920
+    def data(self):
+        er=analysis.errs('sleep',0)
+        tsd=data.get_series('sleep')
+        return tsd,er
+    
+@register
+class sleep50(recon):
+    xl=1330;xu=1920
+    def data(self):
+        er=analysis.errs('sleep',50)
+        tsd=data.get_series('sleep')
         return tsd,er
     
 class anomtype(oneline,ts):#multiple inheritence! i LUV py!
