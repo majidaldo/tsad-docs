@@ -22,3 +22,6 @@ _*
 
 #these are generated so make an exception otherwise
 *.pdf
+
+#python
+*.pyc
