@@ -196,7 +196,6 @@ class sharexaxis(fig):
         plt.setp(po,linewidth=1.5)
         # po.axes.get_xaxis().set_ticklabels([])
         # po.axes.get_yaxis().set_ticklabels([])
-        plt.tight_layout(pad=-.5)
         return po
 
     
@@ -253,7 +252,6 @@ class sharexaxis(fig):
     
         # just to make most use of the spc
         #ax[1].autoscale(axis='y',tight=True); # to show the anom is at max err
-        fg.subplots_adjust(hspace=.03) #todo put blow bc prob
         ax[0].set_ylim(
              min(    data[0][xd[0]:xd[1]]    )
             ,max(    data[0][xd[0]:xd[1]]    )
@@ -262,6 +260,9 @@ class sharexaxis(fig):
              min(    ymxd[xd[0]:xd[1]]    )
             ,max(    ymxd[xd[0]:xd[1]]    )
         )
+        #adj adj
+        fg.subplots_adjust(hspace=.03) 
+        plt.tight_layout(pad=-0)
         
         return ret
     
@@ -556,6 +557,7 @@ def latexify(fig_width=None
               "so will reduce to" + str(MAX_HEIGHT_INCHES) + "inches.")
         fig_height = MAX_HEIGHT_INCHES
 
+#todo: gmu preamble?
     params = {'backend': 'ps',
               'text.latex.preamble': [
                   r'\input{%s/custom}' % os.path.join(os.getcwd(),'..').replace('\\','/') #% 
