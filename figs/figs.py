@@ -240,6 +240,7 @@ class sharexaxis(fig):
         mt='max %s' % self.yl[1]
         ax[1].scatter( mp[0],mp[1]
                        ,marker='_'
+                       ,c='red'
                        ,linewidth=5
                        ,s=70 # ?? Unknown property markersize
                        ,label=mt
@@ -271,7 +272,7 @@ class sharexaxis(fig):
 
 class recon(sharexaxis,ts2):
     yl=['$x$','$\epsilon$']
-    yc=['darkgreen','red']
+    yc=['black','darkblue']
 
 
 class test2(recon):
