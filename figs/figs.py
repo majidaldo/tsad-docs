@@ -233,7 +233,7 @@ class sharexaxis(fig):
         kde=kde+xd[0] #shift to start
         eax.plot(kde,kdexs,linewidth=1.5,color='darkred')
 
-        # show the max err point # todo?: max1,2,3
+        # show the max err point #
         ymxd=ax[1].lines[0].get_ydata()
         ymxd[np.isnan(ymxd)]=min(yed)
         mp=[(ymxd).argmax(), max(yed)]
@@ -249,6 +249,8 @@ class sharexaxis(fig):
                        ,xytext=(10,-10)
                        ,textcoords='offset points'
         )
+        #if mp[0]<xd[0] or xd[1]<mp[0] : print 'aff'
+        #todo: draw 'win' for inside. win!=0
     
         # just to make most use of the spc
         #ax[1].autoscale(axis='y',tight=True); # to show the anom is at max err
@@ -261,8 +263,8 @@ class sharexaxis(fig):
             ,max(    ymxd[xd[0]:xd[1]]    )
         )
         #adj adj
-        fg.subplots_adjust(hspace=.03) 
-        plt.tight_layout(pad=-0)
+        fg.subplots_adjust(hspace=0)
+        fg.tight_layout(pad=.2)
         
         return ret
     
