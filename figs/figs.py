@@ -246,12 +246,10 @@ class sharexaxis(fig):
                        ,label=mt
                        ,zorder=.01
         )
-        if mp[0]>xd[0] and xd[1]>mp[0] : #todo always annotate
-            ax[1].annotate(mt,mp
-                           ,xytext=(10,-10)
-                           ,textcoords='offset points'
-            )
-            #ax[1].legend()
+        ax[1].annotate(mt,mp
+                       ,xytext=(10,-10)
+                       ,textcoords='offset points'
+        )
     
         # just to make most use of the spc
         #ax[1].autoscale(axis='y',tight=True); # to show the anom is at max err
