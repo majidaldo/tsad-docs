@@ -230,6 +230,7 @@ class sharexaxis(fig):
                           ,300)
         kde=kde(kdexs)
         kde=kde/max(kde)*.1*(xd[1]-xd[0])#make dist 10% of x axis
+        if np.all(kde)>=0: kde[0]=0 # i'm not lying!
         kde=kde+xd[0] #shift to start
         eax.plot(kde,kdexs,linewidth=1.5,color='darkred')
 
@@ -269,7 +270,7 @@ class sharexaxis(fig):
         
         return ret
     
-
+# low pri todo: match with seaborn colors
 class recon(sharexaxis,ts2):
     yl=['$x$','$\epsilon$']
     yc=['black','darkblue']
