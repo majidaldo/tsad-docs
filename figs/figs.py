@@ -206,10 +206,9 @@ class sharexaxis(fig):
         ax[1].xaxis.set_major_locator(ticker.MaxNLocator(integer=True))
         ax[0].yaxis.set_major_locator(ticker.MaxNLocator(4))
         ax[1].yaxis.set_major_locator(ticker.MaxNLocator(4))
-        fg.subplots_adjust(hspace=0)
         self.format()
         data=self.data();
-        ax2= self.style(   ax[0].plot( self.data()[0]
+        ax2= self.style(   ax[0].plot( data[0]
                                     ,linestyle=self.yls[0]
                                     ,color=self.yc[0])[0] )
         ax[1].get_xaxis().set_label_text('$t$')
@@ -219,7 +218,7 @@ class sharexaxis(fig):
         if self.xl!=None: xd[0]=self.xl
         if self.xu!=None: xd[1]=self.xu
         ax[0].set_xlim(xd); ax[1].set_xlim(xd)
-        ret= self.style( ax[1].plot(self.data()[1]
+        ret= self.style( ax[1].plot(data[1]
                                     ,linestyle=self.yls[1]
                                     ,color=self.yc[1])[0]  )
         yed=ax[1].lines[0].get_ydata()
@@ -235,17 +234,39 @@ class sharexaxis(fig):
         kde=kde+xd[0] #shift to start
         eax.plot(kde,kdexs,linewidth=1.5,color='darkred')
 
+        # show the max err point # todo?: max1,2,3
+        ymxd=ax[1].lines[0].get_ydata()
+        ymxd[np.isnan(ymxd)]=min(yed)
+        mp=[(ymxd).argmax(), max(yed)]
+        mt='max %s' % self.yl[1]
+        ax[1].scatter( mp[0],mp[1]
+                       ,marker='_'
+                       ,linewidth=5
+                       ,s=70 # ?? Unknown property markersize
+                       ,label=mt
+                       ,zorder=.01
+        )
+        if mp[0]>xd[0] and xd[1]>mp[0] : #todo always annotate
+            ax[1].annotate(mt,mp
+                           ,xytext=(10,-10)
+                           ,textcoords='offset points'
+            )
+            #ax[1].legend()
+    
+        # just to make most use of the spc
+        #ax[1].autoscale(axis='y',tight=True); # to show the anom is at max err
+        fg.subplots_adjust(hspace=.03) #todo put blow bc prob
         ax[0].set_ylim(
              min(    data[0][xd[0]:xd[1]]    )
             ,max(    data[0][xd[0]:xd[1]]    )
-        ) # just to make use of the spc
-        ax[1].autoscale(axis='y',tight=True); # to show the anom is at max err
-
-
-
+        )        
+        ax[1].set_ylim(
+             min(    ymxd[xd[0]:xd[1]]    )
+            ,max(    ymxd[xd[0]:xd[1]]    )
+        )
         
         return ret
-#todo: min max err labels
+    
 
 class recon(sharexaxis,ts2):
     yl=['$x$','$\epsilon$']
@@ -257,8 +278,9 @@ class test2(recon):
     def data(self):
         np.random.seed(123)
         tsd=np.random.normal(0,size=100);
-        er=np.random.normal(0,size=100)
-        er[4]=np.nan;
+        er=np.random.normal(0,size=100); 
+        er[4]=np.nan
+        er[20]=max(er)+1
         return tsd,er
 
 
