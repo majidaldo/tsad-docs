@@ -214,7 +214,7 @@ class sharexaxis(fig):
                                     ,color=self.yc[0])[0] )
         ax[1].get_xaxis().set_label_text('$t$')
         ax[0].get_yaxis().set_label_text(self.yl[0])
-        ax[1].get_yaxis().set_label_text(self.yl[0])
+        ax[1].get_yaxis().set_label_text(self.yl[1])
         xd=list(ax[0].get_xlim())
         if self.xl!=None: xd[0]=self.xl
         if self.xu!=None: xd[1]=self.xu
@@ -240,8 +240,12 @@ class sharexaxis(fig):
             ,max(    data[0][xd[0]:xd[1]]    )
         ) # just to make use of the spc
         ax[1].autoscale(axis='y',tight=True); # to show the anom is at max err
-        return ret
 
+
+
+        
+        return ret
+#todo: min max err labels
 
 class recon(sharexaxis,ts2):
     yl=['$x$','$\epsilon$']
@@ -379,7 +383,6 @@ class sleep50(recon):
         tsd=data.get_series('sleep')
         return tsd,er
 
-#todo: min max err labels
 
 # 3. BAYESIAN OPT ANALYSIS
 
