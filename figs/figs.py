@@ -48,7 +48,7 @@ class ts2(fig):
         latexify(6,ratio=.333*2) #w,r=h*w
 
 
-
+#todo: replace X w/ x
 
 # 1. ANOM TYPES
     
@@ -399,8 +399,27 @@ def bop(data
                       ,join=False
                       ,dodge=True
                      ,estimator=est
-    );#plt.close()
+    );
+    
+    # axes adjustments
+    if np.any(d[y])>=0 and po.axes.get_ylim()[0]<0:
+        #po.axes.set_ylim(bottom=0) #the log axis helps to not have neg ticks
+        pass
+    #po.axes.set_ylim(top=max(d[y]))
+    po.yaxis.set_major_locator(ticker.MaxNLocator(5))
+    if max(d[y])/min(d[y])>10: po.axes.set_yscale('log')
+    
+    #labels
+    yl= po.axes.get_ylabel()
+    yl=yl.split('(')[0] # mean, median, mode ..etc
+    yld={'mean':lambda x:'$\overline{%s}$'%x}
+    plt.ylabel(yld[yl]('L')+'$_v$') # ..of validation set
+    xld={'n': r'$| \vc{s} |$', 'nl': '$l$'}
+    plt.xlabel(xld[x])
+    po.legend(title=xld[hue])
+    
     plt.tight_layout(pad=0)
+    
 
     #putting a line in myself b/c seaborn doesn't do it right!!
 
@@ -515,7 +534,9 @@ def latexify(fig_width=None
         fig_height = MAX_HEIGHT_INCHES
 
     params = {'backend': 'ps',
-              'text.latex.preamble': ['\usepackage{gensymb}'],
+              'text.latex.preamble': [
+                  r'\input{%s/custom}' % os.path.join(os.getcwd(),'..').replace('\\','/') #% 
+              ],
               'axes.labelsize': 10, # fontsize for x and y labels (was 10)
               'axes.titlesize': 10,
               'font.size': 10, # was 10
