@@ -48,7 +48,7 @@ class ts2(fig):
         latexify(6,ratio=.333*2) #w,r=h*w
 
 
-#todo: replace X w/ x
+
 
 # 1. ANOM TYPES
     
@@ -59,7 +59,7 @@ class anomtype(oneline,ts):#multiple inheritence! i LUV py!
         po.axes.get_xaxis().set_ticklabels([])
         po.axes.get_yaxis().set_ticklabels([])
         po.axes.get_xaxis().set_label_text('$t$')
-        po.axes.get_yaxis().set_label_text('$X$')
+        po.axes.get_yaxis().set_label_text('$x$')
         plt.tight_layout(pad=0)
         return po
 #todo: vector (small) x
