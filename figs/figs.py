@@ -190,12 +190,16 @@ class sharexaxis(fig):
     yms=['.','.']
     yls=['-','-']; ylsd=['solid','solid']
     xl=None;xu=None #none: lim as is
+
+    
     def style(self,po):
         plt.setp(po,linewidth=1.5)
         # po.axes.get_xaxis().set_ticklabels([])
         # po.axes.get_yaxis().set_ticklabels([])
         plt.tight_layout(pad=-.5)
         return po
+
+    
     def plot(self):
         fig().plot();
         fg,ax=plt.subplots(2,1,sharex=True)
@@ -396,6 +400,7 @@ def bop(data
                       ,dodge=True
                      ,estimator=est
     );#plt.close()
+    plt.tight_layout(pad=0)
 
     #putting a line in myself b/c seaborn doesn't do it right!!
 
@@ -421,7 +426,7 @@ def bop(data
             i[ix]=ax
             i[ih]=ah
             ys.append(grps[y][tuple(i)])
-        plt.plot( xs,ys )
+        plt.plot( xs,ys,zorder=1 )
     return po
 
 
