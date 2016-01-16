@@ -375,9 +375,71 @@ class sleep50(recon):
         tsd=data.get_series('sleep')
         return tsd,er
 
+#todo: min max err labels
 
-#sns.pointplot(x='n',y='o',hue='nl',data=bo_diag('power').sort('n'),join=False,estimator=median,dodge=True
+# 3. BAYESIAN OPT
+
+import analysis
+
+def bop(ts_id
+       ,hue='nl'
+       ,y='o'
+       ,x='n'
+       ,est=np.mean):
+    d=analysis.bo_diag(ts_id).sort_values(by=x)
+    oxc=set(d.columns)-set([y,hue]);  # other 'x' cols
     
+    po=sns.pointplot(x=x,y=y,hue=hue
+                      ,data=d
+                     ,markers=('o', '<', '>', 'v', '^', '8', 's', 'p', '*', 'h', 'H', 'D', 'd')
+                      ,join=False
+                      ,dodge=True
+                     ,estimator=est
+    );#plt.close()
+
+    #putting a line in myself b/c seaborn doesn't do it right!!
+
+    grps=d.groupby(by=[hue]+list(oxc),sort=True)
+    grps=grps.aggregate(est)#.reset_index();
+
+    hues=(np.unique(d[hue]))
+    xlocs=[]
+    for al in po.lines:
+        xlocs.append( al.get_data()[0][0] )
+    xlocsd={}
+    for ai,ak in enumerate(np.unique(d[x])):
+        xlocsd[ak]=xlocs[ai]
+    xlocs=xlocsd; del xlocsd; 
+
+    for ah in hues:
+        xs=[]; ys=[]
+        for ax in np.unique(d[d[hue]==ah][x]):
+            xs.append(xlocs[ax])
+            ix=grps.index.names.index(x)
+            ih=grps.index.names.index(hue)
+            i=list(range(2))
+            i[ix]=ax
+            i[ih]=ah
+            ys.append(grps[y][tuple(i)])
+        plt.plot( xs,ys )
+    return po
+
+
+
+# class bo(fig):
+#     ts=None
+    
+#     def plot(self):
+#         fig().plot(); #jus' closes a previous plot
+#         self.format();
+#         return self.style(plt.plot(self.data())[0]) #[0] b/c jst 1 line
+    
+#     def format(self):
+#         latexify(4)
+
+#     def data(self):
+        
+        
 #----    
 def latexify(fig_width=None
              , fig_height=None
