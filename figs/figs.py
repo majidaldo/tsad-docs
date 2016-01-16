@@ -180,8 +180,8 @@ class hard2_dist(clusters):
                  ,'$\mathcal{N}_2$')]
 
 
-# 2. ANALYSIS FIGS
-# 2.a reconstruction errors
+ 
+# 2. RECONSTRUCTION ERROR
 
 import matplotlib.ticker as ticker
 class sharexaxis(fig):
@@ -377,16 +377,16 @@ class sleep50(recon):
 
 #todo: min max err labels
 
-# 3. BAYESIAN OPT
+# 3. BAYESIAN OPT ANALYSIS
 
 import analysis
 
-def bop(ts_id
+def bop(data
        ,hue='nl'
        ,y='o'
        ,x='n'
        ,est=np.mean):
-    d=analysis.bo_diag(ts_id).sort_values(by=x)
+    d=data.sort_values(by=x)
     oxc=set(d.columns)-set([y,hue]);  # other 'x' cols
     
     po=sns.pointplot(x=x,y=y,hue=hue
@@ -426,19 +426,50 @@ def bop(ts_id
 
 
 
-# class bo(fig):
-#     ts=None
-    
-#     def plot(self):
-#         fig().plot(); #jus' closes a previous plot
-#         self.format();
-#         return self.style(plt.plot(self.data())[0]) #[0] b/c jst 1 line
-    
-#     def format(self):
-#         latexify(4)
+class bo(fig):
+    ts_id=None
+    bop_kwargs={
+        'hue':'nl'
+       ,'y':'o'
+       ,'x':'n'
+       ,'est':np.mean
+        }
 
-#     def data(self):
-        
+    #def style already seaborn style
+    
+    def plot(self):
+        fig().plot(); #jus' closes a previous plot
+        self.format();
+        return bop(self.data())
+    
+    def format(self):
+        latexify(fig_width=4,ratio=(sqrt(5)-1.0)/2.0)#'golden')
+
+    def data(self):
+        return analysis.bo_diag(self.ts_id)
+
+
+@register
+class bo_sin(bo):
+    ts_id='sin'
+
+@register
+class bo_power(bo):
+    ts_id='power'
+
+@register
+class bo_spike(bo):
+    ts_id='spike'
+
+@register
+class bo_sleep(bo):
+    ts_id='sleep'
+
+@register
+class bo_ecg(bo):
+    ts_id='ecg'
+
+
         
 #----    
 def latexify(fig_width=None
