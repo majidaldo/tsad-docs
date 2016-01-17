@@ -201,59 +201,67 @@ class sharexaxis(fig):
     
     def plot(self):
         fig().plot();
-        fg,ax=plt.subplots(2,1,sharex=True)
-        ax[1].xaxis.set_major_locator(ticker.MaxNLocator(integer=True))
-        ax[0].yaxis.set_major_locator(ticker.MaxNLocator(nbins=4))
-        ax[1].yaxis.set_major_locator(ticker.MaxNLocator(nbins=4,prune='upper'))
+        fg,ax=plt.subplots(1+len(self.wins),1,sharex=True)
         self.format()
-        data=self.data();
-        ax2= self.style(   ax[0].plot( data[0]
-                                    ,linestyle=self.yls[0]
-                                    ,color=self.yc[0])[0] )
-        ax[1].get_xaxis().set_label_text('$t$')
+        #adj adj
+        fg.subplots_adjust(hspace=0)
+        fg.tight_layout(pad=.0)
+        
+        dataall=self.data();
+
+        ax2= self.style(   ax[0].plot( dataall[0]
+                                       ,linestyle=self.yls[0]
+                                       ,color=self.yc[0])[0] )
+        ax[0].yaxis.set_major_locator(ticker.MaxNLocator(nbins=4))
+        ax[-1].get_xaxis().set_label_text('$t$')
         ax[0].get_yaxis().set_label_text(self.yl[0])
-        ax[1].get_yaxis().set_label_text(self.yl[1])
         xd=list(ax[0].get_xlim())
         if self.xl!=None: xd[0]=self.xl
         if self.xu!=None: xd[1]=self.xu
         ax[0].set_xlim(xd); ax[1].set_xlim(xd)
-        ret= self.style( ax[1].plot(data[1]
-                                    ,linestyle=self.yls[1]
-                                    ,color=self.yc[1])[0]  )
-        yed=ax[1].lines[0].get_ydata()
-        yed=yed[~np.isnan(yed)];
-        eax=ret.axes#.twinx(); eax.axes.get_yaxis().set_ticklabels([])
-        eax.set_xlim(xd)
-        kde=sp.stats.gaussian_kde(yed)
-        kdexs=np.linspace(min(yed)#-.05*(max(yed)-min(yed)) #a lil less than 0
-                          ,max(yed)
-                          ,300)
-        kde=kde(kdexs)
-        kde=kde/max(kde)*.1*(xd[1]-xd[0])#make dist 10% of x axis
-        if np.all(kde)>=0: kde[0]=0 # i'm not lying!
-        kde=kde+xd[0] #shift to start
-        eax.plot(kde,kdexs,linewidth=1.5,color='darkred')
 
-        # show the max err point #
-        ymxd=ax[1].lines[0].get_ydata()
-        ymxd[np.isnan(ymxd)]=min(yed)
-        yt= ax[1].get_yticks()
-        yt[-1]=max(ymxd)
-        ax[1].set_yticks(yt)
-        yt= ax[1].get_yticks().tolist()
-        yt[-1]='max'; 
-        ax[1].set_yticklabels(yt)
-        ax[0].set_ylim(
-             min(    data[0][xd[0]:xd[1]]    )
-            ,max(    data[0][xd[0]:xd[1]]    )
-        )        
-        ax[1].set_ylim(
-             min(    ymxd[xd[0]:xd[1]]    )
-            ,max(    ymxd[:]    )
-        )
-        #adj adj
-        fg.subplots_adjust(hspace=0)
-        fg.tight_layout(pad=.2)
+        for aeri0,aer in enumerate(dataall[1]):
+            data=dataall[0],aer
+            aeri=aeri0+1
+
+            ret= self.style( ax[aeri].plot(data[1]
+                                        ,linestyle=self.yls[1]
+                                        ,color=self.yc[1])[0]  )
+            ax[aeri].xaxis.set_major_locator(ticker.MaxNLocator(integer=True))
+            ax[aeri].yaxis.set_major_locator(ticker.MaxNLocator(nbins=4
+                                                                ,prune='upper'))
+            ax[aeri].get_yaxis().set_label_text(self.yl[1])
+            yed=ax[aeri].lines[0].get_ydata()
+            yed=yed[~np.isnan(yed)];
+            eax=ret.axes#.twinx(); eax.axes.get_yaxis().set_ticklabels([])
+            eax.set_xlim(xd)
+            kde=sp.stats.gaussian_kde(yed)
+            kdexs=np.linspace(min(yed)#-.05*(max(yed)-min(yed)) #a lil less than 0
+                              ,max(yed)
+                              ,300)
+            kde=kde(kdexs)
+            kde=kde/max(kde)*.1*(xd[1]-xd[0])#make dist 10% of x axis
+            if np.all(kde)>=0: kde[0]=0 # i'm not lying!
+            kde=kde+xd[0] #shift to start
+            eax.plot(kde,kdexs,linewidth=1.5,color='darkred')
+
+            # show the max err point #
+            ymxd=ax[aeri].lines[0].get_ydata()
+            ymxd[np.isnan(ymxd)]=min(yed)
+            yt= ax[aeri].get_yticks()
+            yt[-1]=max(ymxd)
+            ax[aeri].set_yticks(yt)
+            yt= ax[aeri].get_yticks().tolist()
+            yt[-1]='max'; 
+            ax[aeri].set_yticklabels(yt)
+            ax[0].set_ylim(
+                min(    data[0][xd[0]:xd[1]]    )
+                ,max(    data[0][xd[0]:xd[1]]    )
+            )        
+            ax[aeri].set_ylim(
+                min(    ymxd[xd[0]:xd[1]]    )
+                ,max(    ymxd[:]    )
+            )
         
         return ret
 
@@ -267,12 +275,15 @@ class recon(sharexaxis,ts2):
 
 class test2(recon):
     xl=10;xu=30
+    wins=[20,50,22]
     def data(self):
         np.random.seed(123)
         tsd=np.random.normal(0,size=100);
-        er=np.random.normal(0,size=100); 
-        er[4]=np.nan
-        er[20]=max(er)+1
+        er=[]
+        for i in xrange(len(self.wins)):
+            er.append(np.random.normal(0,size=100))
+            er[i][4]=np.nan
+            er[i][20]=max(er[0])+1
         return tsd,er
 
 
