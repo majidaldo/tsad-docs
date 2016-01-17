@@ -248,10 +248,11 @@ class sharexaxis(fig):
 
 
             # log scale if num diff too big
-            if False:#max(ymxd[xd[0]:xd[1]])/min(ymxd[xd[0]:xd[1]])>10:
+            #todo: log scale on errs if > 10 factor
+            if False:#max(ymxd[xd[0]:xd[1]])/min(ymxd[xd[0]:xd[1]])>100:
                 ax[aeri].set_yscale('log')
-                ax[aeri].yaxis.set_major_locator(ticker.MaxNLocator(nbins=3
-                                                                ,prune='both'))
+                ax[aeri].yaxis.set_major_locator(ticker.MaxNLocator(nbins=5
+                                                               ,prune='both'))
             
             yt= ax[aeri].get_yticks()
             yt[-1]=max(ymxd)
@@ -333,7 +334,7 @@ class erfig(recon):
 
 class testnw(erfig):#recon):
     xl=500;xu=700
-    wins=[0,30,50,100]
+    wins=[0,30,50]
     al=600#None # (qualitative) anomaly location
     def data(self):
         np.random.seed(123)
@@ -358,7 +359,7 @@ class er_ecg(erfig):
     wins=[0,50,150,200]
     al=1565
 
-#todo: log scale on errs if > 10 factor
+
 #todo. dist is not supposed to get fatter w/ bigger win
 
 @register
