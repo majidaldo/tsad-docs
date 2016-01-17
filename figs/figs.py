@@ -274,7 +274,7 @@ class sharexaxis(fig):
             el=np.percentile(yed,90+pct)
             eax.axhspan(el,max(ymxd),facecolor='r',alpha=.1)
             #put pct tick
-            if len(yt)>1:
+            if len(yt)>1 and el!=max(ymxd):
                 yt= ax[aeri].get_yticks()
                 yt[-2]=el
                 ax[aeri].set_yticks(yt)
@@ -365,7 +365,7 @@ class er_ecg(erfig):
 @register
 class er_spike(erfig):
     xl=None;xu=None
-    wins=[0,20,50]
+    wins=[0,50,100]
     al=642
 
 
