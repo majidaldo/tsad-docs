@@ -266,6 +266,7 @@ class sharexaxis(fig):
         return ret
 
 #todo: stack more wins. assoc a list of wins w/ a class
+#todo: window horizontal bar around err
     
 # low pri todo: match with seaborn colors
 class recon(sharexaxis,ts2):
@@ -291,122 +292,46 @@ import tsad
 import analysis
 import data
 
-@register
-class sin0(recon):
-    xl=690;xu=930
-    def data(self):
-        er=analysis.errs('sin',0)
-        tsd=data.get_series('sin')
-        return tsd,er
+class erfig(recon):
+    name=None #if none, gets the name from class name
 
-@register
-class sin50(recon):
-    xl=690;xu=930
-    def data(self):
-        er=analysis.errs('sin',50)
-        tsd=data.get_series('sin')
-        return tsd,er
-
-@register
-class sin150(recon):
-    xl=690;xu=930
-    def data(self):
-        er=analysis.errs('sin',150)
-        tsd=data.get_series('sin')
-        return tsd,er
-
-@register
-class ecg0(recon):
-    xl=1280;xu=1840
-    def data(self):
-        er=analysis.errs('ecg',0)
-        tsd=data.get_series('ecg')
-        return tsd,er
+    def __init__(self):
+        if self.name==None:
+            self.name=self.__class__.__name__[3:]
     
+    def data(self):
+        er=[analysis.errs(self.name,awin) for awin in self.wins ]
+        tsd=data.get_series(self.name)
+        return tsd,er
+
 @register
-class ecg50(recon):
+class er_sin(erfig):
+    xl=690;xu=930
+    wins=[0,30,50,100]
+
+
+@register
+class er_ecg(erfig):
     xl=1280;xu=1840
-    def data(self):
-        er=analysis.errs('ecg',50)
-        tsd=data.get_series('ecg')
-        return tsd,er
+    wins=[0,50,150,200]
+
+#todo. dist is not supposed to get fatter w/ bigger win
 
 @register
-class ecg150(recon):
-    xl=1280;xu=1840
-    def data(self):
-        er=analysis.errs('ecg',150)
-        tsd=data.get_series('ecg')
-        return tsd,er
-
-
-@register
-class spike0(recon):
+class er_spike(erfig):
     xl=None;xu=None
-    def data(self):
-        er=analysis.errs('spike',0)
-        tsd=data.get_series('spike')
-        return tsd,er
+    wins=[0,20,50]
 
 @register
-class spike20(recon):
-    xl=None;xu=None
-    def data(self):
-        er=analysis.errs('spike',20)
-        tsd=data.get_series('spike')
-        return tsd,er
-
-@register
-class spike50(recon):
-    xl=480;xu=None
-    def data(self):
-        er=analysis.errs('spike',50)
-        tsd=data.get_series('spike')
-        return tsd,er
-
-
-@register
-class power0(recon):
+class er_power(erfig):
     xl=1800;xu=3000
-    def data(self):
-        er=analysis.errs('power',0)
-        tsd=data.get_series('power')
-        return tsd,er
-
+    wins=[0,200,300]
 
 
 @register
-class power200(recon):
-    xl=1800;xu=3000
-    def data(self):
-        er=analysis.errs('power',200)
-        tsd=data.get_series('power')
-        return tsd,er
-
-
-@register
-class power300(recon):
-    xl=1800;xu=3000
-    def data(self):
-        er=analysis.errs('power',300)
-        tsd=data.get_series('power')
-        return tsd,er
-
-@register
-class sleep0(recon):
+class er_sleep(erfig):
     xl=1330;xu=1920
-    def data(self):
-        er=analysis.errs('sleep',0)
-        tsd=data.get_series('sleep')
-        return tsd,er
-    
-@register
-class sleep50(recon):
-    xl=1330;xu=1920
-    def data(self):
-        er=analysis.errs('sleep',50)
-        tsd=data.get_series('sleep')
-        return tsd,er
+    wins=[0,50,100]
 
 
 # 3. BAYESIAN OPT ANALYSIS
