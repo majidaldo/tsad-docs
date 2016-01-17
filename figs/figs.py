@@ -225,8 +225,7 @@ class sharexaxis(fig):
                                         ,linestyle=self.yls[1]
                                         ,color=self.yc[1])[0]  )
             #todo nbins in style 
-            ax[aeri].yaxis.set_major_locator(ticker.MaxNLocator(nbins=3 
-                                                                ,prune='both'))
+            ax[aeri].yaxis.set_major_locator(ticker.LinearLocator(numticks=2))
             ax[aeri].get_yaxis().set_label_text(self.yl[1])
             yed=ax[aeri].lines[0].get_ydata()
             yed=yed[~np.isnan(yed)];
