@@ -279,6 +279,15 @@ class sharexaxis(fig):
                 yt[-2]=str(pct)+'\%';
                 yt[-1]='max'; #aah i have to set this again :/
                 ax[aeri].set_yticklabels(yt)
+
+            #window around anomaly
+            if self.al!=None:
+                eax.axvspan(self.al-self.wins[aeri0]*.5
+                            ,self.al+self.wins[aeri0]*.5
+                            ,facecolor='yellow'
+                            ,edgecolor='black',linewidth=2
+                            ,alpha=.1
+                            )
         
         return ret
     
@@ -295,8 +304,9 @@ class recon(sharexaxis,ts2):
 
 
 class testnw(recon):
-    xl=10;xu=30
-    wins=[20,50,22]
+    xl=500;xu=700
+    wins=[20,30,50]
+    al=600#None # (qualitative) anomaly location
     def data(self):
         np.random.seed(123)
         tsd=np.random.normal(0,size=1000);
@@ -314,6 +324,7 @@ import data
 
 class erfig(recon):
     name=None #if none, gets the name from class name
+    al=None # (qualitative) anomaly location
 
     def __init__(self):
         if self.name==None:
