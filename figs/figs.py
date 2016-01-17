@@ -243,7 +243,7 @@ class sharexaxis(fig):
                               ,300)
             kdef=sp.stats.gaussian_kde(yed)
             kde=kdef(kdexs)
-            if np.all(kde)>=0: kde[0]=0 # i'm not lying!
+            kde[0]=min(yed) # i'm not lying!
             kde=kde/max(kde)*.1*(xd[1]-xd[0])#make dist 10% of x axis
             kde=kde+xd[0] #shift to start
             eax.plot(kde,kdexs,linewidth=1.5,color='darkred')
