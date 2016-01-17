@@ -228,7 +228,7 @@ class sharexaxis(fig):
                                         ,linestyle=self.yls[1]
                                         ,color=self.yc[1])[0]  )
             ax[aeri].xaxis.set_major_locator(ticker.MaxNLocator(integer=True))
-            ax[aeri].yaxis.set_major_locator(ticker.MaxNLocator(nbins=4
+            ax[aeri].yaxis.set_major_locator(ticker.MaxNLocator(nbins=5
                                                                 ,prune='upper'))
             ax[aeri].get_yaxis().set_label_text(self.yl[1])
             yed=ax[aeri].lines[0].get_ydata()
@@ -274,7 +274,7 @@ class recon(sharexaxis,ts2):
     yc=['black','darkblue']
 
 
-class test2(recon):
+class testnw(recon):
     xl=10;xu=30
     wins=[20,50,22]
     def data(self):
