@@ -205,7 +205,7 @@ class sharexaxis(fig):
         self.format()
         #adj adj
         fg.subplots_adjust(hspace=0)
-        fg.tight_layout(pad=.0)
+        fg.tight_layout(pad=0) #todo: why still spc b/w plts??
         
         dataall=self.data();
 
@@ -231,7 +231,7 @@ class sharexaxis(fig):
                                         ,linestyle=self.yls[1]
                                         ,color=self.yc[1])[0]  )
             ax[aeri].yaxis.set_major_locator(ticker.MaxNLocator(nbins=5
-                                                                ,prune='upper'))
+                                                                ,prune='both'))
             ax[aeri].get_yaxis().set_label_text(self.yl[1])
             yed=ax[aeri].lines[0].get_ydata()
             yed=yed[~np.isnan(yed)];
@@ -267,7 +267,7 @@ class sharexaxis(fig):
         
         return ret
 
-#todo: stack more wins. assoc a list of wins w/ a class
+
 #todo: window horizontal bar around err
     
 # low pri todo: match with seaborn colors
