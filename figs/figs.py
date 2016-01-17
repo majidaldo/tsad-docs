@@ -266,14 +266,27 @@ class sharexaxis(fig):
                 ,max(    ymxd[:]    )
             )
 
-            #shade 2.5% #todo: just count how many below
-            el=np.percentile(yed,90+5)
+            #shade  pct
+            pct=5
+            el=np.percentile(yed,90+pct)
             eax.axhspan(el,max(ymxd),facecolor='r',alpha=.1)
+            #put pct tick
+            if len(yt)>1:
+                yt= ax[aeri].get_yticks()
+                yt[-2]=el
+                ax[aeri].set_yticks(yt)
+                yt= ax[aeri].get_yticks().tolist()
+                yt[-2]=str(pct)+'\%';
+                yt[-1]='max'; #aah i have to set this again :/
+                ax[aeri].set_yticklabels(yt)
         
         return ret
     
 #todo: window horizontal bar around err.
-
+#maybe use axvspan
+#put win around where /i/ think it is. (not at max y)
+# dbl the window.
+#txt w=whatever. 
     
 # low pri todo: match with seaborn colors
 class recon(sharexaxis,ts2):
