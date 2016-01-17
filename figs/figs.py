@@ -272,7 +272,7 @@ class sharexaxis(fig):
             ,max(    data[0][xd[0]:xd[1]]    )
         )        
         ax[1].set_ylim(
-             min(    ymxd[:]    )
+             min(    ymxd[xd[0]:xd[1]]    )
             ,max(    ymxd[:]    )
         )
         #adj adj
