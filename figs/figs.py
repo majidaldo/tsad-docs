@@ -203,8 +203,8 @@ class sharexaxis(fig):
         fig().plot();
         fg,ax=plt.subplots(2,1,sharex=True)
         ax[1].xaxis.set_major_locator(ticker.MaxNLocator(integer=True))
-        ax[0].yaxis.set_major_locator(ticker.MaxNLocator(4))
-        ax[1].yaxis.set_major_locator(ticker.MaxNLocator(4))
+        ax[0].yaxis.set_major_locator(ticker.MaxNLocator(nbins=4))
+        ax[1].yaxis.set_major_locator(ticker.MaxNLocator(nbins=4,prune='upper'))
         self.format()
         data=self.data();
         ax2= self.style(   ax[0].plot( data[0]
@@ -237,36 +237,12 @@ class sharexaxis(fig):
         # show the max err point #
         ymxd=ax[1].lines[0].get_ydata()
         ymxd[np.isnan(ymxd)]=min(yed)
-        mp=[(ymxd).argmax(), max(yed)]
-        mt='max %s' % self.yl[1]
-        ax[1].scatter( mp[0],mp[1]
-                       ,marker='_'
-                       ,c='red'
-                       ,linewidth=5
-                       ,s=70 # ?? Unknown property markersize
-                       ,label=mt
-                       ,zorder=.01
-        )
-        ax[1].annotate(mt,mp
-                       ,xytext=(10,-10)
-                       ,textcoords='offset points'
-        )
         yt= ax[1].get_yticks()
         yt[-1]=max(ymxd)
         ax[1].set_yticks(yt)
         yt= ax[1].get_yticks().tolist()
         yt[-1]='max'; 
         ax[1].set_yticklabels(yt)
-        # if outside anomaly area.. write local max.
-        # (a case just for power data) 
-        # if mp[0]>xd[0] and xd[1]>mp[0]:
-        #     pass #inside
-        # else:
-        #     m
-        #todo: draw 'win' for inside. win!=0
-    
-        # just to make most use of the spc
-        #ax[1].autoscale(axis='y',tight=True); # to show the anom is at max err
         ax[0].set_ylim(
              min(    data[0][xd[0]:xd[1]]    )
             ,max(    data[0][xd[0]:xd[1]]    )
