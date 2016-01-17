@@ -251,7 +251,18 @@ class sharexaxis(fig):
                        ,xytext=(10,-10)
                        ,textcoords='offset points'
         )
-        #if mp[0]<xd[0] or xd[1]<mp[0] : print 'aff'
+        yt= ax[1].get_yticks()
+        yt[-1]=max(ymxd)
+        ax[1].set_yticks(yt)
+        yt= ax[1].get_yticks().tolist()
+        yt[-1]='max'; 
+        ax[1].set_yticklabels(yt)
+        # if outside anomaly area.. write local max.
+        # (a case just for power data) 
+        # if mp[0]>xd[0] and xd[1]>mp[0]:
+        #     pass #inside
+        # else:
+        #     m
         #todo: draw 'win' for inside. win!=0
     
         # just to make most use of the spc
@@ -261,14 +272,16 @@ class sharexaxis(fig):
             ,max(    data[0][xd[0]:xd[1]]    )
         )        
         ax[1].set_ylim(
-             min(    ymxd[xd[0]:xd[1]]    )
-            ,max(    ymxd[xd[0]:xd[1]]    )
+             min(    ymxd[:]    )
+            ,max(    ymxd[:]    )
         )
         #adj adj
         fg.subplots_adjust(hspace=0)
         fg.tight_layout(pad=.2)
         
         return ret
+
+#todo: stack more wins. assoc a list of wins w/ a class
     
 # low pri todo: match with seaborn colors
 class recon(sharexaxis,ts2):
