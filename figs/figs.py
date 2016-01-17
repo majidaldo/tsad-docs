@@ -12,12 +12,13 @@ from math import sqrt
 registry={}
 def register(figcls):
     registry[figcls.__name__]=figcls
+    
     return figcls
 
 
 class fig(object):
     def data(self):pass
-    def plot(self): plt.close()
+    def plot(self): plt.close();
     def style(self):pass
     def format(self):pass
     def save(self):
@@ -43,14 +44,9 @@ class ts(fig):
     def format(self):
         latexify(6,ratio=.333) #w,r=h*w
 
-class ts2(fig):
-    def format(self):
-        latexify(6,ratio=.333*2) #w,r=h*w
 
 
-
-
-# 1. ANOM TYPES
+# 2. ANOM TYPES
     
 class anomtype(oneline,ts):#multiple inheritence! i LUV py!
     T=500
@@ -102,7 +98,7 @@ class discord_aper(anomtype):
         return gs+g(.5,s=.0025)
 
 
-# 2. CLUSTERING 
+# 3. CLUSTERING 
 
 class xy(fig):
     def plot(self,**kwargs):
@@ -181,7 +177,9 @@ class hard2_dist(clusters):
 
 
  
-# 2. RECONSTRUCTION ERROR
+# 4. RECONSTRUCTION ERROR
+
+
 
 import matplotlib.ticker as ticker
 class sharexaxis(fig):
@@ -200,12 +198,8 @@ class sharexaxis(fig):
 
     
     def plot(self):
-        fig().plot();
+        fig().plot(); self.format()
         fg,ax=plt.subplots(1+len(self.wins),1,sharex=True)
-        self.format()
-        #adj adj
-        fg.subplots_adjust(hspace=0)
-        fg.tight_layout(pad=0) # could put neg for more condense
         
         dataall=self.data();
 
@@ -251,6 +245,14 @@ class sharexaxis(fig):
             # show the max err point #
             ymxd=ax[aeri].lines[0].get_ydata()
             ymxd[np.isnan(ymxd)]=min(yed)
+
+
+            # log scale if num diff too big
+            if False:#max(ymxd[xd[0]:xd[1]])/min(ymxd[xd[0]:xd[1]])>10:
+                ax[aeri].set_yscale('log')
+                ax[aeri].yaxis.set_major_locator(ticker.MaxNLocator(nbins=3
+                                                                ,prune='both'))
+            
             yt= ax[aeri].get_yticks()
             yt[-1]=max(ymxd)
             ax[aeri].set_yticks(yt)
@@ -288,29 +290,23 @@ class sharexaxis(fig):
                             ,edgecolor='black',linewidth=2
                             ,alpha=.1
                             )
+
+        #---end of err plt iter
+                
+        #adj adj
+        fg.subplots_adjust(hspace=0)
+        fg.tight_layout(pad=0) # could put neg for more condense
         
         return ret
 
+#todo sci notation
+
 
 # low pri todo: match with seaborn colors
-class recon(sharexaxis,ts2):
+class recon(sharexaxis):
     yl=['$x$','$\epsilon$']
     yc=['black','darkblue']
 
-
-class testnw(recon):
-    xl=500;xu=700
-    wins=[0,30,50]
-    al=600#None # (qualitative) anomaly location
-    def data(self):
-        np.random.seed(123)
-        tsd=np.random.normal(0,size=1000);
-        er=[]
-        for i in xrange(len(self.wins)):
-            er.append(np.absolute(np.random.normal(1,size=1000)))
-            er[i][4]=np.nan
-            er[i][20]=max(er[0])+1
-        return tsd,er
 
 
 import tsad
@@ -330,37 +326,64 @@ class erfig(recon):
         tsd=data.get_series(self.name)
         return tsd,er
 
+    def format(self):
+        n=len(self.wins)+1
+        latexify(6,ratio=.333*n) #w,r=h*w
+
+
+class testnw(erfig):#recon):
+    xl=500;xu=700
+    wins=[0,30,50,100]
+    al=600#None # (qualitative) anomaly location
+    def data(self):
+        np.random.seed(123)
+        tsd=np.random.normal(0,size=1000);
+        er=[]
+        for i in xrange(len(self.wins)):
+            er.append(np.absolute(np.random.normal(1,size=1000)))
+            er[i][4]=np.nan
+            er[i][20]=max(er[0])+1
+        return tsd,er
+        
+
 @register
 class er_sin(erfig):
     xl=690;xu=930
     wins=[0,30,50,100]
-
+    al=800
 
 @register
 class er_ecg(erfig):
     xl=1280;xu=1840
     wins=[0,50,150,200]
+    al=1565
 
+#todo: log scale on errs if > 10 factor
 #todo. dist is not supposed to get fatter w/ bigger win
 
 @register
 class er_spike(erfig):
     xl=None;xu=None
     wins=[0,20,50]
+    al=642
+
+
 
 @register
 class er_power(erfig):
     xl=1800;xu=3000
     wins=[0,200,300]
+    al=2466
 
 
 @register
 class er_sleep(erfig):
     xl=1330;xu=1920
     wins=[0,50,100]
+    al=1593
 
 
-# 3. BAYESIAN OPT ANALYSIS
+# 5. BAYESIAN OPT ANALYSIS
 
 import analysis
 
