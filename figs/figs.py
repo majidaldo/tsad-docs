@@ -280,7 +280,7 @@ class sharexaxis(fig):
                 yt[-1]='max'; #aah i have to set this again :/
                 ax[aeri].set_yticklabels(yt)
 
-            #window around anomaly
+            #window around anomaly. dbl the win on each side?
             if self.al!=None:
                 eax.axvspan(self.al-self.wins[aeri0]*.5
                             ,self.al+self.wins[aeri0]*.5
@@ -290,13 +290,8 @@ class sharexaxis(fig):
                             )
         
         return ret
-    
-#todo: window horizontal bar around err.
-#maybe use axvspan
-#put win around where /i/ think it is. (not at max y)
-# dbl the window.
-#txt w=whatever. 
-    
+
+
 # low pri todo: match with seaborn colors
 class recon(sharexaxis,ts2):
     yl=['$x$','$\epsilon$']
@@ -305,7 +300,7 @@ class recon(sharexaxis,ts2):
 
 class testnw(recon):
     xl=500;xu=700
-    wins=[20,30,50]
+    wins=[0,30,50]
     al=600#None # (qualitative) anomaly location
     def data(self):
         np.random.seed(123)
