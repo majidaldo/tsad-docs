@@ -249,9 +249,9 @@ class sharexaxis(fig):
 
             # log scale if num diff too big
             #todo: log scale on errs if > 10 factor
-            if False:#max(ymxd[xd[0]:xd[1]])/min(ymxd[xd[0]:xd[1]])>100:
+            if True:#wrongmax(ymxd[xd[0]:xd[1]])/min(ymxd[xd[0]:xd[1]])>10:
                 ax[aeri].set_yscale('log')
-                ax[aeri].yaxis.set_major_locator(ticker.MaxNLocator(nbins=5
+                ax[aeri].yaxis.set_major_locator(ticker.MaxNLocator(nbins=3
                                                                ,prune='both'))
             
             yt= ax[aeri].get_yticks()
