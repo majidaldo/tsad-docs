@@ -213,6 +213,9 @@ class sharexaxis(fig):
                                        ,linestyle=self.yls[0]
                                        ,color=self.yc[0])[0] )
         ax[0].yaxis.set_major_locator(ticker.MaxNLocator(nbins=4))
+        ax[0].xaxis.set_major_locator(ticker.MaxNLocator(integer=True
+                                                         #,nbins=10
+        ))
         ax[-1].get_xaxis().set_label_text('$t$')
         ax[0].get_yaxis().set_label_text(self.yl[0])
         xd=list(ax[0].get_xlim())
@@ -227,7 +230,6 @@ class sharexaxis(fig):
             ret= self.style( ax[aeri].plot(data[1]
                                         ,linestyle=self.yls[1]
                                         ,color=self.yc[1])[0]  )
-            ax[aeri].xaxis.set_major_locator(ticker.MaxNLocator(integer=True))
             ax[aeri].yaxis.set_major_locator(ticker.MaxNLocator(nbins=5
                                                                 ,prune='upper'))
             ax[aeri].get_yaxis().set_label_text(self.yl[1])
