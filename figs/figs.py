@@ -266,27 +266,14 @@ class sharexaxis(fig):
                 ,max(    ymxd[:]    )
             )
 
-            #shade ~2.5% #todo: just count how many below
-            c=0
-            for i in xrange(len(kdexs)):
-                c=kdef.integrate_box_1d(-np.inf,kdexs[i+1])
-                if c>1-2.5e-2: ci= i-1; break #wasteful but whatever
-            del c;
-            eax.axhspan(kdexs[ci],max(ymxd),facecolor='r',alpha=.1)
+            #shade 2.5% #todo: just count how many below
+            el=np.percentile(yed,90+5)
+            eax.axhspan(el,max(ymxd),facecolor='r',alpha=.1)
         
         return ret
-
-
-# def cdfi(d,to,n=300):
-#     kdef=sp.stats.gaussian_kde(d)
-#     c=0
-#     xs=np.linspace(min(d),max(d),n)
-#     for i in xrange(len(xs)):
-#         c+=kdef.integrate_box_1d(xs[i],xs[i+1])
-#         if c>to: return i-1
     
 #todo: window horizontal bar around err.
-#calc 5%
+
     
 # low pri todo: match with seaborn colors
 class recon(sharexaxis,ts2):
@@ -299,10 +286,10 @@ class testnw(recon):
     wins=[20,50,22]
     def data(self):
         np.random.seed(123)
-        tsd=np.random.normal(0,size=100);
+        tsd=np.random.normal(0,size=1000);
         er=[]
         for i in xrange(len(self.wins)):
-            er.append(np.absolute(np.random.normal(0,size=100)))
+            er.append(np.absolute(np.random.normal(1,size=1000)))
             er[i][4]=np.nan
             er[i][20]=max(er[0])+1
         return tsd,er
