@@ -422,10 +422,7 @@ def bop(data
     plt.ylabel(yld[yl]('L')+'$_v$') # ..of validation set
     xld={'n': r'$| \vc{s} |$', 'nl': '$l$'}
     plt.xlabel(xld[x])
-    po.legend(title=xld[hue])
-    
-    plt.tight_layout(pad=0)
-    
+    po.legend(title=xld[hue])    
 
     #putting a line in myself b/c seaborn doesn't do it right!!
 
@@ -452,10 +449,10 @@ def bop(data
             i[ih]=ah
             ys.append(grps[y][tuple(i)])
         plt.plot( xs,ys,zorder=1 )
+        
+    plt.tight_layout(pad=0.05)
     return po
 
-#todo expand ecg win?
-#todo lines in ts as well
 
 class bo(fig):
     ts_id=None
