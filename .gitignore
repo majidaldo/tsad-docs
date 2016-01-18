@@ -22,7 +22,7 @@ _*
 
 #these are generated so make an exception otherwise
 *.pdf
-*.tbl
+*.csv
 
 #python
 *.pyc

@@ -19,7 +19,7 @@ class tbl(object):
         df=self.todf(self.get_data())
         kwargs=self.kwargsproc(kwargs)
         df.to_csv(path_or_buf=os.path.join(os.getcwd()
-                                           ,self.__class__.__name__+'.tbl')
+                                           ,self.__class__.__name__+'.csv')
                   ,index=False
                   ,**kwargs)
 
