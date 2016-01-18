@@ -58,7 +58,6 @@ class anomtype(oneline,ts):#multiple inheritence! i LUV py!
         po.axes.get_yaxis().set_label_text('$x$')
         plt.tight_layout(pad=0)
         return po
-#todo: vector (small) x
 
 @register
 class trivial(anomtype):
@@ -224,7 +223,6 @@ class sharexaxis(fig):
             ret= self.style( ax[aeri].plot(data[1]
                                         ,linestyle=self.yls[1]
                                         ,color=self.yc[1])[0]  )
-            #todo nbins in style 
             ax[aeri].yaxis.set_major_locator(ticker.LinearLocator(numticks=2))
             ax[aeri].get_yaxis().set_label_text(self.yl[1])
             yed=ax[aeri].lines[0].get_ydata()
@@ -298,7 +296,6 @@ class sharexaxis(fig):
         
         return ret
 
-#todo sci notation
 
 
 # low pri todo: match with seaborn colors
@@ -357,8 +354,6 @@ class er_ecg(erfig):
     wins=[0,50,150,200]
     al=1565
 
-
-#todo. dist is not supposed to get fatter w/ bigger win
 
 @register
 class er_spike(erfig):
@@ -534,7 +529,7 @@ def latexify(fig_width=None
               "so will reduce to" + str(MAX_HEIGHT_INCHES) + "inches.")
         fig_height = MAX_HEIGHT_INCHES
 
-#todo: gmu preamble?
+#low priority todo: gmu preamble?
     params = {'backend': 'ps',
               'text.latex.preamble': [
                   r'\input{%s/custom}' % os.path.join(os.getcwd(),'..').replace('\\','/') #% 
