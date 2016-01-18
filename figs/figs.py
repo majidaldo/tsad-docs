@@ -215,6 +215,10 @@ class sharexaxis(fig):
         if self.xl!=None: xd[0]=self.xl
         if self.xu!=None: xd[1]=self.xu
         ax[0].set_xlim(xd); ax[1].set_xlim(xd)
+        ax[0].set_ylim(
+                min(    dataall[0][xd[0]:xd[1]]    )
+                ,max(    dataall[0][xd[0]:xd[1]]    )
+            )   
 
         for aeri0,aer in enumerate(dataall[1]):
             data=dataall[0],aer
@@ -255,11 +259,7 @@ class sharexaxis(fig):
             ax[aeri].set_yticks(yt)
             yt= ax[aeri].get_yticks().tolist()
             yt[-1]='max'; 
-            ax[aeri].set_yticklabels(yt)
-            ax[0].set_ylim(
-                min(    data[0][xd[0]:xd[1]]    )
-                ,max(    data[0][xd[0]:xd[1]]    )
-            )        
+            ax[aeri].set_yticklabels(yt)     
             ax[aeri].set_ylim(
                 min(    ymxd[xd[0]:xd[1]]    )
                 ,max(    ymxd[:]    )
@@ -279,7 +279,7 @@ class sharexaxis(fig):
                 yt[-1]='max'; #aah i have to set this again :/
                 ax[aeri].set_yticklabels(yt)
 
-            #window around anomaly. dbl the win on each side?
+            #window around anomaly.
             if self.al!=None:
                 eax.axvspan(self.al-self.wins[aeri0]*.5
                             ,self.al+self.wins[aeri0]*.5
@@ -287,6 +287,7 @@ class sharexaxis(fig):
                             ,edgecolor='black',linewidth=2
                             ,alpha=.1
                             )
+                
 
         #---end of err plt iter
                 
