@@ -391,7 +391,7 @@ def bop(data
     
     po=sns.pointplot(x=x,y=y,hue=hue
                       ,data=d
-                     ,markers=('o', '<', '>', 'v', '^', '8', 's', 'p', '*', 'h', 'H', 'D', 'd')
+                     ,markers=('o', '>', 'p', 'v', '^', '8', 's', '<', '*', 'h', 'H', 'D', 'd')
                       ,join=False
                       ,dodge=True
                      ,estimator=est
@@ -444,7 +444,8 @@ def bop(data
         plt.plot( xs,ys,zorder=1 )
     return po
 
-
+#todo expand ecg win?
+#todo lines in ts as well
 
 class bo(fig):
     ts_id=None
