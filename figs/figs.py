@@ -287,6 +287,15 @@ class sharexaxis(fig):
                             ,edgecolor='black',linewidth=2
                             ,alpha=.1
                             )
+                frac=1.0/len(self.wins)
+                ax[0].axvspan(self.al-self.wins[aeri0]*.5
+                            ,self.al+self.wins[aeri0]*.5
+                              ,ymin=(aeri-1)*frac
+                              ,ymax=(aeri)*frac
+                            ,fill=True,facecolor='yellow'
+                            ,edgecolor='black',linewidth=2
+                            ,alpha=.2
+                            )
                 
 
         #---end of err plt iter
