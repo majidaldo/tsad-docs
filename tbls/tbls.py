@@ -31,7 +31,7 @@ ts=['ecg','sleep','power','spike','sin']
 class sampling(tbl):
     
     def get_data(self):
-        nm='names'
+        nm='name'
         d=dict.fromkeys(data.get_kwargs(ts[0]).keys())#,[]) <- python gotcha!
         for ak in d: d[ak]=[] #<-soln
         d[nm]=[]
