@@ -247,7 +247,6 @@ class sharexaxis(fig):
 
 
             # log scale if num diff too big
-            #todo: log scale on errs if > 10 factor
             if False:#wrongmax(ymxd[xd[0]:xd[1]])/min(ymxd[xd[0]:xd[1]])>10:
                 ax[aeri].set_yscale('log')
                 ax[aeri].yaxis.set_major_locator(ticker.MaxNLocator(nbins=3
@@ -363,7 +362,7 @@ class er_ecg(erfig):
 
 @register
 class er_spike(erfig):
-    xl=None;xu=None
+    xl=320;xu=None
     wins=[0,50,100]
     al=642
 
