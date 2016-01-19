@@ -48,23 +48,41 @@ The values were adjusted manually until a `reasonable' number of samples were fo
 %
 However, the minimum window length was chosen such that meaningful dynamics were captured (regardless of the scale of the anomaly).
 
+
 \begin{table}[H]
-\centering
-\begin{tabular}{|l||c|c|c|c|c||c|}
+  \centering
+  \csvreader[
+  tabular=|p{1in}||c|c|c|c|c||c|
+  ,table head=
   \hline
-  series & length & min. win. & slide skip & size skip & batch size & $\Rightarrow$ num. samples
-  \\ \hline \hline
-  sine (gen.) & 1000 & 100 & 10 & 10 & 30 & 96 
-  \\ \hline
-  ecg \cite{PhysioNet} & 3277 & 300 & 20 & 20 & 30 & 300
-  \\ \hline
-  spike (gen.) & 800 & 80 & 8 & 8 & 10 & 378
-  \\ \hline
-  power \cite{Keogh2005} & 7008 & 100 & 100 & 20 & 30 & 252
-  \\ \hline
-  sleep \cite{this} & 2560 & 300 & 20 & 20 & 30 & 165
-  \\ \hline
-\end{tabular}
+  \bfseries name
+  &  length 
+  &  min. win.
+  &  slide skip 
+  &  size skip 
+  &  batch size
+  &  $\Rightarrow$ \bfseries samples 
+  \\ \hline  \hline
+  ,late after line=\\\hline
+  ]%
+  {tbls/sampling.csv}%
+  {
+    batch_size=\bs
+    ,length=\ln
+    ,min_winsize=\mw
+    ,name=\nm
+    ,nsamples=\ns
+    ,slide_jump=\ss
+    ,winsize_jump=\wss
+  }%
+  {
+    \ifthenelse{ \equal{\nm}{sin}}{   sine (gen.) }{}
+    \ifthenelse{ \equal{\nm}{ecg}}{   ECG \cite{PhysioNet} }{}
+    \ifthenelse{ \equal{\nm}{power}}{ power \cite{Keogh2005} }{}
+    \ifthenelse{ \equal{\nm}{sleep}}{ sleep \cite{this} }{}
+    \ifthenelse{ \equal{\nm}{spike}}{ spike (gen.) }{}
+    & \ln & \mw & \ss & \wss & \bs & \ns
+  }
 \caption[]{Time series sample specifications} %todo: what case?
 \label{tbl:winspec}
 \end{table}
@@ -221,13 +239,13 @@ Gradients were computed using \texttt{theano}'s automatic differentiation featur
 %\section{Hyper-parameter Optimization}
 %In the previous section, 
 
-Although the training procedure optimizes $\vc{\theta}$, there are other parameters that could be adjusted to minimize the loss.
+While the training procedure optimizes $\vc{\theta}$, there are other parameters that could be adjusted to minimize the loss.
 %
-The number of layers, $n_l$, and the `size' of each layer, $n_s$, corresponding the dimension of vector $\vc{s}$ (which equals the cell state mem), were chosen as `hyperparameters' for optimization in a Bayesian optimization process.
+The number of layers, $n_l$, and the `size' of each layer, $n_s$, corresponding the dimension of vector $\vc{s}$ (which equals the cell state mem), were chosen as `hyper-parameters' for optimization in a Bayesian optimization process.
 %
 Bayesian optimization is suited for training RNNs because
-1) it tries to minimize the number (expensive, objective) function calls and
-2) it considers the stochasticity of the function as the selection of training and validation data are random in addition to the training data shuffling on each epoch.
+1) it tries to minimize the number of (expensive) objective function calls, which, in this case, is the training procedure, and
+2) it considers the stochasticity of the function, which, in this case, the selection of training and validation data are random in addition to the training data shuffling on each epoch.
 %
 The \texttt{spearmint} \cite{snoek2012practical} package was used to drive the hyper-parameter optimization process.
 
@@ -236,6 +254,11 @@ The \texttt{spearmint} \cite{snoek2012practical} package was used to drive the h
 
 
 
+tbl: valid err, params, 
+tbl: range of params search
+
+
+%todo. include tbls and pdfs in repo in final
 
 %%% Local Variables:
 %%% mode: latex
