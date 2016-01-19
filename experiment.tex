@@ -252,11 +252,15 @@ The \texttt{spearmint} \cite{snoek2012practical} package was used to drive the h
 %
 After every optimization iteration, RNN parameters were saved.
 %
-The process was stopped until the best RNN, based on its validation loss, was subjectively able to detect anomalies.
+The process was stopped until the RNN with the minimum validation loss was subjectively able to detect anomalies
+%
+\footnote{Further optimization was possible with increasing RNN size but loss reduction diminished relative to the associated increase in computational expense. See Bayesian optimization figures in Section \ref{sec:results} }
+.
 
 
 
 \section{Results}
+\label{sec:results}
 
 
 
