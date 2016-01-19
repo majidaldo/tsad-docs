@@ -243,19 +243,21 @@ While the training procedure optimizes $\vc{\theta}$, there are other parameters
 %
 The number of layers, $n_l$, and the `size' of each layer, $n_s$, corresponding the dimension of vector $\vc{s}$ (which equals the cell state mem), were chosen as `hyper-parameters' for optimization in a Bayesian optimization process.
 %
-Bayesian optimization is suited for training RNNs because
+Bayesian optimization is suited for optimizing RNN training because
 1) it tries to minimize the number of (expensive) objective function calls, which, in this case, is the training procedure, and
 2) it considers the stochasticity of the function, which, in this case, the selection of training and validation data are random in addition to the training data shuffling on each epoch.
-%
+
+
 The \texttt{spearmint} \cite{snoek2012practical} package was used to drive the hyper-parameter optimization process.
+%
+After every optimization iteration, RNN parameters were saved.
+%
+The process was stopped until the best RNN, based on its validation loss, was subjectively able to detect anomalies.
+
 
 
 \section{Results}
 
-
-
-tbl: valid err, params, 
-tbl: range of params search
 
 
 %todo. include tbls and pdfs in repo in final
