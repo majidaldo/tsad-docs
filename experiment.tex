@@ -29,8 +29,28 @@ The outlines describes:
 \section{Sampling: Sliding Windows}
 \label{sec:sampling}
 
-Some univariate time series \emph{with} anomalies were chosen or generated to test the anomaly detection process.
+Some univariate time series \emph{with} anomalies were chosen or generated to test the anomaly detection process:
+
+\begin{description}
+
+\item[electrocardiogram  (ECG):] a signal from the human heart taken from the PhysioNet \cite{PhysioNet} database.
+
+\item[polysomnography ECG (PSG-ECG):] human ECG data \cite{PhysioNet} taken during a sleep study%
+\footnote{University College Dublin Sleep Apnea Database, \url{http://www.physionet.org/physiobank/database/ucddb/}, doi:10.13026/C26C7D, study id. ucddb002}%
+.
+
+\item[power demand:] a building's electrical power usage data
+\footnote{\url{http://www.cs.ucr.edu/~eamonn/discords/power_data.txt}} referenced in the influencial HOT-SAX paper \cite{Keogh2005} (for anomaly detection in time series).
+
+\item[spike:] a generated sequence that is simply evenly-spaced `spikes' of the same height.
+
+\item[sine:] a generated sinusoidal signal.
+
+\end{description}
+\noindent
 %
+The normal behaviour, as well as anomalous behaviour, of these time series can be seen in the plots presented in Section \ref{sec:results}.
+
 While there is only one `master' time series to train on (in each test), the RNN needs to see many `samples' from the master time series.
 %
 The sliding window procedure, described in \ref{sec:adsample}, is used to get samples of some window length.
@@ -52,10 +72,11 @@ However, the minimum window length was chosen such that meaningful dynamics were
 \begin{table}[H]
   \centering
   \csvreader[
-  tabular=|p{1in}||c|c|c|c|c||c|
+  % need p b/c the below \ifthenelse 'filters' make the tbl cell ugly
+  tabular=|p{.75in}||c|c|c|c|c||c| 
   ,table head=
   \hline
-  \bfseries name
+  \bfseries series
   &  length 
   &  min. win.
   &  slide skip 
@@ -76,11 +97,12 @@ However, the minimum window length was chosen such that meaningful dynamics were
     ,winsize_jump=\wss
   }%
   {
-    \ifthenelse{ \equal{\nm}{sin}}{   sine (gen.) }{}
-    \ifthenelse{ \equal{\nm}{ecg}}{   ECG \cite{PhysioNet} }{}
-    \ifthenelse{ \equal{\nm}{power}}{ power \cite{Keogh2005} }{}
-    \ifthenelse{ \equal{\nm}{sleep}}{ sleep \cite{this} }{}
-    \ifthenelse{ \equal{\nm}{spike}}{ spike (gen.) }{}
+    %these act like filters. so you have to explicitly get them
+    \ifthenelse{ \equal{\nm}{sin}}{   sine  }{}
+    \ifthenelse{ \equal{\nm}{ecg}}{   ECG  }{}
+    \ifthenelse{ \equal{\nm}{power}}{ power  }{}
+    \ifthenelse{ \equal{\nm}{sleep}}{ PSG-ECG}{}
+    \ifthenelse{ \equal{\nm}{spike}}{ spike  }{}
     & \ln & \mw & \ss & \wss & \bs & \ns
   }
 \caption[]{Time series sample specifications} %todo: what case?
@@ -250,9 +272,11 @@ Bayesian optimization is suited for optimizing RNN training because
 
 The \texttt{spearmint} \cite{snoek2012practical} package was used to drive the hyper-parameter optimization process.
 %
-After every optimization iteration, RNN parameters were saved.
+The process was programmed to save RNN parameters after every optimization iteration.
 %
-The process was stopped until the RNN with the minimum validation loss was subjectively able to detect anomalies
+\texttt{spearmint} takes a parameter search space and a maximum number of optimization iterations.
+%
+However, the process was stopped until the RNN with the minimum validation loss was subjectively able to detect anomalies
 %
 \footnote{Further optimization was possible with increasing RNN size but loss reduction diminished relative to the associated increase in computational expense. See Bayesian optimization figures in Section \ref{sec:results} }
 .
