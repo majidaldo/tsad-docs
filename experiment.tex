@@ -68,7 +68,7 @@ The values were adjusted manually until a `reasonable' number of samples were fo
 %
 However, the minimum window length was chosen such that meaningful dynamics were captured (regardless of the scale of the anomaly).
 
-
+%todo: why extra line ???
 \begin{table}[H]
   \centering
   \csvreader[
@@ -98,11 +98,11 @@ However, the minimum window length was chosen such that meaningful dynamics were
   }%
   {
     %these act like filters. so you have to explicitly get them
-    \ifthenelse{ \equal{\nm}{spike}}{ spike  }{}
-    \ifthenelse{ \equal{\nm}{sin}}{   sine  }{}
-    \ifthenelse{ \equal{\nm}{power}}{ power  }{}
-    \ifthenelse{ \equal{\nm}{ecg}}{   ECG  }{}
-    \ifthenelse{ \equal{\nm}{sleep}}{ PSG-ECG}{}
+    \ifthenelse{ \equal{\nm}{spike}}{\noindent spike}{}
+    \ifthenelse{ \equal{\nm}{sin}}{\noindent sine}{}
+    \ifthenelse{ \equal{\nm}{power}}{\noindent power}{}
+    \ifthenelse{ \equal{\nm}{ecg}}{\noindent ECG}{}
+    \ifthenelse{ \equal{\nm}{sleep}}{\noindent  PSG-ECG}{}
 
     & \ln & \mw & \ss & \wss & \bs & \ns
   }
@@ -264,7 +264,7 @@ Gradients were computed using \texttt{theano}'s automatic differentiation featur
 
 While the training procedure optimizes $\vc{\theta}$, there are other parameters that could be adjusted to minimize the loss.
 %
-The number of layers, $n_l$, and the `size' of each layer, $n_s$, corresponding the dimension of vector $\vc{s}$ (which equals the cell state mem), were chosen as `hyper-parameters' for optimization in a Bayesian optimization process.
+The number of layers, $l$, and the `size' of each layer, $n$, corresponding the dimension of vector $\vc{s}$ (which equals the cell state mem), were chosen as `hyper-parameters' for optimization in a Bayesian optimization process.
 %
 Bayesian optimization is suited for optimizing RNN training because
 1) it tries to minimize the number of (expensive) objective function calls, which, in this case, is the training procedure, and
@@ -279,20 +279,59 @@ The process was programmed to save RNN parameters after every optimization itera
 %
 However, the process was stopped until the RNN with the minimum validation loss was subjectively able to detect anomalies
 %
-\footnote{Further optimization was possible with increasing RNN size but loss reduction diminished relative to the associated increase in computational expense. See Bayesian optimization figures in Section \ref{sec:results} }
-(see Section \ref{sec:results}).
+\footnote{
+Further optimization was possible with increasing RNN size but loss reduction diminished relative to the associated increase in computational expense.
+}
+.
 
 
-% \begin{figure}[t!]
-%     \centering
-%     \begin{subfigure}[t]{\textwidth} %hmm it's the same width as the pdf
-% %todo: check the previous pdfs includegraphics
-%         \centering
-%         \includegraphics[]{figs/bo_ecg.pdf}
-%         \caption{Lorem ipsum}
-%     \end{subfigure}%
-% \caption{bo}
-% \end{figure}
+Figure \ref{fig:bo} shows the results of the process.
+%
+Each point is the average validation loss since more than training session could have been launched with the same parameters.
+%
+If so, the points have a 95\% confidence interval bar through them.
+
+\begin{figure}[t!]
+    \centering
+  
+  \begin{subfigure}[t]{\textwidth} %hmm it's the same width as the pdf
+%todo: check the previous pdfs includegraphics
+        \centering
+        \includegraphics[]{figs/bo_spike.pdf}
+        \caption{spike}
+    \end{subfigure}%
+  
+    \begin{subfigure}[t]{\textwidth}
+        \centering
+        \includegraphics[]{figs/bo_sin.pdf}
+        \caption{sine}
+    \end{subfigure}%
+
+    \begin{subfigure}[t]{\textwidth} 
+        \centering
+        \includegraphics[]{figs/bo_power.pdf}
+        \caption{power}
+    \end{subfigure}%
+
+\end{figure}
+\begin{figure}
+    \ContinuedFloat %3 figs a pg
+
+    \begin{subfigure}[t]{\textwidth} 
+        \centering
+        \includegraphics[]{figs/bo_ecg.pdf}
+        \caption{ECG}
+    \end{subfigure}%
+
+    \begin{subfigure}[t]{\textwidth} 
+        \centering
+        \includegraphics[]{figs/bo_sleep.pdf}
+        \caption{PSG-ECG}
+    \end{subfigure}%
+
+\label{fig:bo}
+\caption{Bayesian optimized validation loss} %todo: make tbls sentence case
+\end{figure}
 
 
 \section{Results}
