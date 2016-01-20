@@ -6,8 +6,9 @@ import data
 
 import os
 
-#todo def register
-
+# todo def register
+#registry=[]
+#def register(cls): registry.append(cls)
 
 class tbl(object):
     kwargs={};
@@ -23,11 +24,17 @@ class tbl(object):
                   ,index=False
                   ,**kwargs)
 
+       
+ts=[
+    'spike',
+    'sin',
+    'power',
+    'ecg',
+    'sleep',
+]
 
 
-        
-ts=['ecg','sleep','power','spike','sin']
-
+@register
 class sampling(tbl):
     
     def get_data(self):
@@ -42,3 +49,10 @@ class sampling(tbl):
             kw[more[2]]=len(data.get(s))
             for ak in kw: d[ak].append(kw[ak])
         return pd.DataFrame.from_dict(d)
+
+
+
+
+    
+#if __name__=='__main__':
+#    for ac in registry: cls().save()
