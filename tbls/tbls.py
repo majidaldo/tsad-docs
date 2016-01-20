@@ -7,8 +7,8 @@ import data
 import os
 
 # todo def register
-#registry=[]
-#def register(cls): registry.append(cls)
+registry=[]
+def register(cls): registry.append(cls)
 
 class tbl(object):
     kwargs={};
