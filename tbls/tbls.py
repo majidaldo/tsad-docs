@@ -54,5 +54,5 @@ class sampling(tbl):
 
 
     
-#if __name__=='__main__':
-#    for ac in registry: cls().save()
+if __name__=='__main__':
+    for acls in registry: acls().save()
