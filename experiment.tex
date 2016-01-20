@@ -24,7 +24,7 @@ The outlines describes:
 %
 \end{description}
 
-
+%todo: results or anom data
 
 \section{Sampling: Sliding Windows}
 \label{sec:sampling}
@@ -98,11 +98,12 @@ However, the minimum window length was chosen such that meaningful dynamics were
   }%
   {
     %these act like filters. so you have to explicitly get them
-    \ifthenelse{ \equal{\nm}{sin}}{   sine  }{}
-    \ifthenelse{ \equal{\nm}{ecg}}{   ECG  }{}
-    \ifthenelse{ \equal{\nm}{power}}{ power  }{}
-    \ifthenelse{ \equal{\nm}{sleep}}{ PSG-ECG}{}
     \ifthenelse{ \equal{\nm}{spike}}{ spike  }{}
+    \ifthenelse{ \equal{\nm}{sin}}{   sine  }{}
+    \ifthenelse{ \equal{\nm}{power}}{ power  }{}
+    \ifthenelse{ \equal{\nm}{ecg}}{   ECG  }{}
+    \ifthenelse{ \equal{\nm}{sleep}}{ PSG-ECG}{}
+
     & \ln & \mw & \ss & \wss & \bs & \ns
   }
 \caption[]{Time series sample specifications} %todo: what case?
@@ -279,14 +280,25 @@ The process was programmed to save RNN parameters after every optimization itera
 However, the process was stopped until the RNN with the minimum validation loss was subjectively able to detect anomalies
 %
 \footnote{Further optimization was possible with increasing RNN size but loss reduction diminished relative to the associated increase in computational expense. See Bayesian optimization figures in Section \ref{sec:results} }
-.
+(see Section \ref{sec:results}).
 
+
+% \begin{figure}[t!]
+%     \centering
+%     \begin{subfigure}[t]{\textwidth} %hmm it's the same width as the pdf
+% %todo: check the previous pdfs includegraphics
+%         \centering
+%         \includegraphics[]{figs/bo_ecg.pdf}
+%         \caption{Lorem ipsum}
+%     \end{subfigure}%
+% \caption{bo}
+% \end{figure}
 
 
 \section{Results}
 \label{sec:results}
 
-
+%todo . theano implememtation particularly slow suspected
 
 %todo. include tbls and pdfs in repo in final
 
