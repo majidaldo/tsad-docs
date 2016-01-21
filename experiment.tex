@@ -332,14 +332,120 @@ If so, the points have a 95\% confidence interval bar through them.
 \label{fig:bo}
 \caption{Bayesian optimized validation loss} %todo: make tbls sentence case
 \end{figure}
+%todo: make figures centered by adding whitespace to the right
+
 
 
 \section{Results}
 \label{sec:results}
 
-%todo . theano implememtation particularly slow suspected
+The optimized RNN has some expectation of the typical series.
+%
+So, a `reconstruction error' is the difference between the test input and the output.
+%
+Therefore, the square of the reconstruction error can be used as an anomaly score \cite{Erfani2014}.
+%
+This section will show how the various calculations of error can be used to detect point anomalies \emph{as well as} discord anomalies introduced in \ref{this}.
+%
+However, the particular (objective) anomaly detection technique will not be discussed;
+only the anomaly score, that could be used for such a technique, is presented.
+%
+Nonetheless, the argument is made for the ability of autoencoding RNNs to detect anomalies.
 
-%todo. include tbls and pdfs in repo in final
+
+Although the order of the anomaly scores should not be important to the anomaly detection technique, sequences of error calculations can be made in two ways for a test series: 1) the MSE of a sliding window and 2) the squared error of every point in the test series where the whole sequence is input to the RNN.
+%
+As discussed in Section \ref{this}, while the MSE from a sliding window can detect both point anomalies and discords, it is preferable not to have to specify a window size.
+%
+Ideally, high anomaly scores for points close together signal a discord while a lone high anomaly score signals a point anomaly.
+%
+But both types of caclulations are evaluated in this discussion.
+
+
+Error calculations are presented graphically in Figure \ref{this} for each series.i
+%todoref
+%
+In the top pane, a portion of the input series is shown with an anomaly.
+%
+While the focus is on the anomaly, enough normal data is shown for subjective comparison.
+%
+The lower panes show series of squared error, $\epsilon$, where each pane is associated with a sliding window size.
+%
+The window size is represented by a highlighted vertical span in the error plot as well as a corresponding box in the input series plot to give a sense of scale to anomaly relative to the window.
+%
+Sliding a window over the test series that caclulates its MSE generates the error series (calculation type 1).
+%
+The locations of the MSE points correspond with the center of the sliding window.
+%
+However, error plots with just a vertical line as a `window' are just individual squared errors (calculation type 2).
+%
+Furthermore, a kernel density estimate for all the errors (including ones outside the plot) is plotted (vertically) on the ordinate.
+%
+The highest 5 percentile and the maximum of (all) the errors are marked on the ordinate also.
+
+
+The maximum, the kernel density estimate, and the 5 percentile mark give a summary of the errors.
+%
+Together, with the error plot, the efficacy of the RNN in distinguishing anomalies can be evaluated;
+%
+normal data should correspond to the bulk of the error calculations while anomalies should correspond to extreme high values.
+
+
+\begin{figure}[t!]
+    \centering
+  
+  \begin{subfigure}[t]{\textwidth}
+        \centering
+        \includegraphics[]{figs/er_spike.pdf}
+        \caption{spikes}
+    \end{subfigure}%
+
+\end{figure}
+\begin{figure}
+    \ContinuedFloat 
+  
+    \begin{subfigure}[t]{\textwidth}
+        \centering
+        \includegraphics[]{figs/er_sin.pdf}
+        \caption{sine}
+    \end{subfigure}%
+
+\end{figure}
+\begin{figure}
+    \ContinuedFloat 
+
+    \begin{subfigure}[t]{\textwidth} 
+        \centering
+        \includegraphics[]{figs/er_power.pdf}
+        \caption{power}
+    \end{subfigure}%
+
+\end{figure}
+\begin{figure}
+    \ContinuedFloat 
+
+    \begin{subfigure}[t]{\textwidth} 
+        \centering
+        \includegraphics[]{figs/er_ecg.pdf}
+        \caption{ECG}
+    \end{subfigure}%
+
+\end{figure}
+\begin{figure}
+    \ContinuedFloat
+
+    \begin{subfigure}[t]{\textwidth} 
+        \centering
+        \includegraphics[]{figs/er_sleep.pdf}
+        \caption{PSG-ECG}
+    \end{subfigure}%
+
+\label{fig:err}
+\caption{Anomaly scores of series} %todo: make tbls sentence case
+\end{figure}
+
+%todo . theano implememtation particularly slow suspected
+%todo. include tbls and probabilitydfs in repo in final
 
 %%% Local Variables:
 %%% mode: latex
