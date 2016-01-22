@@ -421,7 +421,7 @@ def bop(data
     d=data.sort_values(by=x)
     oxc=set(d.columns)-set([y,hue]);  # other 'x' cols
     hues=np.sort(np.unique(d[hue]));
-    
+
     po=sns.pointplot(x=x,y=y,hue=hue
                       ,data=d
                      ,markers=('o', '>', 'p', 'v', '^', '8', 's', '<', '*', 'h', 'H', 'D', 'd')
@@ -446,7 +446,7 @@ def bop(data
     plt.ylabel(yld[yl]('L')+'$_v$') # ..of validation set
     xld={'n': r'$| \vc{s} |$', 'nl': '$l$'}
     plt.xlabel(xld[x])
-    po.legend(title=xld[hue])
+    po.legend(title=xld[hue],loc='best')
 
     #putting a line in myself b/c seaborn doesn't do it right!!
 
@@ -471,7 +471,6 @@ def bop(data
             i[ix]=ax
             i[ih]=ah
             ys.append(grps[y][tuple(i)])
-        print ah
         plt.plot( xs,ys,zorder=1 )
         
     plt.tight_layout(pad=0.05)
