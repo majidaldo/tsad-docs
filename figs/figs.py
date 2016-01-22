@@ -214,6 +214,19 @@ class sharexaxis(fig):
         xd=list(ax[0].get_xlim())
         if self.xl!=None: xd[0]=self.xl
         if self.xu!=None: xd[1]=self.xu
+
+        #kde of ts
+        yed=ax[0].lines[0].get_ydata()
+        kdexs=np.linspace(min(yed)#-.05*(max(yed)-min(yed)) #a lil less than 0
+                          ,max(yed)
+                          ,300)
+        kdef=sp.stats.gaussian_kde(yed)
+        kde=kdef(kdexs)
+        kde[0]=min(yed) # i'm not lying!
+        kde=kde/max(kde)*.1*(xd[1]-xd[0])#make dist 10% of x axis
+        kde=kde+xd[0] #shift to start
+        ax[0].plot(kde,kdexs,linewidth=1.5,color='green')
+        
         ax[0].set_xlim(xd); ax[1].set_xlim(xd)
         ax[0].set_ylim(
                 min(    dataall[0][xd[0]:xd[1]]    )
@@ -364,14 +377,22 @@ class er_ecg(erfig):
     wins=[0,50,150,200]
     al=1565
 
-
+#@register
+class er_spikereg(erfig):
+    xl=320;xu=None
+    wins=[0,50,100]
+    al=642
 @register
 class er_spike(erfig):
     xl=320;xu=None
     wins=[0,50,100]
     al=642
 
-
+@register
+class er_spikereg(erfig):
+    xl=320;xu=None
+    wins=[0,50,100]
+    al=642
 
 @register
 class er_power(erfig):
@@ -396,14 +417,17 @@ def bop(data
        ,y='o'
        ,x='n'
        ,est=np.mean):
+    d=data.sort_values(by=hue)
     d=data.sort_values(by=x)
     oxc=set(d.columns)-set([y,hue]);  # other 'x' cols
+    hues=np.sort(np.unique(d[hue]));
     
     po=sns.pointplot(x=x,y=y,hue=hue
                       ,data=d
                      ,markers=('o', '>', 'p', 'v', '^', '8', 's', '<', '*', 'h', 'H', 'D', 'd')
                       ,join=False
                       ,dodge=True
+                     ,hue_order=hues
                      ,estimator=est
     );
     
@@ -422,14 +446,13 @@ def bop(data
     plt.ylabel(yld[yl]('L')+'$_v$') # ..of validation set
     xld={'n': r'$| \vc{s} |$', 'nl': '$l$'}
     plt.xlabel(xld[x])
-    po.legend(title=xld[hue])    
+    po.legend(title=xld[hue])
 
     #putting a line in myself b/c seaborn doesn't do it right!!
 
     grps=d.groupby(by=[hue]+list(oxc),sort=True)
     grps=grps.aggregate(est)#.reset_index();
 
-    hues=(np.unique(d[hue]))
     xlocs=[]
     for al in po.lines:
         xlocs.append( al.get_data()[0][0] )
@@ -448,6 +471,7 @@ def bop(data
             i[ix]=ax
             i[ih]=ah
             ys.append(grps[y][tuple(i)])
+        print ah
         plt.plot( xs,ys,zorder=1 )
         
     plt.tight_layout(pad=0.05)
@@ -485,6 +509,10 @@ class bo_sin(bo):
 class bo_power(bo):
     ts_id='power'
 
+#todo: no need for ts_id name
+#@register
+class bo_spikereg(bo):
+    ts_id='spikereg'
 @register
 class bo_spike(bo):
     ts_id='spike'
