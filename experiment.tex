@@ -34,6 +34,7 @@ Some univariate time series \emph{with} anomalies were chosen or generated to te
 \begin{description}
 
 \item[electrocardiogram  (ECG):] a signal from the human heart taken from the PhysioNet \cite{PhysioNet} database.
+%todo: ecg data is popular. see why in results.
 
 \item[polysomnography ECG (PSG-ECG):] human ECG data \cite{PhysioNet} taken during a sleep study%
 \footnote{University College Dublin Sleep Apnea Database, \url{http://www.physionet.org/physiobank/database/ucddb/}, doi:10.13026/C26C7D, study id. ucddb002}%
@@ -49,7 +50,8 @@ Some univariate time series \emph{with} anomalies were chosen or generated to te
 \end{description}
 \noindent
 %
-The normal behaviour, as well as anomalous behaviour, of these time series can be seen in the plots presented in Section \ref{sec:results}.
+The normal behaviour, as well as anomalous behaviour, of these time series can be seen in the plots presented in Section \ref{sec:results}.%
+%todo: along with an explanation of why it was chosen
 
 While there is only one `master' time series to train on (in each test), the RNN needs to see many `samples' from the master time series.
 %
@@ -336,10 +338,10 @@ If so, the points have a 95\% confidence interval bar through them.
 
 
 
-\section{Results}
+\section{Results and Discussion}
 \label{sec:results}
 
-The optimized RNN has some expectation of the typical series.
+The optimal RNN has some expectation of the typical series.
 %
 So, a `reconstruction error' is the difference between the test input and the output.
 %
@@ -353,7 +355,7 @@ only the anomaly score, that could be used for such a technique, is presented.
 Nonetheless, the argument is made for the ability of autoencoding RNNs to detect anomalies.
 
 
-Although the order of the anomaly scores should not be important to the anomaly detection technique, sequences of error calculations can be made in two ways for a test series: 1) the MSE of a sliding window and 2) the squared error of every point in the test series where the whole sequence is input to the RNN.
+Although the order of the anomaly scores should not be important to the anomaly detection technique, sequences of error calculations can be made in two ways for a test series: 1) the MSE of a sliding window and 2) the squared error of every point in the test series where the whole sequence is input to the optimal RNN.
 %
 As discussed in Section \ref{this}, while the MSE from a sliding window can detect both point anomalies and discords, it is preferable not to have to specify a window size.
 %
@@ -362,12 +364,13 @@ Ideally, high anomaly scores for points close together signal a discord while a 
 But both types of caclulations are evaluated in this discussion.
 
 
-Error calculations are presented graphically in Figure \ref{this} for each series.i
-%todoref
+Error calculations are presented graphically in Figure \ref{fig:err} for each series.
 %
 In the top pane, a portion of the input series is shown with an anomaly.
 %
 While the focus is on the anomaly, enough normal data is shown for subjective comparison.
+%
+The extremes of the ordinate are the extremes of all the input.
 %
 The lower panes show series of squared error, $\epsilon$, where each pane is associated with a sliding window size.
 %
@@ -391,7 +394,82 @@ Together, with the error plot, the efficacy of the RNN in distinguishing anomali
 normal data should correspond to the bulk of the error calculations while anomalies should correspond to extreme high values.
 
 
-\begin{figure}[t!]
+It should be noted that as the window size is increased, fractionally less points are included in the, normal, 95 percentile (and vice versa).
+%
+The kernel desnity estimate might change significantly accordingly.
+
+
+What follows is a discussion of the ability of the (optimal) RNN to detect anomalies referencing subfigures of Figure \ref{fig:err}.
+
+
+
+\noindent {\bfseries{spikes}}
+
+This series can be considered discrete with a point anomaly.
+%
+The errors were discrete as well with the anomaly region taking on specific values.
+%
+Clearly, the anomalies are distinguised in all error calculations.
+
+
+\noindent {\bfseries{sine}}
+
+This series tests discord because no single point is anomalous.
+%
+For the windowed errors, the anomalous and normal regions are distinguished by a range of values for each.
+%
+But, there was a transition region with errors higher or lower than the anomalous region.
+%
+In the point error plot, the extreme values correspond to extreme values in the test plot.
+%
+So, given these results, the windowed error can be more attributed to the extreme values of the test series than to its anomalous behaviour.
+%
+In any case the RNN found a tight expectation for typical values.
+
+
+\noindent {\bfseries{power}}
+
+The power series normally shows a daily demand profile over a five-day work week.
+%
+The windowed error distribution has a long tail because high errors were given to normal areas of test series (not shown within the plot).
+%
+In fact, the first windowed error plot does not contain the highest error unlike the second windowed error plot.
+%
+Nonetheless, both windowed errors distinguished the anomalous region.
+%
+But, obviously, the point errors can not be used to detect the anomalous region.
+
+
+\noindent {\bfseries{ECG}}
+
+The ECG is a challenging series because, while there is a repeating element, the element does not precicely have the same period.
+%
+There is also noise in the signal that has to be distinguished from its significant features.
+
+In the point error plot, the most prominent values correspond to points on the test series that are simply lower than a baseline.
+%
+The same cannot be said about the error plot with the smallest window;
+%
+although the areas with extreme values are the most prominent, areas that have different behavior, but not extreme in value, are distinguished as well.
+%
+This window size was chosen to be about the size of the repeating unit since the effect on the error is diluted for larger windows.
+%
+Still, the argument can be made that the larger windows captured the anomalous region's behavior, as opposed to just its extreme values, because a significant portion of the error corresponding to the anomalous region lies within the 95 percentile (and hence within the normal range of fluctuations for normal data). %weak :S
+
+
+\noindent {\bfseries{PSG-ECG}}
+
+In this ECG, the point errors do not real much about the anomalous region becuase every spike in the error plot plot corresponds to a normal spike in the ECG, normal or otherwise.
+%
+However, the anomalous region is clearly detected in both windowed error plots. Again the error is well beyond the normal range of error fluctuations.
+
+
+%todo: get validation error plts
+%todo: can add linear trend
+%todo: the figs should accompany the text. split the figs
+
+
+\begin{figure}[t!] %todo: i think gmu wants all figs at the top
     \centering
   
   \begin{subfigure}[t]{\textwidth}
@@ -399,6 +477,7 @@ normal data should correspond to the bulk of the error calculations while anomal
         \includegraphics[]{figs/er_spike.pdf}
         \caption{spikes}
     \end{subfigure}%
+
 
 \end{figure}
 \begin{figure}
@@ -441,8 +520,11 @@ normal data should correspond to the bulk of the error calculations while anomal
     \end{subfigure}%
 
 \label{fig:err}
-\caption{Anomaly scores of series} %todo: make tbls sentence case
+\caption{Anomaly scores of series} 
+%todo: make tbls captions sentence case but no period
 \end{figure}
+
+
 
 %todo . theano implememtation particularly slow suspected
 %todo. include tbls and probabilitydfs in repo in final
