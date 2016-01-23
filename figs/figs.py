@@ -383,17 +383,17 @@ class er_spikereg(erfig):
     xl=320;xu=None
     wins=[0,50,100]
     al=642
+@register
+class er_spikelv(erfig):
+    xl=320;xu=None
+    wins=[0,50,100]
+    al=642
 #not going to be using this
 class er_spike(erfig):
     xl=320;xu=None
     wins=[0,50,100]
     al=642
 
-@register
-class er_spikereg(erfig):
-    xl=320;xu=None
-    wins=[0,50,100]
-    al=642
 
 @register
 class er_power(erfig):
@@ -508,6 +508,8 @@ class bo_power(bo):pass
 
 @register
 class bo_spikereg(bo):pass
+@register
+class bo_spikelv(bo):pass
 #not gonna use this
 class bo_spike(bo):pass
 
