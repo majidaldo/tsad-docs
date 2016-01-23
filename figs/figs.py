@@ -17,6 +17,11 @@ def register(figcls):
 
 
 class fig(object):
+    name=None
+    def __init__(self):
+        if self.name==None:
+            self.name=self.__class__.__name__[3:]
+    
     def data(self):pass
     def plot(self): plt.close();
     def style(self):pass
@@ -335,10 +340,6 @@ import data
 class erfig(recon):
     name=None #if none, gets the name from class name
     al=None # (qualitative) anomaly location
-
-    def __init__(self):
-        if self.name==None:
-            self.name=self.__class__.__name__[3:]
     
     def data(self):
         er=[analysis.errs(self.name,awin) for awin in self.wins ]
@@ -478,7 +479,6 @@ def bop(data
 
 
 class bo(fig):
-    ts_id=None
     bop_kwargs={
         'hue':'nl'
        ,'y':'o'
@@ -497,32 +497,25 @@ class bo(fig):
         latexify(fig_width=4,ratio=(sqrt(5)-1.0)/2.0)#'golden')
 
     def data(self):
-        return analysis.bo_diag(self.ts_id)
+        return analysis.bo_diag(self.name.replace('bo_',''))
 
 
 @register
-class bo_sin(bo):
-    ts_id='sin'
+class bo_sin(bo): pass
 
 @register
-class bo_power(bo):
-    ts_id='power'
+class bo_power(bo):pass
 
-#todo: no need for ts_id name
 @register
-class bo_spikereg(bo):
-    ts_id='spikereg'
+class bo_spikereg(bo):pass
 #not gonna use this
-class bo_spike(bo):
-    ts_id='spike'
+class bo_spike(bo):pass
 
 @register
-class bo_sleep(bo):
-    ts_id='sleep'
+class bo_sleep(bo): pass
 
 @register
-class bo_ecg(bo):
-    ts_id='ecg'
+class bo_ecg(bo): pass
 
 
         
