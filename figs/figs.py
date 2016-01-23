@@ -522,8 +522,44 @@ class bo_ecg(bo): pass
 
 
 
-    
+#VALIDATION and TRAINING ERROR
 
+
+class trn(fig):
+    
+    def plot(self):
+        fig().plot(); #jus' closes a previous plot
+        self.format();
+        d=self.data()
+        plt.plot(d['trn'],label='training')
+        po=plt.plot(d['vld'],label='validation')[0]
+        po.axes.set_yscale('log')
+        po.axes.get_xaxis().set_label_text('epoch')
+        po.axes.get_yaxis().set_label_text('$L$')
+        plt.legend(loc='upper right')
+        plt.autoscale(tight=True)
+        return po
+    
+    def format(self):
+        latexify(fig_width=4,ratio=(sqrt(5)-1.0)/2.0)#'golden')
+
+    def data(self):
+        nm=self.name.replace('trn_','')
+        br=analysis.get_best_params(nm)['run_id']
+        return analysis.get_epocherr(nm,br)
+
+@register
+class trn_spikereg(trn):pass
+@register
+class trn_spikelv(trn):pass
+@register
+class trn_sin(trn):pass
+@register
+class trn_power(trn):pass
+@register
+class trn_ecg(trn):pass
+@register
+class trn_sleep(trn):pass
         
 #----    
 def latexify(fig_width=None
