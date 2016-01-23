@@ -377,12 +377,12 @@ class er_ecg(erfig):
     wins=[0,50,150,200]
     al=1565
 
-#@register
+@register
 class er_spikereg(erfig):
     xl=320;xu=None
     wins=[0,50,100]
     al=642
-@register
+#not going to be using this
 class er_spike(erfig):
     xl=320;xu=None
     wins=[0,50,100]
@@ -509,10 +509,10 @@ class bo_power(bo):
     ts_id='power'
 
 #todo: no need for ts_id name
-#@register
+@register
 class bo_spikereg(bo):
     ts_id='spikereg'
-@register
+#not gonna use this
 class bo_spike(bo):
     ts_id='spike'
 
