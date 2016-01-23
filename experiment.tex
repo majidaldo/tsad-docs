@@ -29,23 +29,24 @@ The outlines describes:
 \section{Sampling: Sliding Windows}
 \label{sec:sampling}
 
+
 Some univariate time series \emph{with} anomalies were chosen or generated to test the anomaly detection process:
 
 \begin{description}
 
-\item[electrocardiogram  (ECG):] a signal from the human heart taken from the PhysioNet \cite{PhysioNet} database.
-%todo: ecg data is popular. see why in results.
+\item[spike:] two generated sequence that are simply evenly-spaced `spikes' of the same height.
+
+\item[sine:] a generated sinusoidal signal.
+
+\item[power demand:] a building's electrical power usage data
+\footnote{\url{http://www.cs.ucr.edu/~eamonn/discords/power_data.txt}} referenced in the influencial HOT-SAX paper \cite{Keogh2005} (for anomaly detection in time series). The data was scaled down by dividing it by its median.
+
+\item[electrocardiogram  (ECG):] a signal from the human heart taken from the PhysioNet \cite{PhysioNet} database. Finding anomalies in ECG data has been used as a benchmark in several studies at least \cite{Malhotra2015,Keogh2005,Cheboli2010,li2012dimensionality,Wei2005,Chuah2007}.
 
 \item[polysomnography ECG (PSG-ECG):] human ECG data \cite{PhysioNet} taken during a sleep study%
 \footnote{University College Dublin Sleep Apnea Database, \url{http://www.physionet.org/physiobank/database/ucddb/}, doi:10.13026/C26C7D, study id. ucddb002}%
 .
 
-\item[power demand:] a building's electrical power usage data
-\footnote{\url{http://www.cs.ucr.edu/~eamonn/discords/power_data.txt}} referenced in the influencial HOT-SAX paper \cite{Keogh2005} (for anomaly detection in time series).
-
-\item[spike:] a generated sequence that is simply evenly-spaced `spikes' of the same height.
-
-\item[sine:] a generated sinusoidal signal.
 
 \end{description}
 \noindent
@@ -350,7 +351,7 @@ Therefore, the square of the reconstruction error can be used as an anomaly scor
 This section will show how the various calculations of error can be used to detect point anomalies \emph{as well as} discord anomalies introduced in \ref{this}.
 %
 However, the particular (objective) anomaly detection technique will not be discussed;
-only the anomaly score, that could be used for such a technique, is presented.
+only the anomaly score, that could be used in such a technique, is presented.
 %
 Nonetheless, the argument is made for the ability of autoencoding RNNs to detect anomalies.
 
@@ -370,7 +371,7 @@ In the top pane, a portion of the input series is shown with an anomaly.
 %
 While the focus is on the anomaly, enough normal data is shown for subjective comparison.
 %
-The extremes of the ordinate are the extremes of all the input.
+This is accompanied by a kernel density estimate, plotted on the ordinate (vertically), to evaluate the normality of the data \emph{by value} as opposed to \emph{behavior}.
 %
 The lower panes show series of squared error, $\epsilon$, where each pane is associated with a sliding window size.
 %
@@ -404,7 +405,7 @@ What follows is a discussion of the ability of the (optimal) RNN to detect anoma
 
 
 \noindent {\bfseries{spikes}}
-
+%todo: know that window goes up as soon as it hits the anomaly.
 This series can be considered discrete with a point anomaly.
 %
 The errors were discrete as well with the anomaly region taking on specific values.
@@ -425,11 +426,11 @@ In the point error plot, the extreme values correspond to extreme values in the 
 So, given these results, the windowed error can be more attributed to the extreme values of the test series than to its anomalous behaviour.
 %
 In any case the RNN found a tight expectation for typical values.
-
+%kde bad
 
 \noindent {\bfseries{power}}
 
-The power series normally shows a daily demand profile over a five-day work week.
+The power series normally shows a demand profile over a five-day work week.
 %
 The windowed error distribution has a long tail because high errors were given to normal areas of test series (not shown within the plot).
 %
@@ -452,16 +453,22 @@ The same cannot be said about the error plot with the smallest window;
 %
 although the areas with extreme values are the most prominent, areas that have different behavior, but not extreme in value, are distinguished as well.
 %
+For example, a particularly subtle anomaly was detected within the highest 5 percentile at $t~1380$ despite the fact that the more anomalous \emph{region} contributed extreme values.
+%
 This window size was chosen to be about the size of the repeating unit since the effect on the error is diluted for larger windows.
 %
-Still, the argument can be made that the larger windows captured the anomalous region's behavior, as opposed to just its extreme values, because a significant portion of the error corresponding to the anomalous region lies within the 95 percentile (and hence within the normal range of fluctuations for normal data). %weak :S
+%Still, an argument can be made that the larger windows captured the anomalous region's behavior, as opposed to just its extreme values, because a significant portion of the error corresponding to the anomalous region lies within the 95 percentile (and hence within the normal range of error fluctuations for normal data). %weak :S
+The larger windows detected the most anomalous region but it is difficult the determine whether the extreme error values were due to deviant values or deviant behavior.
 
 
 \noindent {\bfseries{PSG-ECG}}
 
 In this ECG, the point errors do not real much about the anomalous region becuase every spike in the error plot plot corresponds to a normal spike in the ECG, normal or otherwise.
 %
-However, the anomalous region is clearly detected in both windowed error plots. Again the error is well beyond the normal range of error fluctuations.
+However, the anomalous region is clearly detected in both windowed error plots.
+%
+Again the error in the anomalous region is well beyond the normal range of error fluctuations albeit the test series values are slightly above average (as can be seen from the density estimate).
+
 
 
 %todo: get validation error plts
