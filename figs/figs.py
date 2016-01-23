@@ -20,7 +20,8 @@ class fig(object):
     name=None
     def __init__(self):
         if self.name==None:
-            self.name=self.__class__.__name__[3:]
+            nmi=self.__class__.__name__.find('_')
+            self.name=self.__class__.__name__[nmi+1:]
     
     def data(self):pass
     def plot(self): plt.close();
@@ -519,6 +520,9 @@ class bo_sleep(bo): pass
 @register
 class bo_ecg(bo): pass
 
+
+
+    
 
         
 #----    
