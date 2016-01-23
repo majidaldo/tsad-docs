@@ -538,6 +538,7 @@ class trn(fig):
         po.axes.get_yaxis().set_label_text('$L$')
         plt.legend(loc='upper right')
         plt.autoscale(tight=True)
+        plt.tight_layout(pad=0.05)
         return po
     
     def format(self):
