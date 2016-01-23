@@ -1,5 +1,6 @@
 batch_size,length,min_winsize,name,nsamples,slide_jump,winsize_jump
-10,800,80,spike,378,8,8
+10,800,100,spikelv,51,20,20
+10,800,100,spikereg,51,20,20
 30,1000,100,sin,96,10,10
 30,7008,100,power,252,100,20
 30,3277,300,ecg,300,20,20

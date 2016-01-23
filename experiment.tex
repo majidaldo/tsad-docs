@@ -101,7 +101,8 @@ However, the minimum window length was chosen such that meaningful dynamics were
   }%
   {
     %these act like filters. so you have to explicitly get them
-    \ifthenelse{ \equal{\nm}{spike}}{\noindent spike}{}
+    \ifthenelse{ \equal{\nm}{spikelv}}{\noindent spike-1}{}
+    \ifthenelse{ \equal{\nm}{spikereg}}{\noindent spike-2}{}
     \ifthenelse{ \equal{\nm}{sin}}{\noindent sine}{}
     \ifthenelse{ \equal{\nm}{power}}{\noindent power}{}
     \ifthenelse{ \equal{\nm}{ecg}}{\noindent ECG}{}
@@ -300,8 +301,14 @@ If so, the points have a 95\% confidence interval bar through them.
   \begin{subfigure}[t]{\textwidth} %hmm it's the same width as the pdf
 %todo: check the previous pdfs includegraphics
         \centering
-        \includegraphics[]{figs/bo_spike.pdf}
-        \caption{spike}
+        \includegraphics[]{figs/bo_spikelv.pdf}
+        \caption{spike-1}
+    \end{subfigure}%
+
+  \begin{subfigure}[t]{\textwidth}
+        \centering
+        \includegraphics[]{figs/bo_spikereg.pdf}
+        \caption{spike-2}
     \end{subfigure}%
   
     \begin{subfigure}[t]{\textwidth}
@@ -310,15 +317,16 @@ If so, the points have a 95\% confidence interval bar through them.
         \caption{sine}
     \end{subfigure}%
 
+
+\end{figure}
+\begin{figure}
+    \ContinuedFloat %3 figs a pg
+
     \begin{subfigure}[t]{\textwidth} 
         \centering
         \includegraphics[]{figs/bo_power.pdf}
         \caption{power}
     \end{subfigure}%
-
-\end{figure}
-\begin{figure}
-    \ContinuedFloat %3 figs a pg
 
     \begin{subfigure}[t]{\textwidth} 
         \centering
@@ -405,13 +413,16 @@ What follows is a discussion of the ability of the (optimal) RNN to detect anoma
 
 
 \noindent {\bfseries{spikes}}
-%todo: know that window goes up as soon as it hits the anomaly.
+
 This series can be considered discrete with a point anomaly.
 %
-The errors were discrete as well with the anomaly region taking on specific values.
+The point anomaly takes on an improbable value but is not extreme.
 %
 Clearly, the anomalies are distinguised in all error calculations.
 
+Note the anomaly signal increases as soon as the sliding window (from the left) encounters the anomaly.
+%
+This observation can be used to analyze the other series.
 
 \noindent {\bfseries{sine}}
 
@@ -470,7 +481,7 @@ However, the anomalous region is clearly detected in both windowed error plots.
 Again the error in the anomalous region is well beyond the normal range of error fluctuations albeit the test series values are slightly above average (as can be seen from the density estimate).
 
 
-
+%todo: edit tbl for spikelv/reg
 %todo: get validation error plts
 %todo: can add linear trend
 %todo: the figs should accompany the text. split the figs
@@ -481,10 +492,19 @@ Again the error in the anomalous region is well beyond the normal range of error
   
   \begin{subfigure}[t]{\textwidth}
         \centering
-        \includegraphics[]{figs/er_spike.pdf}
-        \caption{spikes}
+        \includegraphics[]{figs/er_spikelv.pdf}
+        \caption{spike-1}
     \end{subfigure}%
 
+\end{figure}
+\begin{figure}
+    \ContinuedFloat 
+  
+    \begin{subfigure}[t]{\textwidth}
+        \centering
+        \includegraphics[]{figs/er_spikereg.pdf}
+        \caption{spike-2}
+    \end{subfigure}%
 
 \end{figure}
 \begin{figure}

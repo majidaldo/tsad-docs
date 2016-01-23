@@ -26,7 +26,8 @@ class tbl(object):
 
        
 ts=[
-    'spike',
+    'spikelv',
+    'spikereg',
     'sin',
     'power',
     'ecg',
