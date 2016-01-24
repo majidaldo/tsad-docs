@@ -446,7 +446,7 @@ def bop(data
     yl=yl.split('(')[0] # mean, median, mode ..etc
     yld={'mean':lambda x:'$\overline{%s}$'%x}
     plt.ylabel(yld[yl]('L')+'$_v$') # ..of validation set
-    xld={'n': r'$| \vc{s} |$', 'nl': '$l$'}
+    xld={'n': r'$n$', 'nl': '$l$'}
     plt.xlabel(xld[x])
     po.legend(title=xld[hue],loc='best')
 
