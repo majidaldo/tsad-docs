@@ -295,48 +295,49 @@ Each point is the average validation loss since more than training session could
 %
 If so, the points have a 95\% confidence interval bar through them.
 
+
 \begin{figure}[t!]
-    \centering
+    \centering %3figs a pg. these are the gen figs
   
   \begin{subfigure}[t]{\textwidth} %hmm it's the same width as the pdf
 %todo: check the previous pdfs includegraphics
-        \centering
-        \includegraphics[]{figs/bo_spikelv.pdf}
+        \includegraphics[width=.5\textwidth]{figs/bo_spikelv.pdf}
+        \includegraphics[width=.5\textwidth]{figs/trn_spikelv.pdf}
         \caption{spike-1}
     \end{subfigure}%
 
   \begin{subfigure}[t]{\textwidth}
-        \centering
-        \includegraphics[]{figs/bo_spikereg.pdf}
+        \includegraphics[width=.5\textwidth]{figs/bo_spikereg.pdf}
+        \includegraphics[width=.5\textwidth]{figs/trn_spikereg.pdf}
         \caption{spike-2}
     \end{subfigure}%
   
     \begin{subfigure}[t]{\textwidth}
-        \centering
-        \includegraphics[]{figs/bo_sin.pdf}
+        \includegraphics[width=.5\textwidth]{figs/bo_sin.pdf}
+        \includegraphics[width=.5\textwidth]{figs/trn_sin.pdf}
         \caption{sine}
     \end{subfigure}%
 
 
 \end{figure}
 \begin{figure}
-    \ContinuedFloat %3 figs a pg
+    \ContinuedFloat %3 'real' data
 
     \begin{subfigure}[t]{\textwidth} 
-        \centering
-        \includegraphics[]{figs/bo_power.pdf}
+        \includegraphics[width=.5\textwidth]{figs/bo_power.pdf}
+        \includegraphics[width=.5\textwidth]{figs/trn_power.pdf}
         \caption{power}
     \end{subfigure}%
 
     \begin{subfigure}[t]{\textwidth} 
-        \centering
-        \includegraphics[]{figs/bo_ecg.pdf}
+        \includegraphics[width=.5\textwidth]{figs/bo_ecg.pdf}
+        \includegraphics[width=.5\textwidth]{figs/trn_ecg.pdf}
         \caption{ECG}
     \end{subfigure}%
 
     \begin{subfigure}[t]{\textwidth} 
-        \centering
-        \includegraphics[]{figs/bo_sleep.pdf}
+        \includegraphics[width=.5\textwidth]{figs/bo_sleep.pdf}
+        \includegraphics[width=.5\textwidth]{figs/trn_sleep.pdf}
         \caption{PSG-ECG}
     \end{subfigure}%
 
@@ -412,7 +413,7 @@ What follows is a discussion of the ability of the (optimal) RNN to detect anoma
 
 
 
-\noindent {\bfseries{spikes}}
+\noindent {\bfseries{spikes-1}}
 
 This series can be considered discrete with a point anomaly.
 %
@@ -420,9 +421,17 @@ The point anomaly takes on an improbable value but is not extreme.
 %
 Clearly, the anomalies are distinguised in all error calculations.
 
-Note the anomaly signal increases as soon as the sliding window (from the left) encounters the anomaly.
+Note the error increases as soon as the sliding window (from the left) encounters the anomaly.
 %
 This observation can be used to analyze the other series.
+
+
+\noindent {\bfseries{spikes-2}}
+
+This spike series tests if the error becomes significant where the spike is out of place; a discord.
+%
+The anomaly is definitely detected in the windowed error plot but not the point error plot.
+
 
 \noindent {\bfseries{sine}}
 
@@ -469,7 +478,7 @@ For example, a particularly subtle anomaly was detected within the highest 5 per
 This window size was chosen to be about the size of the repeating unit since the effect on the error is diluted for larger windows.
 %
 %Still, an argument can be made that the larger windows captured the anomalous region's behavior, as opposed to just its extreme values, because a significant portion of the error corresponding to the anomalous region lies within the 95 percentile (and hence within the normal range of error fluctuations for normal data). %weak :S
-The larger windows detected the most anomalous region but it is difficult the determine whether the extreme error values were due to deviant values or deviant behavior.
+The larger windows detected the most anomalous region but it is not apparent whether the extreme error values were due to deviant values or deviant behavior.
 
 
 \noindent {\bfseries{PSG-ECG}}
@@ -481,11 +490,8 @@ However, the anomalous region is clearly detected in both windowed error plots.
 Again the error in the anomalous region is well beyond the normal range of error fluctuations albeit the test series values are slightly above average (as can be seen from the density estimate).
 
 
-%todo: edit tbl for spikelv/reg
 %todo: get validation error plts
-%todo: can add linear trend
 %todo: the figs should accompany the text. split the figs
-
 
 \begin{figure}[t!] %todo: i think gmu wants all figs at the top
     \centering
