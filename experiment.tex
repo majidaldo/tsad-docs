@@ -561,7 +561,7 @@ The larger windows detected the most anomalous region but it is not apparent whe
 
 \noindent {\bfseries{PSG-ECG}}
 
-\begin{figure}[!hp]
+\begin{figure}[!hp] 
     \ContinuedFloat
 
     \begin{subfigure}[t]{\textwidth} 
@@ -583,8 +583,40 @@ However, the anomalous region is clearly detected in both windowed error plots.
 Again the error in the anomalous region is well beyond the normal range of error fluctuations albeit the test series values are slightly above average (as can be seen from the density estimate).
 
 
- 
+%todo:replace: indices to ^X^X FOR p omitted
+%todo: 'was programmed to save'  ...just write: process saves
+\section[]{Conclusions}
 
+Given the results, which are influenced by the described training process and RNN architecture, some general statements can be made about how well the RNNs can find anomalies.
+
+\begin{itemize}
+
+\item 
+  Using the point errors, extreme, but not necessarily rare, values can be found.
+
+\item
+  The windowed errors are a verstile way of finding, both point and discord, anomalies at multiple scales.
+  % 
+  However, this means that the window size must be about the same scale as the anomaly.
+  % 
+  Else, the effect of the anomaly would not be pronounced.
+  %
+  Furthermore, the minimum window size must be long enough to contain meaningful dynamics.
+
+\item
+  Pursuant to the previous two points, windowed errors are more reliable in finding anomalies.
+
+\item
+  The traning data can have some anomalous data.
+
+\item
+  The RNNs were insensitive to variations in sequence length and translation.
+
+\end{itemize}
+
+In general, subject to effective training, the RNNs `learned' the typical \emph{behaviour} of the series.
+%
+Concludingly, the autoencoding recurrent neural network can be used to detect anomalies in series.
 
 %todo . theano implememtation particularly slow suspected
 %todo. include tbls and probabilitydfs in repo in final
