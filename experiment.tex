@@ -150,6 +150,7 @@ For each derivative in the gradient, RMSprop keeps an exponentially-weighted mov
 %
 More specifically, the (overall) RNN training procedure is outlined in the following box.
 
+
 \begin{algorithm}{Training Procedure}
 \begin{algorithmic}
 \STATE \STATE
@@ -162,6 +163,7 @@ More specifically, the (overall) RNN training procedure is outlined in the follo
 \STATE $\mathcal{X}_t \gets \mathrm{choose(75\%,\mathcal{X})}$
 \STATE $\mathcal{X}_v \gets \mathcal{X} - \mathcal{X}_t$
 \STATE \STATE
+
 
 \STATE \COMMENT{initalize}
 \STATE $\vc{\theta} \gets \vc{0}$
@@ -249,7 +251,7 @@ $v_{min}-v_{i}> v_{min} \cdot \mathrm{min\_improvement}$
 \STATE{$i \gets i+1$}
 \ENDFOR
 
-%\STATE% \STATE
+\STATE \STATE
 \end{algorithmic}
 \end{algorithm}
 
@@ -289,28 +291,41 @@ Further optimization may have been possible with increasing RNN size but loss re
 .
 
 
-Figure \ref{fig:bo} shows the results of the process.
+For every sample, Figure \ref{fig:bo} shows the results of the Bayesian optimization process and the training progress of the best network.
 %
-Each point is the average validation loss since more than training session could have been launched with the same parameters.
+In the Bayesian optimization figures, Each point is the average validation loss since more than training session could have been launched with the same parameters.
 %
 If so, the points have a 95\% confidence interval bar through them.
+%
+In the training progress figures, the validation and validation losses are close throughout the training process.
+%
+This is expected since the training and validation sets are highly redundant and perhaps the RNN, by nature, interprets them to be almost identical (invariance to translation and sequence length).
+%todo: results are fine eventhough it might be underfit
 
 
-\begin{figure}[t!]
+\begin{figure}[!hp]
     \centering %3figs a pg. these are the gen figs
   
   \begin{subfigure}[t]{\textwidth} %hmm it's the same width as the pdf
-%todo: check the previous pdfs includegraphics
+    % todo: check the previous pdfs includegraphics
         \includegraphics[width=.5\textwidth]{figs/bo_spikelv.pdf}
         \includegraphics[width=.5\textwidth]{figs/trn_spikelv.pdf}
         \caption{spike-1}
     \end{subfigure}%
+
+\end{figure}
+\begin{figure}[!hp]
+\ContinuedFloat
 
   \begin{subfigure}[t]{\textwidth}
         \includegraphics[width=.5\textwidth]{figs/bo_spikereg.pdf}
         \includegraphics[width=.5\textwidth]{figs/trn_spikereg.pdf}
         \caption{spike-2}
     \end{subfigure}%
+
+\end{figure}
+\begin{figure}[!hp]
+\ContinuedFloat
   
     \begin{subfigure}[t]{\textwidth}
         \includegraphics[width=.5\textwidth]{figs/bo_sin.pdf}
@@ -318,10 +333,9 @@ If so, the points have a 95\% confidence interval bar through them.
         \caption{sine}
     \end{subfigure}%
 
-
 \end{figure}
-\begin{figure}
-    \ContinuedFloat %3 'real' data
+\begin{figure}[!hp]
+\ContinuedFloat
 
     \begin{subfigure}[t]{\textwidth} 
         \includegraphics[width=.5\textwidth]{figs/bo_power.pdf}
@@ -329,11 +343,19 @@ If so, the points have a 95\% confidence interval bar through them.
         \caption{power}
     \end{subfigure}%
 
+\end{figure}
+\begin{figure}[!hp]
+\ContinuedFloat
+
     \begin{subfigure}[t]{\textwidth} 
         \includegraphics[width=.5\textwidth]{figs/bo_ecg.pdf}
         \includegraphics[width=.5\textwidth]{figs/trn_ecg.pdf}
         \caption{ECG}
     \end{subfigure}%
+
+\end{figure}
+\begin{figure}[!h] %OBVIOUSLY no p on last one...OBVIOUSLY!!
+\ContinuedFloat
 
     \begin{subfigure}[t]{\textwidth} 
         \includegraphics[width=.5\textwidth]{figs/bo_sleep.pdf}
@@ -342,7 +364,7 @@ If so, the points have a 95\% confidence interval bar through them.
     \end{subfigure}%
 
 \label{fig:bo}
-\caption{Bayesian optimized validation loss} %todo: make tbls sentence case
+\caption[Training results]{Bayesian optimized validation loss (left) and training progress of best RNN (right)} %todo: make tbls sentence case
 \end{figure}
 %todo: make figures centered by adding whitespace to the right
 
@@ -415,6 +437,17 @@ What follows is a discussion of the ability of the (optimal) RNN to detect anoma
 
 \noindent {\bfseries{spikes-1}}
 
+\begin{figure}[t] %todo: i think gmu wants all figs at the top
+    \centering
+  
+  \begin{subfigure}[t]{\textwidth}
+        \centering
+        \includegraphics[]{figs/er_spikelv.pdf}
+        \caption{spikes-1}
+    \end{subfigure}%
+
+\end{figure}
+
 This series can be considered discrete with a point anomaly.
 %
 The point anomaly takes on an improbable value but is not extreme.
@@ -428,12 +461,33 @@ This observation can be used to analyze the other series.
 
 \noindent {\bfseries{spikes-2}}
 
+\begin{figure}
+    \ContinuedFloat 
+    \begin{subfigure}[t]{\textwidth}
+        \centering
+        \includegraphics[]{figs/er_spikereg.pdf}
+        \caption{spikes-2}
+    \end{subfigure}%
+\end{figure}
+
 This spike series tests if the error becomes significant where the spike is out of place; a discord.
 %
 The anomaly is definitely detected in the windowed error plot but not the point error plot.
 
 
 \noindent {\bfseries{sine}}
+
+
+\begin{figure}
+    \ContinuedFloat 
+  
+    \begin{subfigure}[t]{\textwidth}
+        \centering
+        \includegraphics[]{figs/er_sin.pdf}
+        \caption{sine}
+    \end{subfigure}%
+
+\end{figure}
 
 This series tests discord because no single point is anomalous.
 %
@@ -450,6 +504,17 @@ In any case the RNN found a tight expectation for typical values.
 
 \noindent {\bfseries{power}}
 
+\begin{figure}
+    \ContinuedFloat 
+
+    \begin{subfigure}[t]{\textwidth} 
+        \centering
+        \includegraphics[]{figs/er_power.pdf}
+        \caption{power}
+    \end{subfigure}%
+
+\end{figure}
+
 The power series normally shows a demand profile over a five-day work week.
 %
 The windowed error distribution has a long tail because high errors were given to normal areas of test series (not shown within the plot).
@@ -462,6 +527,35 @@ But, obviously, the point errors can not be used to detect the anomalous region.
 
 
 \noindent {\bfseries{ECG}}
+
+
+\begin{figure}
+    \ContinuedFloat 
+
+    \begin{subfigure}[t]{\textwidth} 
+        \centering
+        \includegraphics[]{figs/er_ecg.pdf}
+        \caption{ECG}
+    \end{subfigure}%
+
+\end{figure}
+
+\begin{figure}
+    \ContinuedFloat
+
+    \begin{subfigure}[t]{\textwidth} 
+        \centering
+        \includegraphics[]{figs/er_sleep.pdf}
+        \caption{PSG-ECG}
+    \end{subfigure}%
+
+\label{fig:err}
+\caption{Anomaly scores of series} 
+%todo: make tbls captions sentence case but no period
+\end{figure}
+%todo: the figs should accompany the text. split the figs
+
+
 
 The ECG is a challenging series because, while there is a repeating element, the element does not precicely have the same period.
 %
@@ -490,72 +584,6 @@ However, the anomalous region is clearly detected in both windowed error plots.
 Again the error in the anomalous region is well beyond the normal range of error fluctuations albeit the test series values are slightly above average (as can be seen from the density estimate).
 
 
-%todo: get validation error plts
-%todo: the figs should accompany the text. split the figs
-
-\begin{figure}[t!] %todo: i think gmu wants all figs at the top
-    \centering
-  
-  \begin{subfigure}[t]{\textwidth}
-        \centering
-        \includegraphics[]{figs/er_spikelv.pdf}
-        \caption{spike-1}
-    \end{subfigure}%
-
-\end{figure}
-\begin{figure}
-    \ContinuedFloat 
-  
-    \begin{subfigure}[t]{\textwidth}
-        \centering
-        \includegraphics[]{figs/er_spikereg.pdf}
-        \caption{spike-2}
-    \end{subfigure}%
-
-\end{figure}
-\begin{figure}
-    \ContinuedFloat 
-  
-    \begin{subfigure}[t]{\textwidth}
-        \centering
-        \includegraphics[]{figs/er_sin.pdf}
-        \caption{sine}
-    \end{subfigure}%
-
-\end{figure}
-\begin{figure}
-    \ContinuedFloat 
-
-    \begin{subfigure}[t]{\textwidth} 
-        \centering
-        \includegraphics[]{figs/er_power.pdf}
-        \caption{power}
-    \end{subfigure}%
-
-\end{figure}
-\begin{figure}
-    \ContinuedFloat 
-
-    \begin{subfigure}[t]{\textwidth} 
-        \centering
-        \includegraphics[]{figs/er_ecg.pdf}
-        \caption{ECG}
-    \end{subfigure}%
-
-\end{figure}
-\begin{figure}
-    \ContinuedFloat
-
-    \begin{subfigure}[t]{\textwidth} 
-        \centering
-        \includegraphics[]{figs/er_sleep.pdf}
-        \caption{PSG-ECG}
-    \end{subfigure}%
-
-\label{fig:err}
-\caption{Anomaly scores of series} 
-%todo: make tbls captions sentence case but no period
-\end{figure}
 
 
 
