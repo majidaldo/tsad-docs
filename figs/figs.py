@@ -495,7 +495,7 @@ class bo(fig):
         return bop(self.data())
     
     def format(self):
-        latexify(fig_width=4,ratio=(sqrt(5)-1.0)/2.0)#'golden')
+        latexify(fig_width=3,ratio=(sqrt(5)-1.0)/2.0)#'golden')
 
     def data(self):
         return analysis.bo_diag(self.name.replace('bo_',''))
@@ -542,7 +542,7 @@ class trn(fig):
         return po
     
     def format(self):
-        latexify(fig_width=4,ratio=(sqrt(5)-1.0)/2.0)#'golden')
+        latexify(fig_width=3,ratio=(sqrt(5)-1.0)/2.0)#'golden')
 
     def data(self):
         nm=self.name.replace('trn_','')
