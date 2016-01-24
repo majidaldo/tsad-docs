@@ -349,7 +349,7 @@ class erfig(recon):
 
     def format(self):
         n=len(self.wins)+1
-        latexify(6,ratio=.333*n) #w,r=h*w
+        latexify(6,ratio=.2*n) #w,r=h*w
 
 
 class testnw(erfig):#recon):

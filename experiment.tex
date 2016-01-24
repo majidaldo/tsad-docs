@@ -251,7 +251,7 @@ $v_{min}-v_{i}> v_{min} \cdot \mathrm{min\_improvement}$
 \STATE{$i \gets i+1$}
 \ENDFOR
 
-\STATE \STATE
+%\STATE \STATE
 \end{algorithmic}
 \end{algorithm}
 
@@ -437,7 +437,7 @@ What follows is a discussion of the ability of the (optimal) RNN to detect anoma
 
 \noindent {\bfseries{spikes-1}}
 
-\begin{figure}[t] %todo: i think gmu wants all figs at the top
+\begin{figure}[!hp] %todo: i think gmu wants all figs at the top
     \centering
   
   \begin{subfigure}[t]{\textwidth}
@@ -461,7 +461,7 @@ This observation can be used to analyze the other series.
 
 \noindent {\bfseries{spikes-2}}
 
-\begin{figure}
+\begin{figure}[!hp]
     \ContinuedFloat 
     \begin{subfigure}[t]{\textwidth}
         \centering
@@ -478,7 +478,7 @@ The anomaly is definitely detected in the windowed error plot but not the point 
 \noindent {\bfseries{sine}}
 
 
-\begin{figure}
+\begin{figure}[!hp]
     \ContinuedFloat 
   
     \begin{subfigure}[t]{\textwidth}
@@ -504,7 +504,7 @@ In any case the RNN found a tight expectation for typical values.
 
 \noindent {\bfseries{power}}
 
-\begin{figure}
+\begin{figure}[!hp]
     \ContinuedFloat 
 
     \begin{subfigure}[t]{\textwidth} 
@@ -529,7 +529,7 @@ But, obviously, the point errors can not be used to detect the anomalous region.
 \noindent {\bfseries{ECG}}
 
 
-\begin{figure}
+\begin{figure}[!hp]
     \ContinuedFloat 
 
     \begin{subfigure}[t]{\textwidth} 
@@ -539,22 +539,6 @@ But, obviously, the point errors can not be used to detect the anomalous region.
     \end{subfigure}%
 
 \end{figure}
-
-\begin{figure}
-    \ContinuedFloat
-
-    \begin{subfigure}[t]{\textwidth} 
-        \centering
-        \includegraphics[]{figs/er_sleep.pdf}
-        \caption{PSG-ECG}
-    \end{subfigure}%
-
-\label{fig:err}
-\caption{Anomaly scores of series} 
-%todo: make tbls captions sentence case but no period
-\end{figure}
-%todo: the figs should accompany the text. split the figs
-
 
 
 The ECG is a challenging series because, while there is a repeating element, the element does not precicely have the same period.
@@ -577,6 +561,21 @@ The larger windows detected the most anomalous region but it is not apparent whe
 
 \noindent {\bfseries{PSG-ECG}}
 
+\begin{figure}[!hp]
+    \ContinuedFloat
+
+    \begin{subfigure}[t]{\textwidth} 
+        \centering
+        \includegraphics[]{figs/er_sleep.pdf}
+        \caption{PSG-ECG}
+    \end{subfigure}%
+
+\label{fig:err}
+\caption{Anomaly scores of series} 
+%todo: make tbls captions sentence case but no period
+\end{figure}
+%todo: the figs should accompany the text. split the figs
+
 In this ECG, the point errors do not real much about the anomalous region becuase every spike in the error plot plot corresponds to a normal spike in the ECG, normal or otherwise.
 %
 However, the anomalous region is clearly detected in both windowed error plots.
@@ -584,7 +583,7 @@ However, the anomalous region is clearly detected in both windowed error plots.
 Again the error in the anomalous region is well beyond the normal range of error fluctuations albeit the test series values are slightly above average (as can be seen from the density estimate).
 
 
-
+ 
 
 
 %todo . theano implememtation particularly slow suspected
