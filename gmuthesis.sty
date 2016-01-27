@@ -165,7 +165,8 @@
 \def\thirdmember#1{\gdef\@thirdmember{#1}}
 \def\fourthmember#1{\gdef\@fourthmember{#1}}
 \def\depthead#1{\gdef\@depthead{#1}}
-\def\deanresearch#1{\gdef\@deanresearch{#1}}
+\def\assocdean#1{\gdef\@assocdean{#1}}
+\def\dean#1{\gdef\@dean{#1}}
 \def\submitdate#1{\gdef\@submitdate{#1}}
 % \def\copyrightyear#1{\gdef\@copyrightyear{#1}} % \author, \title in report
 \def\firstdeg#1{\gdef\@firstdeg{#1}}
@@ -245,23 +246,26 @@
                 Graduate Faculty\\
                 of\\
                 George Mason University\\
-                In Partial fulfillment of\\
+                in Partial Fulfillment of\\
                 The Requirements for the Degree\\
                 of\\
-                \@degree\\
-                \@subject\\[0.5 in]
+                \@degree\\[0.5 in]
         \end{center}
         Committee:\\[16 pt]
-        \siglinewithspace \@advisor, \@doctype\ Director \\[\intercommspace]
-        \siglinewithspace \@firstmember, Committee Member        \\[\intercommspace]
-        \siglinewithspace \@secondmember, Committee Member       \\[\intercommspace]
+        \siglinewithspace \@advisor,    \@doctype\ Director   \\[\intercommspace]
+        \siglinewithspace \@firstmember, Committee Member  \\[\intercommspace]
+        \siglinewithspace \@secondmember, Committee Member \\[\intercommspace]
 %        \siglinewithspace \@thirdmember        \\[\intercommspace]
-        \siglinewithspace \@depthead, Chairman, Department\\
-        \phantom{\siglinewithspace\!\!} of \@dept \\[\intercommspace]
-        \siglinewithspace \@deanresearch, Associate Dean for \\
-        \phantom{\siglinewithspace\!\!}  Research and Graduate Studies \\[\intercommspace]
-%         \siglinewithspace \@programdirector, Associate Dean \\
-%          \phantom{\siglinewithspace} for Graduate Studies and Research \\[\commdatespace]
+        % need this pct here if the code is to be nice looking
+        \siglinewithspace \@depthead,  Department Chair \\ [\intercommspace]
+        %
+        \siglinewithspace \@assocdean, Associate Dean, Office \\
+        \phantom{\siglinewithspace\!\!} of Student Affairs \& Special Programs, \\
+        \phantom{\siglinewithspace\!\!} College of Science \\[\intercommspace]
+        %
+        \siglinewithspace \@dean, Dean, College of \\
+        \phantom{\siglinewithspace\!\!} Science \\[\intercommspace]
+        %
         Date: \rule{\datelinelength}{\siglinedepth} \hspace{\spacesiglinename} \!\!\@degreesemester\
 %       Semester
         \@degreeyear\\
