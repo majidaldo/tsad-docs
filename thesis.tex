@@ -162,7 +162,22 @@ Last but not least, I appreciate very much that Leif Johnson, author of the \tex
 %%
 \abstractpage
 
-This research approaches the problem of finding anomalies in time series by using more general and robust modeling provided by recent advances in recurrent neural networks (RNNs). The information from RNNs is used in an anomaly detection technique (tbd).
+Recurrent neural networks (RNN) with Long Short Term Memory (LSTM) are evaluated for their potential to generically detect anomalies in sequences.
+%
+First, anomaly detection techniques are surveyed at a high level so that their shortcomings are exposed.
+%
+The shortcomings are mainly their inflexibility in the use of a context `window' size and/or their suboptimal performance in handling sequences.
+%
+Furthermore, high-performing techniques for sequences are usually associated with their respective knowledge domains.
+%
+After discussing these shortcomings, RNNs are exposed mathematically as generic sequence modelers that can handle sequences of arbitrary length.
+%
+From there, results from experiments with RNNs show their ability to detect anomalies in a set of test sequences.
+%
+The test sequences had different types of anomalies but each had its unique normal behavior.
+%
+Given the characteristics of the test data, it was concluded that the RNNs were not only able to generically distinguish rare values in the data (out of context) but were also able to generically distinguish abnormal \emph{patterns} (in context).
+
 
 %% Be sure to leave a line of whitespace immediately before this line!!!!!
 %% (If this comment segment runs together with the preceeding text, you might
@@ -172,9 +187,9 @@ This research approaches the problem of finding anomalies in time series by usin
 %% at the page break; otherwise, comment it out.  (See note about this line
 %% in the usage notes.)
 %%
-\abstractmultiplepage
+%\abstractmultiplepage
 
-The second page of the abstract
+%The second page of the abstract
 
 %%
 %%  the main body of the dissertation
