@@ -1,17 +1,32 @@
-\chapter[intro]{Introduction}
+\chapter{Introduction}
+\label{ch:intro}
 
-
-In the modern world, large amounts of time series \footnote{In this document, the terms `time series' and `sequence' are used interchangeably without implication to to the discusion. Strictly however, a time series is a sequence of time-indexed elements. So sequences are the more general object. As such, the term `sequence' is used when a general context is more applicable. Furthermore, the terms do not necessarily imply that the data are real, discrete, or symbolic. However, literature frequently uses the terms `time series' and `sequence' for real and symbolic data respectively.} data of various types are recorded.  Inexpensive and compact instrumentation and storage allows various types of processes to be recorded. For example, human activity being recorded includes physiological signals, automotive traffic, website navigation activity, and communication network traffic. Other kinds of data are captured from instrumentation in industrial processes, automobiles, space probes, telescopes, geological formations, oceans, power lines, and residential thermostats. Furthermore, the data can be machine generated for diagnostic purposes such as web server logs, system startup logs, and satellite status logs.
+In the modern world, large amounts of time series%
+\footnote{
+In this document, the terms `time series' and `sequence' are used interchangeably without implication to the discussion.
+%
+Strictly however, a time series is a sequence of time-indexed elements.
+%
+So sequences are the more general object.
+%
+As such, the term `sequence' is used when a general context is more applicable.
+%
+Furthermore, the terms do not imply that the data are real, discrete, or symbolic.
+%
+However, literature frequently uses the terms `time series' and `sequence' for real and symbolic data respectively.
+%
+Here, the term `time series' was used to emphasize that much data is recorded from monitoring devices which implies that a timestamp is associated with each data point.}
+data of various types are recorded.  Inexpensive and compact instrumentation and storage allows various types of processes to be recorded. For example, human activity being recorded includes physiological signals, automotive traffic, website navigation activity, and communication network traffic. Other kinds of data are captured from instrumentation in industrial processes, automobiles, space probes, telescopes, geological formations, oceans, power lines, and residential thermostats. Furthermore, the data can be machine generated for diagnostic purposes such as web server logs, system startup logs, and satellite status logs.
 
 Increasingly, these data are being analyzed. Inexpensive and ubiquitous networking has allowed the data to be transmitted for processing. At the same time, ubiquitous computing has allowed the data to be processed at the location of capture.
 
-While the data can be recorded for historical purposes, much value can be obtained from finding anomalous data. However, it is challenging to go through large and varied quantities of data to find anomalies. Even if a procedure can be developed for one type of data, it usually cannot be applied to another type of data.
+While the data can be recorded for historical purposes, much value can be obtained from finding anomalous data. However, it is challenging to manually analyze large and varied quantities of data to find anomalies. Even if a procedure can be developed for one type of data, it usually cannot be applied to another type of data.
 
-Hence, the problem that is addressed can be stated as follows: find anomalous points in an arbitrary time series. So, a solution must use the same procedure to analyze different types of time series data. In the language of machine learning, this problem is unsupervised.
+Hence, the problem that is addressed can be stated as follows: find anomalous points in an arbitrary (unlabeled) sequence. So, a solution must use the same procedure to analyze different types of time series data.
 
-A literature search presents at least two such solutions (though not much more). In the acoustics domain, \cite{Marchi2015} transform audio signals into a sequence of spectral features which are then used as input to a denoising recurrent autoencoder. \cite{Malhotra2015} improve on this by using recurrent neural networks (directly) without the use of features (that are speific to acoustics) to multiple domains.
+The solution presented here comes from an unsupervised use of recurrent neural networks. A literature search only readily gives two similar solutions. In the acoustics domain, \cite{Marchi2015} transform audio signals into a sequence of spectral features which are then input to a denoising recurrent autoencoder. \cite{Malhotra2015} improve on this by using recurrent neural networks (directly) without the use of features (that are specific to a problem domain, like acoustics) to multiple domains.
 
-This work closely resembles \cite{Malhotra2015} but with emphasis on automating the procedure so that it applies to many domains. But first, some background is given on anomaly detetion that explains the challenges of finding a solution. Second, recurrent neural networks are introduced as general sequence modelers. Then, experiments will be presented to show that recurrent neural networks can find anomalies in multiple domains. Concluding remarks finalize the thesis.
+This work closely resembles \cite{Malhotra2015} but presenting a single, highly-automated procedure that applies to many domains is emphasized. First, some background is given on anomaly detection that explains the challenges of finding a solution. Second, recurrent neural networks are introduced as general sequence modelers. Then, experiments will be presented to show that recurrent neural networks can find different types of anomalies in multiple domains. Finally, concluding remarks are given.
 
 %todo pcc project
 
