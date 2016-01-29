@@ -38,7 +38,7 @@
 %%
 %% other packages that need to be loaded
 %%
-
+\usepackage[activate=true]{microtype} %don't hyphenate everywhere
 \usepackage{graphicx}                    %   for imported graphics
 \usepackage{amsmath}                     %%
 \usepackage{amsfonts}                    %%  for AMS mathematics
@@ -53,6 +53,10 @@
 \usepackage{csvsimple}
 \usepackage{hyperref}
 \usepackage{enumitem}
+% circled numbers for footnotes b/c it's confusing in math
+\usepackage{pifont}
+\renewcommand\thefootnote{\ding{\numexpr171+\value{footnote}}}
+
 %% The file ``mythesisabbrev.sty'' is an (optional) personalized file that
 %% may contain any and all LaTeX command (re)definitions that will be used
 %% throughout the document
