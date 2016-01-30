@@ -20,7 +20,7 @@
     \node[     ](y) {$\vc{y}$}; \\
     \node[state](L) {$L$}; \\
     \node[state](o) {$\vc{o}$}; \\
-    \node[state,dotted](sn) {$\vc{s}_n$}; \\
+    \node[state,dotted](sl) {$\vc{s}_n$}; \\
     \node[state](s2) {$\vc{s}_2$}; \\
     \node[state](s1) {$\vc{s}_1$}; \\
     \node[     ](x) {$\vc{x}$}; \\
@@ -32,13 +32,13 @@
   (s2) edge [loop right] node {$\vc{\theta}_{s_2s_2}\tm{-1}$} (s2)
   (s1) edge  node {}                                 (s2)
   (s1) edge  node {}                                 (s2)
-  (s2) edge  node {}                                 (sn)
+  (s2) edge  node {}                                 (sl)
   (o)  edge  node {}                                 (L)
   (y)  edge  node {}                                 (L)
   ;
   \path [dotted] 
-  (sn) edge  node {$\vc{\theta}_{s_no}$}               (o)
-  (sn) edge [loop right] node {$\vc{\theta}_{s_ns_n}\tm{-1}$} (sn)
+  (sl) edge  node {$\vc{\theta}_{s_no}$}               (o)
+  (sl) edge [loop right] node {$\vc{\theta}_{s_ls_l}\tm{-1}$} (sl)
   ;
   
 \end{tikzpicture}

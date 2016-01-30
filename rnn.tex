@@ -1,21 +1,19 @@
-% go over ideas..not 
-
-\chapter[]{Recurrent Neural Networks}
+\chapter{Recurrent Neural Networks}
 \label{ch:rnn}
 
 \section{Introduction}
 
 In the previous chapter, an argument was made for the use of models to for the purpose of anomaly detection. In this chapter, recurrent neural networks \cite{Rumelhart1986}, or RNNs, are introduced as powerful sequence modelers of arbitrary length.
 
-RNNs have acheived state-of-the-art performance in supervised tasks such as handwriting recognition \cite{Graves2009}, and speech recognition  \cite{Graves2013}. RNNs can also be trained unsupervised to generate  music  \cite{Boulanger-Lewandowski2012}, text \cite{Martens2011a,Graves2013b}, and handwriting \cite{Graves2013b}. Given these impressive feats, RNNs can be effectively used for anomaly detection in sequences \cite{Marchi2015,Malhotra2015}.
+RNNs have achieved state-of-the-art performance in supervised tasks such as handwriting recognition \cite{Graves2009}, and speech recognition  \cite{Graves2013}. RNNs can also be trained unsupervised to generate  music  \cite{Boulanger-Lewandowski2012}, text \cite{Martens2011a,Graves2013b}, and handwriting \cite{Graves2013b}. Given these impressive feats, RNNs can be effectively used for anomaly detection in sequences \cite{Marchi2015,Malhotra2015}.
 
-Like HMMs, RNNs have hidden states. But, in contrast to HMMs, RNNs make a more efficient use of its hidden state \cite{ZacharyC.Lipton2015}. In a HMM, the hidden state depends only on the previous state which must store possible configurations of the sequence. So to incorporate information about a window of previous states, the hidden state must grow exponentially large making them computationally impractical. While in RNNs, the state is shared over time; the hidden state of a RNN contains information from an arbitrarily long window. The next section will explain this.
+Like HMMs, RNNs have hidden states. But, in contrast to HMMs, RNNs make a more efficient use of its hidden state \cite{ZacharyC.Lipton2015}. In a HMM, the hidden state depends only on the previous state which must store possible configurations of the sequence. So to incorporate information about an increasing window of previous states, the hidden state must grow exponentially large making them computationally impractical. While in RNNs, the state is shared over time; the hidden state of a RNN contains information from an arbitrarily long window. The next section will explain this.
 
 In addition, RNNs do not make a Markovian assumption. In fact, they are so general, that RNNs have been shown to be equivalent to finite state automata \cite{Minsky1967}, equivalent to turing machines \cite{Siegelmann1995}, and more powerful than turing machines \cite{Siegelmann1993} even.
 
 In the next few sections, some essential concepts of RNNs will be presented as most applicable to this work. Consult the RNN chapter in \cite{Bengio-et-al-2015-Book} for an in-depth treatment.
 
-The concepts presented are accompanied by mathematical expressions although only concepts will be presented. Due to the preciceness needed to follow the expressions, some conventions are followed: Due to the numerous interacting quantities, a typographic distinction is made between vectors ($\vc{v}$) and  matrices ($\mt{M}$). Variables are time indexed with superscripts enclosed in parentheses ($\vc{x}^{(t)}$) leaving subscripts available to index other quantities.
+The precision from mathematical expressions will be used to understand how RNNs operate but only concepts will be presented. To follow the expressions precisely, some conventions are followed: 1) Due to the numerous interacting quantities, a typographic distinction is made between vectors ($\vc{v}$) and  matrices ($\mt{M}$). 2) Variables are time indexed with superscripts enclosed in parentheses ($\vc{x}^{(t)}$) leaving subscripts available to index other quantities.
 
 % notation:
 % matrix: bold upright 
@@ -41,7 +39,7 @@ f(f(f(f(\s\tm{t-4}
 ,\x\tm{t};\vc{\theta})     .
 \end{equation*}
 
-So the composite function, $g$, can be written as depending on an arbitrary number, $T$, of time steps.
+So the composite function, $g$, can be written as depending on an arbitrary number of time steps, $T$.
 \begin{equation*}
 \s\tm{T} = g_{T}(\x\tm{T},\x\tm{T-1},\x\tm{T-2},\ldots,\x\tm{2},\x\tm{1})
 \end{equation*}
@@ -75,7 +73,7 @@ It can be difficult to follow recurrent computations by looking at mathematical 
 The functionality of a basic RNN resembles that of a traditional neural network with the addition of a state variable shared over time.
 
 
-The core RNN functionality can be formulated as Equations \ref{eqn:rnn} describe. Each equation represents a `layer' or `node' in the network.
+The core RNN functionality can be formulated as Equations \ref{eqn:rnn} describe. Each equation represents a `layer' or, individually, in the scalar sense, `nodes' in the network.
 % no new para
 \begin{subequations}  
   \label{eqn:rnn}
@@ -100,7 +98,7 @@ The core RNN functionality can be formulated as Equations \ref{eqn:rnn} describe
   \end{align}
 \end{subequations}
 \noindent 
-The output at time $t$, $\vc{o}\tm{t}$, depends on current state, $\s\tm{t}$, which, in turn, depends on the previous state, $\s\tm{t-1}$, and the current input, $\x\tm{t}$, through associated weight matrices, $\mt{W}$. The weight matrices are subscripted with two variables to associate an input with an output. The input variable is the first subscript while the output variable is the second. For example, $\mt{W}_{so}$ connects the input from $\s$ to output, $\vc{o}$. Also, bias vectors, $\vc{b}$ allow values to be adjusted additively (offset). Finally, the hyperbolic tangent, $\tanh$, provides a non-linearity that allows the RNN to summarize arbitrarily complex sequences.
+The output at time $t$, $\vc{o}\tm{t}$, depends on current state, $\s\tm{t}$, which, in turn, depends on the previous state, $\s\tm{t-1}$, and the current input, $\x\tm{t}$, through associated weight matrices, $\mt{W}$. The weight matrices are subscripted with two variables to associate an input with an output. The input variable is the first subscript while the output variable is the second. For example, $\mt{W}_{so}$ connects the input from $\s$ to output, $\vc{o}$. Also, bias vectors, $\vc{b}$, allow values to be adjusted additively (offset). Finally, the hyperbolic tangent, $\tanh$, provides a non-linearity, in the range (-1,1), that allows the RNN to summarize arbitrarily complex sequences.
 
 A `size' can be specified that measures the capacity of $\s$; the dimension of $\s$ is a (free) parameter (obviously the dimensions of other quantities in Equation \ref{eqn:rnns} need to be compatible).
 %
@@ -117,9 +115,8 @@ The output, $\vc{o}$, needs to be need to be compared to a `target', $\vc{y}$, t
 \noindent
 $V$ and $T$ are the number of variables and the length of the sequences respectively indexed by $t$ and $v$ respectively.
 
-Equations \ref{eqn:mse} and \ref{eqn:rnn}, together, define the framework for a basic RNN. One way to enhance this is to `stack' states so that the output from one state is input into another state in the same time step. So the last, $n$th, layer produces $\vc{o}$.  There is evidence that stacking the state layers leads to the network being able to learn time series at multiple time scales \cite{Hermans2013} \cite{Pascanu2013a}.
+Equations \ref{eqn:mse} and \ref{eqn:rnn}, together, define the framework for a basic RNN. One way to enhance this is to `stack' states so that the output from one state is input into another state in the same time step. So the last, $l$th, layer produces $\vc{o}$.  There is evidence that stacking the state layers leads to the network being able to learn time series at multiple time scales \cite{Hermans2013,Pascanu2013a}.
 
-The stacking can be seen graphically in \ref{fig:rnn}.
 
 \begin{figure}[H]
   \centering
@@ -137,28 +134,30 @@ The stacking can be seen graphically in \ref{fig:rnn}.
     \caption{acyclic}
     \label{fig:rnn_uf}
   \end{subfigure}
-  \caption{Recurrent Neural Network Graph Views}
-  \label{fig:rnn}
-\end{figure}
-\noindent
-%
+  \caption[Recurrent neural network graph views]{
+Recurrent neural network graph views. 
+%this was all in the paragraph
 Bias terms are omitted for clarity but are included as elements in $\vc{\theta}$ along with elements from $\W$.
 %
 The notation of $\vc{\theta}$ follows that of $\mt{W}$ but captures more variables by vectorizing each component for concatenation into a single vector.
 %
-$\vc{\theta}_{ss} = (\vc{W}_{ss},\vc{b}_s)$, $\vc{\theta}_{xs} = (\vc{W}_{xs})$, and $\vc{\theta}_{so} = (\vc{W}_{so},\vc{b}_o)$ (mathematical operations to produce the vector are implied).
+$\vc{\theta}_{ss} = (\vc{W}_{ss},\vc{b}_s)$, $\vc{\theta}_{xs} = (\vc{W}_{xs})$, and $\vc{\theta}_{so} = (\vc{W}_{so},\vc{b}_o)$ (operations to produce the vector are implied).
+%
+Inter-layer parameters, $\vc{\theta}_{s_is_{i+1}}$, are omitted as well to focus on operations in time (horizontally).
+}
+  \label{fig:rnn}
+\end{figure}%
 
-
-Notice that the unfolded view allows one to see that information can flow through many paths in time and layers (horizontally and vertically respectively). So `depth' can be used to describe the number of operations in these two directions with depth in the time direction being typically much greater. This makes RNNs, among `deep learning' architectures, the deepest networks!
+The stacking can be seen graphically in Figure \ref{fig:rnn}. Notice that the unfolded view allows one to see that information can flow through many paths in time and layers (horizontally and vertically respectively). So `depth' can be used to describe the number of operations in these two directions with depth in the time direction being typically much greater\footnote{This makes RNNs, among `deep learning' architectures, the deepest networks!}.
 
 
 \section{Training}
 
 %use s_(l)ayers. todo
 
-To train the network, the loss function is used to  minimize (optimized) an objective function given pairs of training examples, $(\x,\vc{y})$, by adjusting the parameters $\vc{\theta}$. Unfortunately, training neural networks in general, let alone recurrent neural networks, are challenging optimization and computational problems \cite{Blum1992}. However, a flavor of the relatively simple mini-batch stochastic gradient descent (SGD) has remained successful in training a variety of networks \cite{Bengio2012b} despite the availability of other, perhaps more sophisticated, optimization algorithms. %practical recs for training deep. todo 2014+ ref?
+To train the network, the loss function is used to  minimize (optimize) an objective function given pairs of training examples, $(\x,\vc{y})$, by adjusting the parameters $\vc{\theta}$. Unfortunately, training neural networks in general, let alone recurrent neural networks, are challenging optimization and computational problems \cite{Blum1992}. However, a flavor of the relatively simple mini-batch stochastic gradient descent (SGD) has remained successful in training a variety of networks \cite{Bengio2012b} despite the availability of other, perhaps more sophisticated, optimization algorithms. %practical recs for training deep. todo 2014+ ref?
 
-In plain mini-batch SGD, parameters are updated with a `learning reate', $\alpha$, for a selected `mini-batch' example set (from the training set), $M$, according to Equation \ref{eqn:sgd} until a convergence critereon is met.
+In plain mini-batch SGD, parameters are updated with a `learning rate', $\alpha$, for a selected `mini-batch' example set (from the training set), $M$, according to Equation \ref{eqn:sgd} until a convergence criterion is met.
 
 \begin{equation}
   \label{eqn:sgd}
@@ -194,24 +193,25 @@ An involved application of the (backpropagated) differential chain rule to the l
 \noindent
 Equation \ref{eqn:grad} shows that there are multiplicative `chains' of differentials for each preceding time step. 
 
-The computational graph in Figure \ref{fig:grad}, represents Equation \ref{eqn:grad} for $T=4$.
-%
 \begin{figure}[H]
   \centering
   \includegraphics[]{figs/grad.pdf}
-  \caption{Partial derivative chain for a basic RNN for a history of 4 time steps (biases not shown)}
-  \label{fig:grad}
-\end{figure}
+  \caption[Partial derivative chain for a basic RNN]{Partial derivative chain for a basic RNN for a history of 4 time steps (biases not shown).
+%this used to be in the paragraph.
 %
-\noindent
 Several quantities are distinguished. Dash-dotted lines are the independent inputs, $\x$, $\vc{y}$, and $\vc{W}_{ss}$, to the loss function, $L$, while the dashed lines represent intermediate quantities in the graph.
 %
 The path formed by the curved solid lines follows the chain rule to get one summand for $\partial{L}\tm{t}/\partial{\vc{W}_{ss}}$.
 %
 Dotted quantities are not involved in the calculation (for $T=4$).
 
+}
+  \label{fig:grad}
+\end{figure}
 
-Now that the graph is associated with the equation, the origin of the vanishing granient can be seen;
+The computational graph in Figure \ref{fig:grad} represents Equation \ref{eqn:grad} for $T=4$.
+%
+Now that the graph is associated with the equation, the origin of the vanishing gradient can be seen;
 %
 the vanishing gradient is due to successive multiplications of the derivative of $\tanh$ which is bound in $(0,1]$ (Again, see \cite{Hochreiter,Bengio1994,Doya1992,Pascanu2013c} for details).
 
@@ -220,11 +220,11 @@ the vanishing gradient is due to successive multiplications of the derivative of
 %
 For example, Hessian-free optimization \cite{Martens2010} uses second order information that can make use of the ratio of small gradients to small curvature to more directly find optimal parameters.
 %
-\cite{Martens2011} uses Hessian-free optimization to train (a basic) RNN to achieve remarkable results.
+\cite{Martens2011} uses Hessian-free optimization to train a basic RNN to achieve remarkable results.
 %
 However, this comes at a computational cost.
 %
-For practical reasons, it might be preferrable to use well-established SGD-based methods over second order methods \cite{Bengio2012,Dauphin} as long as the RNN architecture facilitates learning long range dependencies;
+For practical reasons, it might be preferable to use well-established SGD-based methods over second order methods \cite{Bengio2012,Dauphin} as long as the RNN architecture facilitates learning long range dependencies;
 %
 the Long Short Term Memory (LSTM) RNN \cite{Hochreiter1997} uses a `memory cell' to recall (past) information only when needed thereby working around the vanishing gradient problem.
 
@@ -233,7 +233,7 @@ the Long Short Term Memory (LSTM) RNN \cite{Hochreiter1997} uses a `memory cell'
 
 \section{Long Short-Term Memory} %todo check hyphenations
 
-LSTM models have acheived impressive benchmarks recently.
+LSTM models have achieved impressive benchmarks recently.
 %
 Networks with LSTM elements have been used for
 text-to-speech synthesis \cite{Fan2014},
@@ -241,12 +241,12 @@ language identification from speech \cite{Gonzalez-Dominguez2014},
 large-vocabulary speech recognition \cite{Sak2014},
 English-to-French text translation  \cite{Sutskever2014},
 identifying non-verbal cues from speech \cite{Brueckner2014},
-Arabic handwriting recongition \cite{Bluche},
+Arabic handwriting recognition \cite{Bluche},
 image caption generation \cite{Vinyals2015},
 video to text description \cite{Venugopalan2014},
 and generating realistic talking heads \cite{Fan2015}.
 %
-Futhermore, LSTM RNNs have remained competitive against other RNN types \cite{Jozefowicz2015}.
+Furthermore, LSTM RNNs have remained competitive against other RNN types \cite{Jozefowicz2015}.
 
 
 There are a few variants of LSTM but they all have a linear self-loop that gradients can flow through for a long time.
@@ -278,7 +278,7 @@ The LSTM variant presented in Figure \ref{fig:lstmfig} is found in \cite{Graves2
           \mt{W}_i \cdot
           (
           \x\tm{t},
-          \vc{h}\tm{t-1},
+          \vc{s}\tm{t-1},
           \vc{c}\tm{t-1}
           )
           +\vc{b}_i
@@ -291,7 +291,7 @@ The LSTM variant presented in Figure \ref{fig:lstmfig} is found in \cite{Graves2
           \mt{W}_f \cdot
           (
           \x\tm{t},
-          \vc{h}\tm{t-1},
+          \vc{s}\tm{t-1},
           \vc{c}\tm{t-1}
           )
           +\vc{b}_f
@@ -304,7 +304,7 @@ The LSTM variant presented in Figure \ref{fig:lstmfig} is found in \cite{Graves2
           \mt{W}_c \cdot
           (
           \x\tm{t},
-          \vc{h}\tm{t-1}
+          \vc{s}\tm{t-1}
           )
           +\vc{b}_c
           )
@@ -321,13 +321,13 @@ The LSTM variant presented in Figure \ref{fig:lstmfig} is found in \cite{Graves2
           \mt{W}_o \cdot
           (
           \x\tm{t},
-          \vc{h}\tm{t-1},
+          \vc{s}\tm{t-1},
           \vc{c}\tm{t-1}
           )
           +\vc{b}_o
           )
         \\
-        \vc{h}\tm{t}
+        \vc{s}\tm{t}
         &=
           \vc{o}\tm{t} \odot
           \tanh
@@ -336,33 +336,33 @@ The LSTM variant presented in Figure \ref{fig:lstmfig} is found in \cite{Graves2
           )
       \end{align}
     \end{subequations}
-    \caption{equations}
+    \caption{equations from \cite{Graves2013b}}
     \label{eqn:lstm}
   \end{subfigure}
-  \caption{Long Short-Term Memory Module}
-  \label{fig:lstmfig}
-\end{figure}
-\noindent
+  \caption{Long Short-Term Memory Layer.
 %
 $\sigma$ stands for the logistic sigmoid function while $\tau$ stands for $\tanh$.
 %
-Elementwise multiplication is represented by the $\odot$ symbol.
+Element-wise multiplication is represented by the $\odot$ symbol.
 %
 For brevity and clarity, a (single) weight matrix combines the weights associated with more than one input to a single output (unlike the typical notation used in literature).
 %
-For example, $\mt{W}_i \cdot(\x\tm{t},\vc{h}\tm{t-1},\vc{c}\tm{t-1})=\mt{W}_{xi}\vc{x}\tm{t}+\mt{W}_{hi}\vc{h}\tm{t-1}+\mt{W}_{ci}\vc{c}\tm{t-1}$ where the input vectors, $\x$, $\vc{h}$, and $\vc{c}$ are concatenated into a vector  and weight matrices $\mt{W}_{xi}$, $\mt{W}_{hi}$, and $\mt{W}_{ci}$ are augmented horizontally. %todo.. chk dim in theanets code
+For example, $\mt{W}_i \cdot(\x\tm{t},\vc{s}\tm{t-1},\vc{c}\tm{t-1})=\mt{W}_{xi}\vc{x}\tm{t}+\mt{W}_{si}\vc{s}\tm{t-1}+\mt{W}_{ci}\vc{c}\tm{t-1}$ where the input vectors, $\x$, $\vc{s}$, and $\vc{c}$ are concatenated into a vector  and weight matrices $\mt{W}_{xi}$, $\mt{W}_{si}$, and $\mt{W}_{ci}$ are augmented horizontally. %todo.. chk dim in theanets code
 %
 In the diagram, the concatenation is represented by black dots combining single lines into more than one line.
 %
 Furthermore, $\mt{W}_{ci}$, $\mt{W}_{cf}$, and $\mt{W}_{co}$ are diagonal matrices so the number of weights associated with each $\vc{c}$ equals the LSTM `size'.
+}
+  \label{fig:lstmfig}
+\end{figure}
 
 
-The size that can be attributed to the LSTM module is the dimension of $\vc{i}$, $\vc{f}$, $\vc{c}$, $\vc{g}$, $\vc{o}$, or $\vc{h}$ which are equal.
+The size that can be attributed to the LSTM module is the dimension of $\vc{i}$, $\vc{f}$, $\vc{g}$, $\vc{c}$, $\vc{o}$, or $\vc{s}$ (which are equal).
 
 
 Very briefly, the central element in a LSTM module is the `memory cell', $\vc{c}$, that works to keep information unchanged over many time steps (likened to a conveyor belt through time).
 %
-Information flow is controlled through input, forget, and output `gates', elements $\vc{i}$, $\vc{f}$, and $\vc{o}$ respectively.
+Information flow is controlled through input, `forget', and output `gates', elements $\vc{i}$, $\vc{f}$, and $\vc{o}$ respectively.
 %
 The input gate controls information into the memory cell.
 %
@@ -370,7 +370,7 @@ The output gate controls when information should flow to the next time step.
 %
 The forget gate zeros out elements in the memory cell.
 %
-The gates make their decisions based on the input, $\x$, the `hidden' state, $\vc{h}$, and content already in the memory cell.
+The gates make their decisions based on the input, $\x$, the `hidden' state, $\vc{s}$, and content already in the memory cell.
 %
 %g is a c candidate
 %things get trapped in memory
@@ -398,15 +398,15 @@ Unlike the recurrence of the basic RNN (Equation \ref{eqn:rnns}), information ca
 %
 There is a way for information to propagate without successive multiplication of fractions (as in the derivative of $\tanh$):
 %
-Consider an element in (vector) $\vc{c}\tm{t-1}$ with a value of 1.
+In Equation \ref{eqn:lstms}, consider an element in (vector) $\vc{c}\tm{t-1}$ with a value of 1.
 %
 It can be retained indefinitely as long as the corresponding element in $\vc{f}\tm{t}$ is 1 and the corresponding element in $\vc{i}\tm{t}$ is 0.
 %
-In other words, the derivative is constant.
+In other words, the derivative is constant with respect to $t$.
 
 Finally, note how the LSTM modules can be stacked (vertically) in similar fashion to the basic RNN.
 %
-The output of the lower module, $\vc{h}\tm{t}$, becomes the input, $\x\tm{t}$, of the upper module.
+The output of the lower module, $\vc{s}\tm{t}$, becomes the input, $\x\tm{t}$, of the upper module.
 
 
 With such configurations, the next chapter will show how LSTM RNNs can be used to model time series to find anomalies.
