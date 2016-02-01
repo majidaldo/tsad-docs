@@ -47,18 +47,23 @@ In other words, the vector $\s\tm{T}$ contains a summary of the of the preceding
 
 It can be difficult to follow recurrent computations by looking at mathematical expressions. So recurrence can be graphically represented in two ways. One way, shown in Figure \ref{fig:recurrent}, shows the state feeding back into itself through its parameters representing Equation \ref{eqn:ds}. The other way is to `unfold' the recurrence in a flow graph as in Figure \ref{fig:recurrent_uf}. Graphs offer a convenient way of organizing computations. The (unfolded) graph shows every hidden state, say $\s\tm{t}$, is dependent on the current input, $\x\tm{t}$, the previous state, $\s\tm{t-1}$, and (fixed) parameters $\vc{\theta}$. So it should be obvious that $\vc{\theta}$ is shared over successive computations of $\s$.
 
+\newsavebox{\recurrent}
+\savebox{\recurrent}{\includegraphics[]{figs/recurrent.pdf}}
+\newsavebox{\recurrentuf}
+\savebox{\recurrentuf}{\includegraphics[]{figs/recurrent_uf.pdf}}
 \begin{figure}[H]
   \centering
-  \begin{subfigure}[]{.2\textwidth}
+  \begin{subfigure}[]{\wd\recurrent}
     \begin{center}
-    \includegraphics[]{figs/recurrent.pdf}
+      \usebox{\recurrent}
     \end{center}
     \caption{cyclic}
     \label{fig:recurrent}
   \end{subfigure}
-  \begin{subfigure}[]{.79\textwidth}
+  ~
+  \begin{subfigure}[]{\wd\recurrentuf}
     \begin{center}
-    \includegraphics[]{figs/recurrent_uf.pdf}
+      \usebox{\recurrentuf}
     \end{center}
     \caption{acyclic (unfolded)}
     \label{fig:recurrent_uf}
@@ -117,19 +122,23 @@ $V$ and $T$ are the number of variables and the length of the sequences respecti
 
 Equations \ref{eqn:mse} and \ref{eqn:rnn}, together, define the framework for a basic RNN. One way to enhance this is to `stack' states so that the output from one state is input into another state in the same time step. So the last, $l$th, layer produces $\vc{o}$.  There is evidence that stacking the state layers leads to the network being able to learn time series at multiple time scales \cite{Hermans2013,Pascanu2013a}.
 
-
+\newsavebox{\rnn}
+\savebox{\rnn}{\includegraphics[]{figs/rnn.pdf}}
+\newsavebox{\rnnuf}
+\savebox{\rnnuf}{\includegraphics[]{figs/rnn_uf.pdf}}
 \begin{figure}[H]
   \centering
-  \begin{subfigure}[]{.2\textwidth}
+  \begin{subfigure}[]{\wd\rnn}
     \begin{center}
-    \includegraphics[]{figs/rnn.pdf}
+      \usebox{\rnn}
     \end{center}
     \caption{cyclic}
     \label{fig:rnn_f}
   \end{subfigure}
-  \begin{subfigure}[]{.79\textwidth}
+  ~
+  \begin{subfigure}[]{\wd\rnnuf}
     \begin{center}
-    \includegraphics[]{figs/rnn_uf.pdf}
+      \usebox{\rnnuf}
     \end{center}
     \caption{acyclic}
     \label{fig:rnn_uf}
