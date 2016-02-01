@@ -1,4 +1,4 @@
-\chapter[]{Anomaly Detection Using Recurrent Neural Networks}
+\chapter{Anomaly Detection Using Recurrent Neural Networks}
 \label{ch:results}
 
 
@@ -6,12 +6,12 @@
 
 Chapters \ref{ch:ad} and \ref{ch:rnn}, separately, introduced anomaly detection in time series and recurrent neural networks as time series modelers.
 %
-This chapter outlines a procedure for finding anomalies using RNNs with the goal of mitigating many of the problems associated with anomaly detection that were discussed in \ref{ch:ad}.
+This chapter outlines and tests a procedure for finding anomalies using RNNs with the goal of mitigating many of the problems associated with anomaly detection that were discussed in Chapters \ref{ch:ad} and \ref{ch:adtechnique}.
 %
-As much as possible, the same procedure is applied for each time series used to test the procedure.
+As much as possible, the same procedure is applied to each test time series to test the procedure's generality.
 
 
-The outlines describes:
+The procedure outline describes:
 %
 \begin{description}
 %
@@ -24,23 +24,24 @@ The outlines describes:
 \item[Bayesian optimization:] the search for optimized parameters for the procedure
 %
 \end{description}
+%
+After describing the procedure, the anomaly scores of the test time series are evaluated for their ability to detect anomalies.
 
-%todo: results or anom data
 
 \section{Sampling: Sliding Windows}
 \label{sec:sampling}
 
 
-Some univariate time series \emph{with} anomalies were chosen or generated to test the anomaly detection process:
+Some univariate time series \emph{with} anomalies were chosen or generated to test the anomaly detection process named as follws:
 
 \begin{description}
 
-\item[spike:] two generated sequence that are simply evenly-spaced `spikes' of the same height.
+\item[spike:] two generated sequences that are simply evenly-spaced `spikes' of the same height.
 
 \item[sine:] a generated sinusoidal signal.
 
-\item[power demand:] a building's electrical power usage data
-\footnote{\url{http://www.cs.ucr.edu/~eamonn/discords/power_data.txt}} referenced in the influencial HOT-SAX paper \cite{Keogh2005} (for anomaly detection in time series). The data was scaled down by dividing it by its median.
+\item[power demand:] a building's electrical power usage data%
+\footnote{\url{http://www.cs.ucr.edu/~eamonn/discords/power_data.txt}} referenced in the influencial HOT-SAX paper \cite{Keogh2005} (for anomaly detection in time series). The data was scaled down by dividing it by its median (to help in the training process).
 
 \item[electrocardiogram  (ECG):] a signal from the human heart taken from the PhysioNet \cite{PhysioNet} database. Finding anomalies in ECG data has been used as a benchmark in several studies at least \cite{Malhotra2015,Keogh2005,Cheboli2010,li2012dimensionality,Wei2005,Chuah2007,Jones2014}.
 
@@ -55,15 +56,15 @@ Some univariate time series \emph{with} anomalies were chosen or generated to te
 The normal behaviour, as well as anomalous behaviour, of these time series can be seen in the plots presented in Section \ref{sec:results}.%
 %todo: along with an explanation of why it was chosen
 
-While there is only one `master' time series to train on (in each test), the RNN needs to see many `samples' from the master time series.
+While there is only one `source' time series to train on (in each test), the RNN needs to see many `samples' from the source time series.
 %
-The sliding window procedure, described in \ref{sec:adsample}, is used to get samples of some window length.
+The sliding window procedure, described in \ref{sec:adsample}, is used to get samples of some window width.
 %
-Additionally, since RNNs do not need a fixed window, sliding windows are obtained for more than one window length.
+Additionally, since RNNs do not need a fixed window, sliding windows are obtained for more than one window width.
 %
-Furthermore, the samples are collected into `mini-batches' (of the same window length) to be more compatible with the training procedure.
+Furthermore, the samples are collected into `mini-batches' (of the same window width) to be more compatible with the training procedure.
 %
-The window length is incremented (size skip) from some minimum until it is not possible to obtain a mini-batch (so the largest window will be close to the length of the time series).
+The window width is incremented (width skip) from some minimum until it is not possible to obtain a mini-batch (so the largest window will be close to the length of the time series).
 
 
 Table \ref{tbl:winspec} specifies the relevent sizes and increments for the sampling process.
@@ -84,7 +85,7 @@ However, the minimum window length was chosen such that meaningful dynamics were
   &  length 
   &  min. win.
   &  slide skip 
-  &  size skip 
+  &  width skip 
   &  batch size
   &  $\Rightarrow$ \bfseries samples 
   \\ \hline  \hline
@@ -118,33 +119,32 @@ However, the minimum window length was chosen such that meaningful dynamics were
 
 \section{RNN Setup: Autoencoder}
 
-The RNN needs to learn what normal time series behaviour is.
+The RNN needs to learn what normal time series behavior is.
 %
 So an autoencoder is used which can learn expected behavior by setting the target, $\vc{y}$, to be the input, $\vc{x}$.
 %
-The loss function is MSE (Equation \ref{eqn:mse}).
+The loss function is the MSE (Equation \ref{eqn:mse}).
 %
-Furthermore, to prevent the RNN from learning trivial identity functions, Gaussian noise is added to the input where the standard deviation is equal to .75 the standard deviation of the whole time series.
-
+Furthermore, to prevent the RNN from learning trivial identity functions, Gaussian noise is added to the input where the standard deviation is equal to 0.75 times the standard deviation of the whole time series.
+%
 \begin{equation*}
  \tilde{\x} = \x
  + \mathcal{N}(0,(0.75\sigma_{\mathrm{std}}(\x))^2)
 \end{equation*}
-\noindent
 %
-Note the comparison in the loss function is between the (uncorrupted) signal, $\x$, and the output from the network, $\vc{o}$, given $\x$: $L(\vc{o}(\tilde{\x}),\x)$.
-%
-With this setup, a denoising autoencoder, the data generating process, $p(\x)$, is implictly learned \cite{Bengio2013}.
+Note the comparison in the loss function is between the uncorrupted signal, $\x$, and the output from the network, $\vc{o}$, given $\x$: $L(\vc{o}(\tilde{\x}),\x)$.
+
+With this setup, a denoising autoencoder, the data generating process, $p(\x)$, is implicitly learned \cite{Bengio2013}.
 
 
-\section{Training}
+\section{Training: RMSprop}
 
 
 SGD with RMSprop \cite{Tieleman2012} for parameter updates has been demonstrated to provide results that are similar to more sophisticated second-order methods but with significantly less computational cost \cite{Dauphin}.
 %
 Another benefit of RMSprop is that it is designed to work with mini-batch learning.
 %
-Since the training data is highly redunant (from sliding windows), it is expected that computing the gradient (to update parameters) from a subset of the data (mini-batch) is more efficient than computing the gradient for all the data.
+Since the training data is highly redundant (from sliding windows), it is expected that computing the gradient (to update parameters) from a subset of the data (mini-batch) is more efficient than computing the gradient for all the data.
 
 
 For each derivative in the gradient, RMSprop keeps an exponentially-weighted moving average of derivative magnitudes which normalizes the derivative by its root-mean-squared.
@@ -166,7 +166,7 @@ More specifically, the (overall) RNN training procedure is outlined in the follo
 \STATE \STATE
 
 
-\STATE \COMMENT{initalize}
+\STATE \COMMENT{initialize}
 \STATE $\vc{\theta} \gets \vc{0}$
 \COMMENT{initial RNN parameters are 0}
 \STATE \COMMENT{set training parameters}
@@ -187,7 +187,7 @@ More specifically, the (overall) RNN training procedure is outlined in the follo
 \FOR{epoch $i$}
 \STATE{ $\mathcal{X}_t \gets  \mathrm{shuffle}(\mathcal{X}_t)$}
 
-\FOR{minibatch $M$ in $\mathcal{X}_t$ }
+\FOR{mini-batch $M$ in $\mathcal{X}_t$ }
 
 \FOR{parameter $p$ in $\vc{\theta}$}
 \STATE{} \COMMENT{per-parameter, update $p$ according to RMSprop \cite{Graves2013b}
@@ -258,9 +258,9 @@ $v_{min}-v_{i}> v_{min} \cdot \mathrm{min\_improvement}$
 
 %todo: use s=h in lstm
 
-The \texttt{theanets} \cite{Johnson2015} implementation of RNNs and RMSprop
+The \texttt{theanets} \cite{Johnson2015} implementation%
 \footnote{With every calculation of $\vc{o}$, the RNN states are initialized to 0.}
-was used.
+of RNNs and RMSprop was used.
 %
 \texttt{theanets} is based on the mathematical expression compiler, \texttt{theano} \cite{Bergstra2010}.
 %
@@ -271,7 +271,7 @@ Gradients were computed using \texttt{theano}'s automatic differentiation featur
 
 While the training procedure optimizes $\vc{\theta}$, there are other parameters that could be adjusted to minimize the loss.
 %
-The number of layers, $l$, and the `size' of each layer, $n$, corresponding the dimension of vector $\vc{s}$ (which equals the cell state mem), were chosen as `hyper-parameters' for optimization in a Bayesian optimization process.
+The number of layers, $l$, and the `size' of each layer, $n$, corresponding the dimension of vector $\vc{s}$ (which equals the cell state memory dimension as well), were chosen as `hyper-parameters' for optimization in a Bayesian optimization process.
 %
 Bayesian optimization is suited for optimizing RNN training because
 1) it tries to minimize the number of (expensive) objective function calls, which, in this case, is the training procedure, and
@@ -280,30 +280,27 @@ Bayesian optimization is suited for optimizing RNN training because
 
 The \texttt{spearmint} \cite{snoek2012practical} package was used to drive the hyper-parameter optimization process.
 %
-The process was programmed to save RNN parameters after every optimization iteration.
-%
 \texttt{spearmint} takes a parameter search space and a maximum number of optimization iterations.
 %
-However, the process was stopped until the RNN with the minimum validation loss was subjectively able to detect anomalies
+The process was programmed to save RNN parameters after every optimization iteration.
+%
+However, the process was stopped until the RNN with the minimum validation loss was subjectively able to detect anomalies%
 %
 \footnote{
 Further optimization may have been possible with increasing RNN size but loss reduction diminished relative to the associated increase in computational expense.
-}
+}%
+%
 .
 
 
 For every sample, Figure \ref{fig:bo} shows the results of the Bayesian optimization process and the training progress of the best network.
-%
-In the Bayesian optimization figures, Each point is the average validation loss since more than training session could have been launched with the same parameters.
-%
-If so, the points have a 95\% confidence interval bar through them.
 %
 In the training progress figures, the validation and validation losses are close throughout the training process.
 %
 This is expected since the training and validation sets are highly redundant and perhaps the RNN, by nature, interprets them to be almost identical (invariance to translation and sequence length).
 %todo: results are fine eventhough it might be underfit
 
-
+%todo: spike-2 legend
 \begin{figure}[!hp]
     \centering %3figs a pg. these are the gen figs
   
@@ -364,8 +361,14 @@ This is expected since the training and validation sets are highly redundant and
         \caption{PSG-ECG}
     \end{subfigure}%
 
-\label{fig:bo}
-\caption[Training results]{Bayesian optimized validation loss (left) and training progress of best RNN (right)} %todo: make tbls sentence case
+
+\caption[Training results]{Bayesian optimized validation loss (left) and training progress of best RNN (right).
+%
+Each point is the average validation loss since more than on training session could have been launched with the same parameters.
+%
+If so, the points have a 95\% confidence interval bar through them.
+} 
+\label{fig:bo} %OBVIOUSLY label should be AFTER caption!!!
 \end{figure}
 %todo: make figures centered by adding whitespace to the right
 
@@ -380,7 +383,7 @@ So, a `reconstruction error' is the difference between the test input and the ou
 %
 Therefore, the square of the reconstruction error can be used as an anomaly score \cite{Erfani2014}.
 %
-This section will show how the various calculations of error can be used to detect point anomalies \emph{as well as} discord anomalies introduced in \ref{this}.
+This section will show how the various calculations of error can be used to detect point anomalies \emph{as well as} discord anomalies introduced in \ref{sec:anomalytypes}.
 %
 However, the particular (objective) anomaly detection technique will not be discussed;
 only the anomaly score, that could be used in such a technique, is presented.
@@ -390,37 +393,16 @@ Nonetheless, the argument is made for the ability of autoencoding RNNs to detect
 
 Although the order of the anomaly scores should not be important to the anomaly detection technique, sequences of error calculations can be made in two ways for a test series: 1) the MSE of a sliding window and 2) the squared error of every point in the test series where the whole sequence is input to the optimal RNN.
 %
-As discussed in Section \ref{this}, while the MSE from a sliding window can detect both point anomalies and discords, it is preferable not to have to specify a window size.
+While the MSE from a sliding window can detect both point anomalies and discords, it is preferable not to have to specify a window size.
 %
 Ideally, high anomaly scores for points close together signal a discord while a lone high anomaly score signals a point anomaly.
 %
-But both types of caclulations are evaluated in this discussion.
+But both types of calculations are evaluated in this discussion.
 
 
-Error calculations are presented graphically in Figure \ref{fig:err} for each series.
+Error calculations are presented graphically in Figure \ref{fig:err} for each series (see Figure caption after the last subfigure).
 %
-In the top pane, a portion of the input series is shown with an anomaly.
-%
-While the focus is on the anomaly, enough normal data is shown for subjective comparison.
-%
-This is accompanied by a kernel density estimate, plotted on the ordinate (vertically), to evaluate the normality of the data \emph{by value} as opposed to \emph{behavior}.
-%
-The lower panes show series of squared error, $\epsilon$, where each pane is associated with a sliding window size.
-%
-The window size is represented by a highlighted vertical span in the error plot as well as a corresponding box in the input series plot to give a sense of scale to anomaly relative to the window.
-%
-Sliding a window over the test series that caclulates its MSE generates the error series (calculation type 1).
-%
-The locations of the MSE points correspond with the center of the sliding window.
-%
-However, error plots with just a vertical line as a `window' are just individual squared errors (calculation type 2).
-%
-Furthermore, a kernel density estimate for all the errors (including ones outside the plot) is plotted (vertically) on the ordinate.
-%
-The highest 5 percentile and the maximum of (all) the errors are marked on the ordinate also.
-
-
-The maximum, the kernel density estimate, and the 5 percentile mark give a summary of the errors.
+The errors are summarized by their maximum, kernel density estimate, and the 5 percentile mark.
 %
 Together, with the error plot, the efficacy of the RNN in distinguishing anomalies can be evaluated;
 %
@@ -429,11 +411,10 @@ normal data should correspond to the bulk of the error calculations while anomal
 
 It should be noted that as the window size is increased, fractionally less points are included in the, normal, 95 percentile (and vice versa).
 %
-The kernel desnity estimate might change significantly accordingly.
+The kernel density estimate might change significantly accordingly.
 
 
 What follows is a discussion of the ability of the (optimal) RNN to detect anomalies referencing subfigures of Figure \ref{fig:err}.
-
 
 
 \noindent {\bfseries{spikes-1}}
@@ -453,7 +434,7 @@ This series can be considered discrete with a point anomaly.
 %
 The point anomaly takes on an improbable value but is not extreme.
 %
-Clearly, the anomalies are distinguised in all error calculations.
+Clearly, the anomalies are distinguished in all error calculations.
 
 Note the error increases as soon as the sliding window (from the left) encounters the anomaly.
 %
@@ -498,7 +479,7 @@ But, there was a transition region with errors higher or lower than the anomalou
 %
 In the point error plot, the extreme values correspond to extreme values in the test plot.
 %
-So, given these results, the windowed error can be more attributed to the extreme values of the test series than to its anomalous behaviour.
+So, given these results, the windowed error can be more attributed to the extreme values of the test series than to its anomalous behavior.
 %
 In any case the RNN found a tight expectation for typical values.
 %kde bad
@@ -518,7 +499,7 @@ In any case the RNN found a tight expectation for typical values.
 
 The power series normally shows a demand profile over a five-day work week.
 %
-The windowed error distribution has a long tail because high errors were given to normal areas of test series (not shown within the plot).
+The windowed error distribution has a long tail because high errors were given to normal areas of test series (not shown within the plot, possibly due to some drift in the series).
 %
 In fact, the first windowed error plot does not contain the highest error unlike the second windowed error plot.
 %
@@ -528,7 +509,6 @@ But, obviously, the point errors can not be used to detect the anomalous region.
 
 
 \noindent {\bfseries{ECG}}
-
 
 \begin{figure}[!hp]
     \ContinuedFloat 
@@ -542,7 +522,7 @@ But, obviously, the point errors can not be used to detect the anomalous region.
 \end{figure}
 
 
-The ECG is a challenging series because, while there is a repeating element, the element does not precicely have the same period.
+The ECG is a challenging series because, while there is a repeating element, the element does not precisely have the same period.
 %
 There is also noise in the signal that has to be distinguished from its significant features.
 
@@ -552,15 +532,23 @@ The same cannot be said about the error plot with the smallest window;
 %
 although the areas with extreme values are the most prominent, areas that have different behavior, but not extreme in value, are distinguished as well.
 %
-For example, a particularly subtle anomaly was detected within the highest 5 percentile at $t~1380$ despite the fact that the more anomalous \emph{region} contributed extreme values.
+For example, a particularly subtle anomaly was detected within the highest 5 percentile at around $t=1380$ despite the fact that the more anomalous \emph{region} contributed extreme values.
 %
-This window size was chosen to be about the size of the repeating unit since the effect on the error is diluted for larger windows.
+The same could be said about anomaly at around $t=1470$.
+%
+This window size was chosen to be about the size of the repeating unit since the effect of these anomalies on the error is diluted for larger windows.
 %
 %Still, an argument can be made that the larger windows captured the anomalous region's behavior, as opposed to just its extreme values, because a significant portion of the error corresponding to the anomalous region lies within the 95 percentile (and hence within the normal range of error fluctuations for normal data). %weak :S
 The larger windows detected the most anomalous region but it is not apparent whether the extreme error values were due to deviant values or deviant behavior.
 
 
 \noindent {\bfseries{PSG-ECG}}
+
+In this ECG, the point errors do not reveal much about the anomalous region because every spike in the error plot plot corresponds to a normal spike in the ECG, normal or otherwise.
+%
+However, the anomalous region is clearly detected in both windowed error plots.
+%
+Again the error in the anomalous region is well beyond the normal range of error fluctuations albeit the test series values are slightly above average (as can be seen from the density estimate).
 
 \begin{figure}[!hp] 
     \ContinuedFloat
@@ -571,18 +559,30 @@ The larger windows detected the most anomalous region but it is not apparent whe
         \caption{PSG-ECG}
     \end{subfigure}%
 
+\caption[Anomaly scores of series]{Anomaly scores of series.
+%
+In the top pane, a portion of the input series is shown with an anomaly.
+%
+While the focus is on the anomaly, enough normal data is shown for subjective comparison.
+%
+This is accompanied by a kernel density estimate, plotted on the ordinate (vertically), to evaluate the normality of the data \emph{by value} as opposed to \emph{behavior}.
+%
+The lower panes show series of squared error, $\epsilon$, where each pane is associated with a sliding window size.
+%
+The window size is represented by a highlighted vertical span in the error plot as well as a corresponding box in the input series plot to give a sense of scale to the anomaly relative to the window.
+%
+Sliding a window over the test series that calculates its MSE generates the error series (error calculation type 1).
+%
+The locations of the MSE points correspond with the center of the sliding window.
+%
+However, error plots with just a vertical line as a `window' are just individual squared errors (error calculation type 2).
+%
+Furthermore, a kernel density estimate for all the errors (including ones outside the plot) is plotted (vertically) on the ordinate.
+%
+The highest 5 percentile and the maximum of (all) the errors are marked on the ordinate also.
+}
 \label{fig:err}
-\caption{Anomaly scores of series} 
-%todo: make tbls captions sentence case but no period
 \end{figure}
-%todo: the figs should accompany the text. split the figs
-
-In this ECG, the point errors do not real much about the anomalous region becuase every spike in the error plot plot corresponds to a normal spike in the ECG, normal or otherwise.
-%
-However, the anomalous region is clearly detected in both windowed error plots.
-%
-Again the error in the anomalous region is well beyond the normal range of error fluctuations albeit the test series values are slightly above average (as can be seen from the density estimate).
-
 
 %todo:replace: indices to ^X^X FOR p omitted
 %todo: 'was programmed to save'  ...just write: process saves
@@ -596,7 +596,7 @@ Given the results, which are influenced by the described training process and RN
   Using the point errors, extreme, but not necessarily rare, values can be found.
 
 \item
-  The windowed errors are a verstile way of finding, both point and discord, anomalies at multiple scales.
+  The windowed errors are a versatile way of finding, both point and discord, anomalies at multiple scales.
   % 
   However, this means that the window size must be about the same scale as the anomaly.
   % 
@@ -608,7 +608,7 @@ Given the results, which are influenced by the described training process and RN
   Pursuant to the previous two points, windowed errors are more reliable in finding anomalies.
 
 \item
-  The traning data can have some anomalous data.
+  The training data can have some anomalous data.
 
 \item
   The RNNs were insensitive to variations in sequence length and translation.
@@ -618,9 +618,10 @@ Given the results, which are influenced by the described training process and RN
 
 \end{itemize}
 
-In general, subject to effective training, the RNNs `learned' the typical \emph{behaviour} of the series which includes information about their typcial values as well as their ordering.
+In general, subject to effective training, the RNNs `learned' the typical \emph{behavior} of the series which includes information about their typical values as well as their ordering.
 %
-Concludingly, the autoencoding recurrent neural network can be used to detect anomalies in series.
+Concludingly, the autoencoding recurrent neural network can be used to detect anomalies in sequences.
+
 
 %todo . theano implememtation particularly slow suspected
 %todo. include tbls and probabilitydfs in repo in final

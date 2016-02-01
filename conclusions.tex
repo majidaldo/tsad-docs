@@ -1,12 +1,11 @@
 \chapter{Concluding Remarks}
 %todo. rename everything to sequence. seq. includes ts
-%say that no need for all subsequences in distance based technique
 
-Now that proximity-based and model-based anomaly detection techniques have been introduced in Chapter \ref{this}, some comparisions can be made with them given the results from the previous chapter.
+Now that proximity-based and model-based anomaly detection techniques have been introduced in Chapter \ref{ch:ad}, some comparisons can be made with them given the results from the previous chapter.
 %
-From there, some qualified conclusion can be made.
+From there, some qualified conclusions can be made.
 %
-Mind that, from the start, the comparison is made with techniques that do not require labelled data.
+Mind that, from the start, the comparison is made with techniques that do not require labeled data.
 %
 Also, the comparison is made as general statements of advantages of RNNs over the alternative.
 
@@ -22,15 +21,15 @@ Also, the comparison is made as general statements of advantages of RNNs over th
       Furthermore, while HMMs are powerful, RNNs are fundamentally sequence modelers.
 
 
-\item HOTSAX (proximity).
+\item HOT SAX (proximity).
 
-      The HOTSAX \cite{Keogh2005} technique (and its variants) is considered a proximity-based technique optimized for sequences.
+      The HOT SAX \cite{Keogh2005} technique (and its variants) is considered a proximity-based technique optimized for sequences that is sensitive to window size.
       %
       While the results show in the previous chapter that window size is important, RNNs have the advantage that, the same RNN can be used to find anomalies at different scales.
       %
-      In HOTSAX, a comparison is made for almost all pairs of windows for one window size.
+      In HOT SAX, a comparison is made for almost all pairs of windows for one window size.
       %
-      This may not be an advantage when analyzing short sequences, but a \emph{trained} RNN can analyze a long sequence for anomalies based on a shorter sample.
+      This thorough comparison may be tolerable for short sequences, but a \emph{trained} RNN can analyze a long sequence for anomalies based on a shorter sample.
       %
       Furthermore, the mathematics of RNNs naturally accept multivariate sequences.
 
@@ -50,7 +49,7 @@ A negative response to the following questions for the alternative gives RNNs an
 
 \item Is it robust against some window length?
 
-\item Is it invariant to tranlation? (Is it invariant to sliding a window?)
+\item Is it invariant to translation? (Is it invariant to sliding a window?)
 
 \item Is it fundamentally a sequence modeler?
 
@@ -58,7 +57,7 @@ A negative response to the following questions for the alternative gives RNNs an
 
 \item Can the model prediction be associated with a probability \cite{Graves2013b}?
 
-\item Does it need labelled data? If not, is it robust to anomalous training data?
+\item Does it need labeled data? If not, is it robust to anomalous training data?
 
 \item Does it require domain knowledge?
 
@@ -79,7 +78,7 @@ In this work, although windows were found to be needed to detect anomalies, the 
 \footnote{Another way of seeing the difference in the mode of operation between the two RNN setups is by considering their mappings. In \cite{Malhotra2015}, an arbitrary subsequence is mapped to a fixed length sequence while in this work an arbitrary subsequence is mapped to itself.}
 (not the scale of the anomaly).
 %
-In fact, specifiying a window size for the prediction errors (as in Section \ref{sec:results}) can be seen as an advantage because it allows detection of anomalies at different scales as a desired choice for the investigator.
+In fact, specifying a window size for the prediction errors (as in Section \ref{sec:results}) can be seen as an advantage because it allows detection of anomalies at different scales as a desired choice for the investigator.
 %
 Furthermore, \cite{Malhotra2015} uses normal data for training thereby not providing evidence that their process can tolerate anomalous data.
 %
@@ -93,15 +92,15 @@ Nonetheless, evidence for anomaly detection in multivariate time series is provi
 
 Unfortunately, the power of RNNs comes at high computational expense in the training process.
 %
-Not only is there a cost in finding RNN parameters ($\vc{\theta}$), but there is also to finding RNN hyperparameters which can include parameters specifying RNN architecture as well as parameters specifying training algorithm parameters.
+Not only is there a cost in finding RNN parameters ($\vc{\theta}$), but there is also to finding RNN hyper-parameters which can include parameters specifying RNN architecture as well as parameters specifying training algorithm parameters.
 
 
-Given the results of this work and how it compares to other techniques, it can be concluded that AE-RNNs can be used to detect anomalies in arbitrary sequences, provided that an initial training cost can be managed.
+Given the results of this work and how it compares to other techniques, it can be concluded that autoencoding RNNs can be used to detect anomalies in arbitrary sequences, provided that an initial training cost can be managed.
 
 
 \section{Further Work}
 
-The text ends with a list of further work directions with potential to strengthen the case for using AE-RNNs in anomaly detection.
+The text ends with a list of further work directions with potential to strengthen the case for using autoencoding RNNs in anomaly detection.
 %
 As the list is mainly concerned with the RNNs, and much progress has been made in RNN research recently, the list is not exhaustive.
 %
@@ -120,6 +119,13 @@ Also, variations in the training data on the length scale of the sequence (trend
 These optimizations are important to effectively learn normal sequence patterns.
 
 
+\item[Use autocorrelation to determine a minimum window width.]
+
+In the sampling process, the minimum window length was manually determined such that the length captured meaningful dynamics.
+%
+This length can be systematically determined by using information from the sequence's autocorrelation.
+
+
 \item[Accelerate training.]  \hfill %obviously no need for \\ obviously
 
                  \begin{description}
@@ -129,7 +135,7 @@ These optimizations are important to effectively learn normal sequence patterns.
 
                  Although not required, some carefully chosen normalization of data could help.
                  %
-                 Another normalization scheme to consider is found in a recent paper \cite{laurent2015batch} which suggests using normalization based on mini-batch statistics to accelerate RNN training.
+                 Another normalization scheme to consider is found in a a recent paper \cite{laurent2015batch} which suggests using normalization based on mini-batch statistics to accelerate RNN training.
                  
 
                  \item[Find an optimum mini-batch size.]
@@ -157,7 +163,7 @@ Dropout was first applied to non-recurrent neural networks but recent study \cit
 
                  \item[Experiment with alternatives to the LSTM layer.]
 
-                 Over a plain RNN, the LSTM imposes more computational complexity as well as more storage requirements (for the memory cell).
+                 Over a basic RNN, the LSTM imposes more computational complexity as well as more storage requirements (for the memory cell).
                  %
                  Gated Recurrent Units (GRU) \cite{Cho2014} are gaining in popularity as a simpler and cheaper alternative to LSTM layers.
 
@@ -180,26 +186,26 @@ Dropout was first applied to non-recurrent neural networks but recent study \cit
 
 Thee output from a RNN can be interpreted to have an associated uncertainty \cite{Graves2013b}.
 %
-It follows that it should be possible to get high or low error signals associated with high uncertainty which should affect the interpetation of the existence of an anomaly (see Reconstruction Distribution, Section 13.3, of \cite{Bengio-et-al-2015-Book}).
+It follows that it should be possible to get high or low error signals associated with high uncertainty which should affect the interpretation of the existence of an anomaly (see Reconstruction Distribution, Section 13.3, in \cite{Bengio-et-al-2015-Book}).
 
 
 \item[Objectively compare anomaly detection performance against other techniques
  over a range of data.] 
 
 
-While certain disciplines might have benchmark datasets to test anomaly detection, measuring the generality of a technique by evaluating its performace over a wide variety of data is not widespread%
+While certain disciplines might have benchmark datasets to test anomaly detection, measuring the generality of a technique by evaluating its performance over a wide variety of data is not widespread%
 \footnote{Perhaps this is due to the difficulty in finding a general technique.}%
 .
 %
-To solve this problem, Yahoo recently offered a benchmark (labelled) dataset \cite{Laptev2015} which includes a variety of synthetic and real time series.
+To solve this problem, Yahoo recently offered a benchmark (labeled) dataset \cite{Laptev2015} which includes a variety of synthetic and real time series.
 
 
 Methods based on non-linear dimensionality reduction might be competitive \cite{Lewandowski2010}.
 
 
-\item[Find anomalies multivariate sequences.]
+\item[Find anomalies in multivariate sequences.]
 
-The NASA Shuttle Valve Data \cite{Ferrel2005} is an example which was used in \cite{Jones2014} and the well-known HOTSAX \cite{Keogh2005} technique.
+The NASA Shuttle Valve Data \cite{Ferrel2005} is an example which was used in \cite{Jones2014} and the well-known HOT SAX \cite{Keogh2005} technique.
 
 
 %questions: why pt errs not reveal anoms?? but this does not further my goal
@@ -213,6 +219,6 @@ The NASA Shuttle Valve Data \cite{Ferrel2005} is an example which was used in \c
 %todo: fix margin on nested descriptions
 
 %%% Local Variables:
-%%% mode: plain-tex
+%%% mode: latex
 %%% TeX-master: "thesis"
 %%% End:

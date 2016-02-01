@@ -43,6 +43,7 @@ How is the measure tested to decide if it is anomalous?
 
 
 \section{Anomaly Types}
+\label{sec:anomalytypes}
 
 The presence of different anomaly types can be a challenge for anomaly detection techniques. What follow are qualitative descriptions of anomalies classified in a way most relevant to this work. However, a taxonomy of anomalies will never encompass all anomalies as well as defining anomalies as points that are not normal.
 
@@ -185,6 +186,7 @@ However, a recent empirical study \cite{Wang2013} suggests that, in general, the
 Choosing the anomaly detection technique is the final step in setting up an anomaly detection process. Discussion of detection techniques are discussed as a separate chapter to allow for more development.
 
 \chapter{Detection Technique}
+\label{ch:adtechnique}
 
 The application of anomaly detection in a wide variety of domains has led to the development of numerous detection techniques. Each of these applications defines anomalies in a different way;  some  may only be interested in single anomalous points while others are more concerned about anomalous subsquences (discords). Furthermore, techniques are developed drawing on theory from statistics, machine learning, data mining, information theory, and spectral theory.
 
@@ -282,7 +284,7 @@ Furthermore, in addition to addressing the previously mentioned factors, the dis
 
 \subsubsection{Window Width}
 
-Section \ref{sec:adsample} introduced the use of sliding windows to extract samples of some width (or size or length), $w$. Here, the effect of the choice of $w$ will be explained when combined with a distance measure.
+Section \ref{sec:adsample} introduced the use of sliding windows to extract samples of some width\footnote{Window `size' or `length' might also be used to refer to window width}, $w$. Here, the effect of the choice of $w$ will be explained when combined with a distance measure.
 
 Also in Section \ref{sec:adsample}, it was mentioned that $w$ should be, at least, on the order of the length of the expected anomaly. But when $w$ is too large the distance measure becomes less effective at measuring similarity because the proportion of the anomalous subsequence becomes small compared to $w$. Furthermore, pairs of points become more equidistant in high-dimensional space \cite{Hinneburg2000,Beyer1999} which makes distinguishing between time series difficult (though this could be mitigated by using a dimension-reducing transformation \cite{Keogh2001}).
 
