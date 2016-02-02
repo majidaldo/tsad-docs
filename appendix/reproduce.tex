@@ -1,0 +1,181 @@
+as of sept '15.
+
+git clone --recursive 
+swith to commitid (instead of btrfs b/c more perm)
+
+2. DISTRIBUTED EXEC
+
+start init and computers according to instructions
+ansible/
+ansible-playbook -vvv init.yml
+ditto                ec2.yml
+setup.yml --hosts=ec2
+
+(todo put tsad code in sys.. subproj?)
+
+on init
+
+* start mongodb (collects task info)
+/project/docker/1111-mongodb/run.sh
+* start ipycontroller
+/project/docker/0200-ipycontroller/run.sh
+* start bayesian optimizer
+set settings. po.py. maybe restrict the spc
+. start a container with an env
+/project/docker/0100-computer/run.sh ipykernel
+do not do more than one ts at same time
+. enter env
+docker exec -ti init-ipykernel-1 bash
+cd /data/experiments/exp_name
+python ~/spearmint/spearmint/main.py .
+
+
+on a computer
+
+* start ipyengine (they will connect auto)
+/project/docker/0100-computer/run.sh  (run.sh ipyengine n procs)
+ensure ipy engine connect on init
+docker logs ipycontroller
+should have computed
+docker logs computernamefromdockerps-ipyengine-1
+
+(obtain tsad code or subtree it?)
+
+
+join non-vm computer
+
+install comoputing essentials:
+theano
+numpy,scipy
+paramiko
+python27
+theanets
+pymongo
+pandas
+sklearn just one func
+
+get a local tsad dir
+tunnel these ports
+tsad/docker/port.sh 27017
+tsad/docker/port.sh 4321
+tsad/config.yml
+'
+---
+rnndb: localhost
+'
+tsad/ > ipengine --file=..\sys\files\.ipython\profile_default\security\ipcontroller-engine.json --ssh="core@init" --sshkey=c:\Users\Majid\.vagrant.d\insecure_private_key
+
+
+1. LOCAL EXEC
+
+start mongodb
+in addition to non-vm computer stuff, install spearmint
+cd tsad/experiment/exp_name
+set o.py
+python /path/to/spearmint/main.py .
+
+
+---
+
+parallel
+
+{
+
+    "experiment-name": "spike",
+    "database": {"address":"mongodb"}, <<<
+    "language"   : "PYTHON",
+    
+    "resources" : {
+	"my-machine" : {
+	    "scheduler"         : "local",
+	    "max-concurrent"    : 3,
+	    "max-finished-jobs" : 50
+	}
+    },
+
+    "tasks": {
+	"main" : {
+	    "type"       : "OBJECTIVE",
+	    "likelihood" : "GAUSSIAN",
+	    "main-file"  : "po.py", <<<
+	    "resources"  : ["my-machine"]
+	}
+    },
+    
+    "variables" : {
+	"nl" : {
+	    "type" : "INT",
+	    "size" : 1,
+	    "min"  : 1,
+	    "max"  : 2
+	},
+	"n" : {
+	    "type" : "INT",
+	    "size" : 1,
+	    "min"  : 1,
+	    "max"  : 20
+	},
+	"iter" : {
+	    "type" : "FLOAT",
+	    "size" : 1,
+	    "min"  : 0,
+	    "max"  : 1
+	}
+    }
+}
+
+
+local
+
+{
+
+    "experiment-name": "power",
+    "database": {"address":"localhost"},
+    "language"   : "PYTHON",
+    
+    "resources" : {
+	"my-machine" : {
+	    "scheduler"         : "local",
+	    "max-concurrent"    : 1,
+	    "max-finished-jobs" : 20
+	}
+    },
+
+    "tasks": {
+	"main" : {
+	    "type"       : "OBJECTIVE",
+	    "likelihood" : "GAUSSIAN",
+	    "main-file"  : "o.py",
+	    "resources"  : ["my-machine"]
+	}
+    },
+    
+    "variables" : {
+	"nl" : {
+	    "type" : "INT",
+	    "size" : 1,
+	    "min"  : 1,
+	    "max"  : 2
+	},
+	"n" : {
+	    "type" : "INT",
+	    "size" : 1,
+	    "min"  : 1,
+	    "max"  : 10
+	},
+	"iter" : {
+	    "type" : "FLOAT",
+	    "size" : 1,
+	    "min"  : 0,
+	    "max"  : 1
+	}
+    }
+}
+
+
+
+
+
+
+
+

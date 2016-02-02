@@ -1,0 +1,161 @@
+
+%% A sample appendix
+%%
+%%**********************************************************************
+%% Legal Notice:
+%% This code is offered as-is without any warranty either
+%% expressed or implied; without even the implied warranty of
+%% MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE!
+%% User assumes all risk.
+%% In no event shall any contributor to this code be liable for any damages
+%% or losses, including, but not limited to, incidental, consequential, or
+%% any other damages, resulting from the use or misuse of any information
+%% contained here.
+%%**********************************************************************
+%%
+%% $Id: Appendix.tex,v 1.6 2006/08/25 00:58:50 Owner Exp $
+%%
+
+% N.B.: an appendix chapter starts with "appchapter" instead of "chapter"
+%
+% The first argument in [ ] is the title as displayed in the table of contents
+% The second argument is the title as displayed here.  Use \\ as appropriate in
+%   this title to get desired line breaks
+%\appchapter[An Appendix]{An Appendix}
+
+\chapter{Reproducible Computational Infrastructure}
+
+
+\section{Introduction}
+
+
+There has been much attention recently on being able to reproduce computational research \cite{Stodden2013}. 
+%
+In some cases, just providing the computational code and data, along with some instructions, is sufficient to be able to reproduce a computational experiment.
+%
+However, typically code relies on libraries and other support facilities which complicates the computational setup.
+%
+So, just providing computational code is not sufficient to ensure reproducibility (at least not easily).
+%
+Some domains have managed this complexity somewhat by providing specific solutions.
+%
+As examples, \textsf{Galaxy} is used in genome analysis \cite{Giardine2005},
+%
+\textsf{Madagascar} in geophysics \cite{Fomel2013},
+%
+\textsf{WaveLab} in signal processing \cite{Buckheit1995},
+%
+and \textsf{Bioconductor} in computational biology and bioinformatics \cite{Gentleman2004}.
+%
+These solutions can be seen as platforms onto which instructions can be provided.
+
+
+However, these solutions do not address computational infrastructure setup in addition to being limited to their domains.
+%
+`Infrastructure' here means aspects related to both hardware and software.
+%
+While the importance of hardware is not emphasized as much as software, it is best to think of hardware as clean slates onto which software is installed, beginning with the operating system.
+%
+In fact, some computational code requires certain hardware like graphical processing units.
+%
+Furthermore, computational codes might interact with services provided by the operating system and/or non-computational services that perhaps are closely associated with the operating system.
+%
+Therefore providing instructions, in the form of code, that specify the hardware \emph{and} software has much value for reproducibility.
+%
+The benefit from having such instructions is not limited to ensuring integrity of results;
+%
+the iterative work process is greatly enhanced because this level of reproducibility implies automation.
+
+
+Many software tools from information technology (not specific to high-performance computing) automate infrastructure setup.
+%
+As such, the results presented in Chapter \ref{ch:results}, was performed with an automated process that used these information technology tools.
+%
+While motivated by a problem encountered in this work, the process has been separated out as an independent solution applicable to any computational problem.
+%
+The following sections describe the problem and then the solution.
+
+
+\subsection{Motivation}
+
+
+in the BO proc: 1 2 3 aprox these steps
+- the BO proc
+- storing rnn in mongodb
+- storing bo opt prog in mongodb
+- how to parallelize??
+
+
+required alot of iteration!
+- repetition of analysis vs repetition of (whole) proces
+
+requirements: reproduce the whole stack
+
+bold general problem: reproduce computational infrastructure. emphasize local dev. and testing. workflow AND reprod.
+
+
+
+\subsubsection{Solution Elements}
+
+partial solns.
+
+- traditional hpc only given machine. mismatch with local environment.
+- w/ docker get to encapsulate os w/ app in a proc. sometimes tied to an os.. or at least on a particular os , easier installation. almost like a vm. save a binary.
+- common network
+- vm good encapsulation. but usually out of context. needs to be coordianted. save a vm img.
+- git: describes everything and makes tracable
+
+
+- starcluster. tied to aws
+- cloudman. tied to ami
+- closest is starcluster but no docker. no local dev.
+- any other soln not allow seamless from local to cloud.
+
+
+\section{Solution}
+
+two types of machines: compute and a coordination machine.
+
+- compute stack: (unit same for all except h/w of course)
+. app
+. container, container, libs
+. base os1, base os2
+. docker cntroller
+. os, coreos
+. h/w (abstraction)
+
+
+
+- fig w/ stack
+- fig with explaining coordination/context
+. local machine getting storage. for registry, and files
+. local machine emu compute coputer
+. 'cloud'
+. networked 
+
+use ansible to coordinate this. other coordiantion tools exist but ansible is a good base generic. lot's of support. customized for this workflow.
+
+
+benefits:
+code -> binary -> vm binary
+
+- last thing: usage instructions as in repo
+
+
+\chapter{Reproducing Results}
+
+talk about more specific things.
+- task distribution across machines with ipyparallel
+- rnn storage in mongodb as well.
+
+\chapter{Contributions}
+
+- review of ts
+- lstm fig that matches math
+- bo demo
+- codes
+
+%%% Local Variables:
+%%% mode: latex
+%%% TeX-master: "../thesis"
+%%% End:
