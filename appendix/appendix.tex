@@ -35,7 +35,7 @@ In some cases, just providing the computational code and data, along with some i
 %
 However, typically code relies on libraries and other support facilities which complicates the computational setup.
 %
-So, just providing computational code is not sufficient to ensure reproducibility (at least not easily).
+So, just providing the computational code is not sufficient to ensure reproducibility (at least not easily).
 %
 Some domains have managed this complexity somewhat by providing specific solutions.
 %
@@ -54,11 +54,14 @@ However, these solutions do not address computational infrastructure setup in ad
 %
 `Infrastructure' here means aspects related to both hardware and software.
 %
-While the importance of hardware is not emphasized as much as software, it is best to think of hardware as clean slates onto which software is installed, beginning with the operating system.
+While the importance of hardware is not emphasized as much as software in reproducibility%
+\footnote{This is because the programmer is usually highly removed from hardware details. The same cannot be said of software dependencies.}%
+,
+it is best to think of hardware as clean slates onto which software is installed, beginning with the operating system.
 %
-In fact, some computational code requires certain hardware like graphical processing units.
+In fact, some computational code requires certain hardware like graphics processing units (GPUs).
 %
-Furthermore, computational codes might interact with services provided by the operating system and/or non-computational services that perhaps are closely associated with the operating system.
+Furthermore, computational codes might interact with (non-computational) services provided by the operating system and/or non-computational services that perhaps are closely associated with the operating system.
 %
 Therefore providing instructions, in the form of code, that specify the hardware \emph{and} software has much value for reproducibility.
 %
@@ -69,11 +72,12 @@ the iterative work process is greatly enhanced because this level of reproducibi
 
 Many software tools from information technology (not specific to high-performance computing) automate infrastructure setup.
 %
-As such, the results presented in Chapter \ref{ch:results}, was performed with an automated process that used these information technology tools.
+As such, the results presented in Chapter \ref{ch:results}, were obtained by using an automated process that used some of these information technology tools.
 %
-While motivated by a problem encountered in this work, the process has been separated out as an independent solution applicable to any computational problem.
-%
-The following sections describe the problem and then the solution.
+Futheremore, while being motivated by a problem encountered in this work, the process has been separated as an independent solution applicable to any computational problem.
+
+
+The following sections describe the problem and, in turn, its solution.
 
 
 \subsection{Motivation}
