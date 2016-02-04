@@ -1,0 +1,262 @@
+\chapter{Reproducible Computational Infrastructure}
+
+
+\section{Introduction}
+
+
+There has been much attention recently on being able to reproduce computational research \cite{Stodden2013}. 
+%
+In some cases, just providing the computational code and data, along with some instructions, is sufficient to be able to reproduce a computational experiment.
+%
+However, typically code relies on libraries and other support facilities which complicates the computational setup.
+%
+So, just providing the computational code is not sufficient to ensure reproducibility (at least not easily).
+%
+Some domains have managed this complexity somewhat by providing specific solutions.
+%
+As examples, \textsf{Galaxy} is used in genome analysis \cite{Giardine2005},
+%
+\textsf{Madagascar} in geophysics \cite{Fomel2013},
+%
+\textsf{WaveLab} in signal processing \cite{Buckheit1995},
+%
+and \textsf{Bioconductor} in computational biology and bioinformatics \cite{Gentleman2004}.
+%
+These solutions can be seen as platforms onto which instructions can be provided.
+
+
+However, these solutions do not address computational infrastructure setup in addition to being limited to their domains.
+%
+`Infrastructure' here means aspects related to both hardware and software.
+%
+While the importance of hardware is not emphasized as much as software in reproducibility%
+\footnote{This is because the quantitative programmer is usually highly removed from hardware details. The same cannot be said of software dependencies.}%
+,
+it is best to think of hardware as clean slates onto which software is installed, beginning with the operating system.
+%
+In fact, some computational code requires certain hardware like graphics processing units (GPUs).
+%
+Furthermore, computational codes might interact with (non-computational) services provided by the operating system and/or non-computational services that perhaps are closely associated with the operating system.
+%
+Therefore providing instructions, in the form of code, that specify the hardware \emph{and} software has much value for reproducibility.
+%
+The benefit from having such instructions is not limited to ensuring integrity of results;
+%
+the iterative work process is greatly enhanced because this level of reproducibility implies automation.
+
+
+Many software tools from information technology (not specific to high-performance computing) automate infrastructure setup.
+%
+As such, the results presented in Chapter \ref{ch:results}, were obtained by using an automated process that used some of these information technology tools.
+%
+Futheremore, while being motivated by a problem encountered in this work, the process has been separated out as an independent solution applicable to any computational problem.
+
+
+The following sections describe the problem and, in turn, its solution.
+
+
+\subsection{Motivation}
+
+The Bayesian optimization process, explained in Section \ref{sec:training}, required the coordination of many components.
+%
+The general problem is explained here but refer to Chapter \ref{ch:reproduce} for the specific solution components.
+%
+The components must satisfy the following requirements:
+%
+\begin{itemize}
+
+\item 
+  the provisioning of a \textsf{mongodb} database so that \textsf{spearmint} could store its optimization progress in it
+
+\item
+  the provisioning of a database to store RNN parameters after every training iteration
+
+\item
+  the coordination of training runs on potentially multiple compute machines where a RNN training run is for certain hyper-parameters (a course form of parallelization)
+
+\end{itemize}
+
+Furthermore, two operational requirements can be added as well:
+
+\begin{itemize}
+
+\item
+  There should be an automated (reproducible) process that sets up these components.
+
+\item
+  The investigator should be able to seamlessly transition from testing and development on his/her local machine to `production' execution on a remote machine.
+%
+That is, the investigator's workflow should be uninterrupted.
+
+\end{itemize}
+
+
+So the challenge is twofold: the reproducibility of each component and the reproducibility of the setup.
+%
+Also, this implies that the setup should occur in clean, isolated environments.
+
+
+\section{Solution Elements}
+
+
+Some solutions solve certain parts of the previously listed requirements.
+%
+They ccan be evaluatd based on their degree of reproducibility and automation.
+
+
+\begin{description}
+
+
+\item[local virtual machine: \textsf{VirtualBox}.]
+  %
+  This software virtualizes all the workings of a machine into a process running on a (local) host operating system.
+
+  
+  However, on its own, \textsf{VirtualBox} does not provide a systematic and generic way of provisioning the machine as well as provisioning software on the machine.
+
+
+\item[local virtual machine automation: \textsf{Vagrant}.]
+  %
+  By providing \textsf{Vagrant} with instructions in a file, virtual machine setup can be automated.
+  
+
+  \textsf{Vagrant} can control \textsf{VirtualBox} by specifying virtual machine hardware as well a machine image (file) which typically includes an operating system installation at least.
+  %
+  While a virtual machine provisioned automatically provides an isolated, reproducible environment for work, it needs to exist in the context of being a part of a network of machines.
+  %
+  So, ideally, after a minimal initial provisioning, the virtual machine is treated as just another machine regardless of the fact that it exists virtualized locally.
+
+
+\item[application reproducibility: \textsf{Docker}.]
+  %
+  From instructions in a file, \textsf{Docker} can create an isolated application image.
+
+
+  \textsf{Docker} has recently emerged as an easy yet powerful way to work with (isolated) application containers.
+  %
+  Furthermore, the image execution is portable as long as the machine has compatible architecture which has obvious advantages when working with multiple machines.
+  %
+  Also, by persisting the image, the application can be started swiftly since the image creation process would have already gone through potentially lengthy software installation processes.
+  %
+%footnote? docker like vm but compare to handling vm img!
+  %
+%used for svc and the compute code as well.
+%
+  In the context of computational research, it is possible to have isolated, reproducible containers for, as examples, databases, computational code, and computational task management.
+  %
+  While \textsf{Docker} provides a great deal of reproducibility, it is not involved in machine provisioning.
+
+
+
+\item[distributed \textsf{Docker} support: \textsf{Weave} and \textsf{CoreOS}.]
+%
+\textsf{Weave} and \textsf{CoreOS} facilitate the distributed operation of \textsf{Docker} containers.
+
+Given that \textsf{Docker} was identified as an important solution component, it follows that \textsf{Docker}-specific solutions should be chosen that facilitate distributed application execution.
+%
+\textsf{Weave} provides global private network addressing for each container.
+%
+\textsf{CoreOS} is an operating system designed for distributed, containerized applications.
+%
+As such, it is delivered with mimimal software and services as containers are assumed to be the primary method by which software and services are added.
+%
+In the context of computational research, this ensures the fastest possible execution of computational code since the operating system is not running unnecessary processes.
+%docker soles other probs but these are main ones
+
+\item[remote machine facility: \textsf{Amazon Web Services (AWS)}.] 
+  %
+  \textsf{AWS} provides high-performance compute machines, including machines equipped with GPUs, running \textsf{CoreOS}.
+  
+
+  What is important for the purpose of automation, is that \textsf{AWS} provides a programmatic interface for the provisioning of machines.
+  % 
+  However, the choice of \textsf{AWS} is not critical because \textsf{AWS} can be substitued by other providers providing comparable facilities.
+ 
+
+
+\item[global automation: \textsf{Ansible}.]
+  %
+  \textsf{Ansible} is the highest-level automation software that can orchestrate the infrastructure setup process (in full).
+  
+  \textsf{Ansible} can be used to generically provision machines, local or remote, virtual or physical.
+  %
+  \textsf{Ansible} can also be used to provision software, containerized or not.
+  %
+  Furthermore, the provisioning can occur in a coordianted fashion.
+
+
+\end{description}
+
+
+%tech stack to understand. todo?
+%put it together would like to achieve this pic.
+%replicate this anywhere.
+
+\subsection{Partial Solutions}
+
+
+Research-oriented cluster computing faciilties were found to not satisfy the requirements previously mentioned.
+%
+Typically, the machines are provided with an operating system installed with a restricted user account.
+%
+This restricts the ease in which some software can be installed although this can be mitigated somewhat if \textsf{Docker} was installed.
+%
+Most importantly, is that the use of research-oriented clusters does not facilitate a seamless transition from local development to remote execution because the local and remote environments do not match (unless the local environment is restricted to use the same technologies as the facility which would limit portability of the setup process).
+%
+So treating cluster computing providers as just providers of machines is advantageous because it allows the investigator generically automate the setup of the same computing environment on any facility.
+
+
+While automating the setup for a research-oriented cluster is possible, \textsf{StarCluster} is notable for automating the setup for \textsf{AWS}.
+%
+Although the setup is convenient, \textsf{StarCluster} otherwise is much like a research-oriented cluster computing facility but with more control given to the user since adminitrative priviledges on the operating systems are granted.
+%
+Not only is \textsf{StarCluster} restricted to \textsf{AWS}, but its technology stack is not designed for the primary usage of \textsf{Docker}.
+%
+Furthermore, the argument holds that \textsf{StarCluster} does not facilitate the seamless transition from local development to remote execution due to the mismatch between the environments.
+
+%- cloudman. tied to ami
+
+
+\section{Solution}
+
+%mismatch
+
+two types of machines: compute and a coordination machine.
+
+- compute stack: (unit same for all except h/w of course)
+. app
+. container, container, libs
+. base os1, base os2
+. docker cntroller
+. os, coreos
+. h/w (abstraction)
+
+
+
+- fig w/ stack
+- fig with explaining coordination/context
+. local machine getting storage. for registry, and files
+. local machine emu compute coputer
+. 'cloud'
+. networked 
+
+use ansible to coordinate this. other coordiantion tools exist but ansible is a good base generic. lot's of support. customized for this workflow.
+
+
+major services of init: registry and storage
+
+benefits:
+code -> binary -> vm binary
+
+- last thing: usage instructions as in repo. this doc jsut high level more specifics in repo. and since details will change.
+
+adv:
+- code is portable b/c it is agnostic to compute facility
+- reproducible
+- worst case is running locally. guaranteed to work.
+
+
+%%% Local Variables:
+%%% mode: latex
+%%% TeX-master: "../thesis"
+%%% End:
