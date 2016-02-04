@@ -1,4 +1,3 @@
-
 %% A sample appendix
 %%
 %%**********************************************************************
@@ -11,7 +10,7 @@
 %% or losses, including, but not limited to, incidental, consequential, or
 %% any other damages, resulting from the use or misuse of any information
 %% contained here.
-%%**********************************************************************
+%k%**********************************************************************
 %%
 %% $Id: Appendix.tex,v 1.6 2006/08/25 00:58:50 Owner Exp $
 %%
@@ -172,14 +171,13 @@ They ccan be evaluatd based on their degree of reproducibility and automation.
   While \textsf{Docker} provides a great deal of reproducibility, it is not involved in machine provisioning.
 
 
-
 \item[distributed \textsf{Docker} support: \textsf{Weave} and \textsf{CoreOS}.]
 %
 \textsf{Weave} and \textsf{CoreOS} facilitate the distributed operation of \textsf{Docker} containers.
 
 Given that \textsf{Docker} was identified as an important solution component, it follows that \textsf{Docker}-specific solutions should be chosen that facilitate distributed application execution.
 %
-\textsf{Weave} provides global network addressing for each container.
+\textsf{Weave} provides global private network addressing for each container.
 %
 \textsf{CoreOS} is an operating system designed for distributed, containerized applications.
 %
@@ -213,23 +211,38 @@ In the context of computational research, this ensures the fastest possible exec
 \end{description}
 
 
-- git: describes everything and makes tracable
+%tech stack to understand. todo?
+%put it together would like to achieve this pic.
+%replicate this anywhere.
+
+\subsection{Partial Solutions}
 
 
-- starcluster. tied to aws
-- cloudman. tied to ami
-- closest is starcluster but no docker. no local dev.
-- any other soln not allow seamless from local to cloud.
+Research-oriented cluster computing faciilties were found to not satisfy the requirements previously mentioned.
+%
+Typically, the machines are provided with an operating system installed with a restricted user account.
+%
+This restricts the ease in which some software can be installed although this can be mitigated somewhat if \textsf{Docker} was installed.
+%
+Most importantly, is that the use of research-oriented clusters does not facilitate a seamless transition from local development to remote execution because the local and remote environments do not match (unless the local environment is restricted to use the same technologies as the facility which would limit portability of the setup process).
+%
+So treating cluster computing providers as just providers of machines is advantageous because it allows the investigator generically automate the setup of the same computing environment on any facility.
 
-Before going into solution specifics, it should be noted that (at least traditional) high-performance computing facilities cannot satisfy these requirements.
+
+While automating the setup for a research-oriented cluster is possible, \textsf{StarCluster} is notable for automating the setup for \textsf{AWS}.
 %
-mismatch
+Although the setup is convenient, \textsf{StarCluster} otherwise is much like a research-oriented cluster computing facility but with more control given to the user since adminitrative priviledges on the operating systems are granted.
 %
-in summary, control.
+Not only is \textsf{StarCluster} restricted to \textsf{AWS}, but its technology stack is not designed for the primary usage of \textsf{Docker}.
 %
-rant about how hpc behind commodity
+Furthermore, the argument holds that \textsf{StarCluster} does not facilitate the seamless transition from local development to remote execution due to the mismatch between the environments.
+
+%- cloudman. tied to ami
+
 
 \section{Solution}
+
+%mismatch
 
 two types of machines: compute and a coordination machine.
 
@@ -258,7 +271,12 @@ major services of init: registry and storage
 benefits:
 code -> binary -> vm binary
 
-- last thing: usage instructions as in repo. this doc jsut high level more specifics in repo.
+- last thing: usage instructions as in repo. this doc jsut high level more specifics in repo. and since details will change.
+
+adv:
+- code is portable b/c it is agnostic to compute facility
+- reproducible
+- worst case is running locally. guaranteed to work.
 
 
 \chapter{Reproducing Results}
