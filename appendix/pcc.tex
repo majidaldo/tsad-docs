@@ -188,9 +188,78 @@ In the context of computational research, this ensures the fastest possible exec
 \end{description}
 
 
-%tech stack to understand. todo?
-%put it together would like to achieve this pic.
-%replicate this anywhere.
+\subsection{Solution Stack}
+
+The solution elements can be organized into a `stack' to help understand their place in an overall solution.
+%
+The stack represents a technology dependency which is depicted in Figure \ref{fig:stack}.
+%
+The goal is to be able to automatically recreate this technology stack anywhere.
+%
+As such, \textsf{Ansible} is not shown because it is an automation tool that sets up the stack.
+
+%bold lines under purview direct,indirect of ansible automation todo
+\begin{figure}[h]
+\newcolumntype{T}{!{\vrule width 2pt}}
+\newcolumntype{C}[0]{>{\centering\let\newline\\\arraybackslash\hspace{0pt}}m{1.5in}}
+\centering
+\begin{tabular}{l C C}
+  & local 
+  & remote
+  \\
+  \hline \hline
+  application   
+  &  \multicolumn{1}{TcT}{\ldots}
+  & \multicolumn{1}{TcT}{\ldots} 
+  \\
+  \hline
+  container network 
+  & \multicolumn{2}{TcT}{\textsf{Weave}}  
+  \\
+  app. containerization  
+  & \multicolumn{2}{TcT}{\textsf{Docker}}   
+  \\
+  \hline
+  operating system 
+  & \multicolumn{2}{TcT}{\textsf{CoreOS}} 
+  \\ 
+  \hline
+  (abstract) machine 
+  & \multicolumn{1}{TcT}{(x64)}
+  &  \multicolumn{1}{TcT}{x64} 
+  \\ 
+  \hline
+  hypervisor 
+  & \multicolumn{1}{TcT}{\textsf{VirtualBox}} 
+  & \multicolumn{1}{TcT}{\ldots }
+  \\
+  hypervisor interface
+  & \multicolumn{1}{TcT}{\textsf{Vagrant}} 
+  & \multicolumn{1}{TcT}{\textsf{AWS}}
+  \\
+  \hline
+  host o/s 
+  & \textsf{Windows}%
+    \textbar \textsf{OS X}%
+    \textbar \textsf{Linux}
+  & \multicolumn{1}{TcT}{\ldots}
+  \\
+  \hline
+  hardware 
+  & x64 
+  & \multicolumn{1}{TcT}{x64}
+  \\
+  \hline \hline
+\end{tabular}
+\label{fig:stack}
+\caption{Container-oriented computational technology stack}
+\end{figure}
+
+%todo: .... immatertial to discussion
+
+%as go down. app rep less importnat
+%influence of automation from btm up
+
 
 \subsection{Partial Solutions}
 
@@ -221,39 +290,44 @@ Furthermore, the argument holds that \textsf{StarCluster} does not facilitate th
 
 %mismatch
 
-two types of machines: compute and a coordination machine.
+%fig here with 
 
-- compute stack: (unit same for all except h/w of course)
-. app
-. container, container, libs
-. base os1, base os2
-. docker cntroller
-. os, coreos
-. h/w (abstraction)
+%registry |app1| app2       ___weave___   app1|app2 _wv_   app1
+%local                |                   remote1          remote2
 
+% two types of machines: compute and a coordination machine.
 
-
-- fig w/ stack
-- fig with explaining coordination/context
-. local machine getting storage. for registry, and files
-. local machine emu compute coputer
-. 'cloud'
-. networked 
-
-use ansible to coordinate this. other coordiantion tools exist but ansible is a good base generic. lot's of support. customized for this workflow.
+% - compute stack: (unit same for all except h/w of course)
+% . app
+% . container, container, libs
+% . base os1, base os2
+% . docker cntroller
+% . os, coreos
+% . h/w (abstraction)
 
 
-major services of init: registry and storage
 
-benefits:
-code -> binary -> vm binary
+% - fig w/ stack
+% - fig with explaining coordination/context
+% . local machine getting storage. for registry, and files
+% . local machine emu compute coputer
+% . 'cloud'
+% . networked 
 
-- last thing: usage instructions as in repo. this doc jsut high level more specifics in repo. and since details will change.
+% use ansible to coordinate this. other coordiantion tools exist but ansible is a good base generic. lot's of support. customized for this workflow.
 
-adv:
-- code is portable b/c it is agnostic to compute facility
-- reproducible
-- worst case is running locally. guaranteed to work.
+
+% major services of init: registry and storage
+
+% benefits:
+% code -> binary -> vm binary
+
+% - last thing: usage instructions as in repo. this doc jsut high level more specifics in repo. and since details will change.
+
+% adv:
+% - code is portable b/c it is agnostic to compute facility
+% - reproducible
+% - worst case is running locally. guaranteed to work.
 
 
 %%% Local Variables:
