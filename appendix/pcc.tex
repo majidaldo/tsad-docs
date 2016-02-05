@@ -156,7 +156,7 @@ Given that \textsf{Docker} was identified as an important solution component, it
 %
 \textsf{Weave} provides global private network addressing for each container.
 %
-\textsf{CoreOS} is an operating system designed for distributed, containerized applications.
+\textsf{CoreOS} a \textsf{Linux} operating system designed for distributed, containerized applications.
 %
 As such, it is delivered with mimimal software and services as containers are assumed to be the primary method by which software and services are added.
 %
@@ -182,7 +182,7 @@ In the context of computational research, this ensures the fastest possible exec
   %
   \textsf{Ansible} can also be used to provision software, containerized or not.
   %
-  Furthermore, the provisioning can occur in a coordianted fashion.
+  Furthermore, the provisioning of hardware and software can occur in a coordianted fashion.
 
 
 \end{description}
@@ -198,16 +198,16 @@ The goal is to be able to automatically recreate this technology stack anywhere.
 %
 As such, \textsf{Ansible} is not shown because it is an automation tool that sets up the stack.
 
-%bold lines under purview direct,indirect of ansible automation todo
+
 \begin{figure}[h]
-\newcolumntype{T}{!{\vrule width 2pt}}
+\newcolumntype{T}{!{\vrule width 3\arrayrulewidth}}
 \newcolumntype{C}[0]{>{\centering\let\newline\\\arraybackslash\hspace{0pt}}m{1.5in}}
 \centering
 \begin{tabular}{l C C}
   & local 
   & remote
   \\
-  \hline \hline
+  \Xhline{6\arrayrulewidth}
   application   
   &  \multicolumn{1}{TcT}{\ldots}
   & \multicolumn{1}{TcT}{\ldots} 
@@ -224,7 +224,7 @@ As such, \textsf{Ansible} is not shown because it is an automation tool that set
   & \multicolumn{2}{TcT}{\textsf{CoreOS}} 
   \\ 
   \hline
-  (abstract) machine 
+  machine 
   & \multicolumn{1}{TcT}{(x64)}
   &  \multicolumn{1}{TcT}{x64} 
   \\ 
@@ -238,28 +238,65 @@ As such, \textsf{Ansible} is not shown because it is an automation tool that set
   & \multicolumn{1}{TcT}{\textsf{AWS}}
   \\
   \hline
-  host o/s 
-  & \textsf{Windows}%
+  host operating sys. 
+  & \multicolumn{1}{|c|}{
+    \textsf{Windows}%
     \textbar \textsf{OS X}%
     \textbar \textsf{Linux}
+    }
   & \multicolumn{1}{TcT}{\ldots}
   \\
   \hline
   hardware 
-  & x64 
+  & \multicolumn{1}{|c|}{x64}
   & \multicolumn{1}{TcT}{x64}
   \\
-  \hline \hline
+  \Xhline{6\arrayrulewidth}
 \end{tabular}
 \label{fig:stack}
-\caption{Container-oriented computational technology stack}
+\caption[Container-oriented computational technology stack]
+{Container-oriented computational technology stack.
+%
+Technologies bordered by thick lines are under the influence of automation by \textsf{Ansible}.
+%
+The parentheses around x64 indicate that the hardware architecture is virtualized (under type-2 hypervisor).
+%
+Table cells with ellipses are immaterial to the discussion.
+%
+}
 \end{figure}
 
-%todo: .... immatertial to discussion
 
-%as go down. app rep less importnat
-%influence of automation from btm up
+The reproducibility of results from computation (at the application layer) is generally not influenced by technologies lower in the stack.
+%
+In fact, they can be swapped with other technologies as long as the technology stack is compatible.
 
+
+For reproduciblity of results, it is more a matter of convenience that the layers above the hypervisor can be recreated locally and remotely.
+%
+However, the technologies selected facilitate portability in several ways which allows for easier collaboration and reproducibility of results starting at different levels.
+%
+At the lowest level, the automation code can recreate the full stack, locally and remotely, perhaps with different hypervisors.
+%
+So, at the container level, \textsf{Docker} instructions can be used to recreate the application image.
+%
+Alternatively, the image (itself) can be transferred to any compatible machine for execution.
+%
+At the application level, only the simplest program codes are truly portable.
+%
+Practically all modern computational codes have complex dependencies which are handled in a variety of ways.
+%
+But by using \textsf{Docker}, dependencies are handled in the most general way.
+
+
+However, speaking of a `stack' on a machine, individually, does not address distributed computing.
+%
+Using multiple machines to accelerate computing is highly-desirable, if not essential, depending on the application.
+%todo: is this sentence redundant?
+%
+This is where automating the entire stack on any compute provider, homogeneously, becomes advantageous since the automation code embodies the distributed environment.
+%
+Therefore, even the distributed environment can be reproducible.
 
 \subsection{Partial Solutions}
 
@@ -268,7 +305,7 @@ Research-oriented cluster computing faciilties were found to not satisfy the req
 %
 Typically, the machines are provided with an operating system installed with a restricted user account.
 %
-This restricts the ease in which some software can be installed although this can be mitigated somewhat if \textsf{Docker} was installed.
+This restricts the ease in which some software can be installed although this can be mitigated somewhat if \textsf{Docker} is installed.
 %
 Most importantly, is that the use of research-oriented clusters does not facilitate a seamless transition from local development to remote execution because the local and remote environments do not match (unless the local environment is restricted to use the same technologies as the facility which would limit portability of the setup process).
 %
