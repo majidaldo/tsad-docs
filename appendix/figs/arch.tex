@@ -1,0 +1,115 @@
+\documentclass{standalone}
+\usepackage{tikz}
+\usetikzlibrary{positioning,calc,fit
+  ,matrix}
+
+\definecolor{mybluei}{RGB}{124,156,205}
+\definecolor{myblueii}{RGB}{73,121,193}
+\definecolor{mygreen}{RGB}{202,217,126}
+\definecolor{mypink}{RGB}{233,198,235}
+
+
+\pgfdeclarelayer{background}
+\pgfsetlayers{background,main}
+
+\pgfkeys{
+  /tikz/node distance/.append code={
+    \pgfkeyssetvalue{/tikz/node distance value}{#1}
+  }
+}
+
+
+
+
+\tikzset{
+,title/.style={ inner sep=0pt, color=white}
+,bounder/.style={rounded corners,draw=black,inner sep=5pt}
+,computer/.style={bounder}
+,computername/.style={font=\sffamily\color{black}
+  ,above=20pt of stack}
+,blueb/.style={
+  draw=white, line width=.5pt,
+  fill=myblueii,
+  text width=2.5cm,
+  font={\sffamily\color{white}},
+  align=center,
+  text height=12pt,
+  text depth=9pt
+}
+,span/.style={inner sep=0pt,text height=12pt}
+,dockerapp/.style={blueb,fill=mybluei,font={\sffamily\bfseries\color{white}}}
+,docker/.style={blueb,fill=myblueii}
+,os/.style={blueb,fill=orange,font={\sffamily\color{black}}}
+,stack/.style={ column sep=0em, row sep=0em}
+}
+
+
+
+
+\begin{document}
+
+
+
+\begin{tikzpicture}[
+  node distance=20pt
+  ,inner sep=0pt
+  ,outer sep=0pt
+]
+
+%vagrant compute computer
+\matrix[stack](stack){
+  \node[dockerapp] (vagapp1) {app1};
+  & \node[dockerapp] (vagapp2) {app2};
+  \\
+  \node[dockerapp] (vaglib1) {};
+  & \node[dockerapp] (vaglib2) {};
+  & \node[dockerapp] (vagapp3) {app3}; 
+  \\
+  \node[docker] (vagdkr1) {};
+  & \node[docker] (vagdkr2) {};
+  & \node[docker] (vagdkr3) {};
+  \\
+  \node[os] (vagos1) {};
+  & \node[os] (vagos2) {};
+  & \node[os] (vagos3) {};
+  \\
+};
+%span is last
+\node[dockerapp,fit= (vaglib1) (vaglib2),span] (vaglib) {lib};
+\node[docker,fit=(vagdkr1)(vagdkr2)(vagdkr3),span ] (vagdkr) {Docker}; \\
+\node[os,fit=(vagos1)(vagos2)(vagos3),span ] (vagos) {CoreOS}; \\
+\node[computername] (vagrantcomputenm) {``vagrant''};
+
+\begin{pgfonlayer}{background}
+ \node[computer
+ ,fit=(vagrantcomputenm) (stack)] (vagrantcomputenm) {};
+\end{pgfonlayer}
+%vagrant compute computer
+
+\end{tikzpicture}
+
+\begin{tikzpicture}[
+  node distance=20pt
+  ,inner sep=0pt
+  ,outer sep=0pt
+]
+
+
+%init computer
+\matrix[stack](stack){
+  \node[dockerapp] (initreg) {registry};\\
+  \node[docker] (initdkr) {Docker}; \\
+  \node[os] (initos) {CoreOS}; \\
+};
+\node[computername] (initnm) {init};
+\begin{pgfonlayer}{background}
+\node[computer,fit=(initnm) (stack)] (init) {};
+\end{pgfonlayer}
+%init computer
+
+
+\end{tikzpicture}
+
+
+
+\end{document}
