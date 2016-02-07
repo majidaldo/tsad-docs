@@ -22,6 +22,11 @@
 
 
 \tikzset{
+tikzpic/.style={ 
+  node distance=20pt
+    ,inner sep=0pt
+    ,outer sep=0pt
+}
 ,title/.style={ inner sep=0pt, color=white}
 ,bounder/.style={rounded corners,draw=black,inner sep=5pt}
 ,computer/.style={bounder}
@@ -49,14 +54,11 @@
 \begin{document}
 
 
-
 \begin{tikzpicture}[
-  node distance=20pt
-  ,inner sep=0pt
-  ,outer sep=0pt
+tikzpic
 ]
 
-%vagrant compute computer
+vagrant compute computer
 \matrix[stack](stack){
   \node[dockerapp] (vagapp1) {app1};
   & \node[dockerapp] (vagapp2) {app2};
@@ -74,6 +76,7 @@
   & \node[os] (vagos3) {};
   \\
 };
+
 %span is last
 \node[dockerapp,fit= (vaglib1) (vaglib2),span] (vaglib) {lib};
 \node[docker,fit=(vagdkr1)(vagdkr2)(vagdkr3),span ] (vagdkr) {Docker}; \\
@@ -88,10 +91,9 @@
 
 \end{tikzpicture}
 
+
 \begin{tikzpicture}[
-  node distance=20pt
-  ,inner sep=0pt
-  ,outer sep=0pt
+tikzpic
 ]
 
 
