@@ -4,11 +4,11 @@
 \usetikzlibrary{positioning,calc,fit
   ,matrix}
 
+
 \definecolor{mybluei}{RGB}{124,156,205}
 \definecolor{myblueii}{RGB}{73,121,193}
 \definecolor{mygreen}{RGB}{202,217,126}
 \definecolor{mypink}{RGB}{233,198,235}
-
 
 
 \pgfdeclarelayer{background}
@@ -37,7 +37,7 @@ tikzcomputerpic/.style={
 ,blueb/.style={
   draw=white, line width=.5pt,
   fill=myblueii,
-  text width=2.5cm,
+  text width=2.6cm,
   font={\sffamily\color{white}},
   align=center,
   text height=12pt,
@@ -48,6 +48,8 @@ tikzcomputerpic/.style={
 ,docker/.style={blueb,fill=myblueii}
 ,os/.style={blueb,fill=BurntOrange,font={\sffamily\color{black}}}
 ,stack/.style={ column sep=0em, row sep=0em}
+,sharestyle/.style={blueb,fill=Aquamarine}
+,app/.style={blueb,fill=Periwinkle}
 }
 
 
@@ -59,11 +61,11 @@ tikzcomputerpic/.style={
 \begin{document}
 
 \newcommand\shareblock[2][\texttt{/project}]{
-\node[blueb,fill=Aquamarine] (#2) {#1};
+\node[sharestyle] (#2) {#1};
 }
 
 \begin{tikzpicture}[
-node distance=3in
+node distance=4in
 ,inner sep=0pt
 ]
 
@@ -83,6 +85,10 @@ node distance=3in
   & \node[docker] (vagdkr2) {};
   & \node[docker] (vagdkr3) {};
   \\
+  \node[sharestyle] (vagshare1) {};
+  & \node[sharestyle] (vagshare2) {};
+  & \node[sharestyle] (vagshare3) {};
+  \\
   \node[os] (vagos1) {};
   & \node[os] (vagos2) {};
   & \node[os] (vagos3) {};
@@ -92,6 +98,8 @@ node distance=3in
 
 %span is last
 \node[dockerapp,fit= (vaglib1) (vaglib2),span] (vaglib) {lib};
+\node[sharestyle,fit= (vagshare1) (vagshare2)(vagshare3),span]
+(vaglib) {\texttt{/project}};
 \node[docker,fit=(vagdkr1)(vagdkr2)(vagdkr3),span ] (vagdkr) {Docker}; \\
 \node[os,fit=(vagos1)(vagos2)(vagos3),span ] (vagos) {CoreOS}; \\
 \node[computername] (vagrantcomputenm) {``vagrant''};
@@ -115,6 +123,8 @@ node distance=3in
     \\
     \node[docker] (initdkr) {Docker}; 
     \\
+    \shareblock{initshare};
+    \\
     \node[os] (initos) {CoreOS}; 
     \\
   };
@@ -131,8 +141,13 @@ node distance=3in
 \begin{tikzpicture}[tikzcomputerpic]
   % local computer
   \matrix[stack](stack){
+    \node[dockerapp] (localapp3) {app3}; 
+    &
+    & \node[app](localvirtualbox) {VirtualBox};
+    \\
     \node[docker] (localdkr) {Docker};
-    &   \shareblock[share \texttt{/project}]{localshare}
+    &   \shareblock[share:\texttt{/project}]{localshare}
+    & \node[app](localvagrant) {Vagrant};
     \\
     \node[os] (localos1) {}; 
     & \node[os] (localos2) {}; 
@@ -146,9 +161,52 @@ node distance=3in
   \begin{pgfonlayer}{background}
     \node[computer,fit=(localnm) (stack)] (localbox) {};
   \end{pgfonlayer}
-  % init computer
 \end{tikzpicture}
 };
+
+
+\node[right of=vagrant] (aws1) {
+\begin{tikzpicture}[tikzcomputerpic]
+%vagrant compute computer
+ \matrix[stack](stack){
+   \node[dockerapp] (aws1app1) {app1}; 
+   & \node[dockerapp] (aws1app2) {app2}; 
+   \\
+  \node[dockerapp] (aws1lib1) {};
+  & \node[dockerapp] (aws1lib2) {};
+  & \node[dockerapp] (aws1app3) {app3}; 
+  \\
+  \node[docker] (aws1dkr1) {};
+  & \node[docker] (aws1dkr2) {};
+  & \node[docker] (aws1dkr3) {};
+  \\
+  \node[sharestyle] (aws1share1) {};
+  & \node[sharestyle] (aws1share2) {};
+  & \node[sharestyle] (aws1share3) {};
+  \\
+  \node[os] (aws1os1) {};
+  & \node[os] (aws1os2) {};
+  & \node[os] (aws1os3) {};
+  \\
+ };
+
+
+%span is last
+\node[dockerapp,fit= (vaglib1) (vaglib2),span] (vaglib) {lib};
+\node[sharestyle,fit= (vagshare1) (vagshare2)(vagshare3),span]
+(vaglib) {\texttt{/project}};
+\node[docker,fit=(vagdkr1)(vagdkr2)(vagdkr3),span ] (vagdkr) {Docker}; \\
+\node[os,fit=(vagos1)(vagos2)(vagos3),span ] (vagos) {CoreOS}; \\
+\node[computername] (vagrantcomputenm) {aws1};
+
+\begin{pgfonlayer}{background}
+ \node[computer
+ ,fit=(vagrantcomputenm) (stack)] (vagrantcomputebox) {};
+\end{pgfonlayer}
+%Vagrant compute computer
+\end{tikzpicture}
+};
+
 
 \end{tikzpicture}
 
