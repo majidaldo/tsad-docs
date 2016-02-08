@@ -1,4 +1,5 @@
 \documentclass{standalone}
+\usepackage[dvipsnames]{xcolor}
 \usepackage{tikz}
 \usetikzlibrary{positioning,calc,fit
   ,matrix}
@@ -7,6 +8,7 @@
 \definecolor{myblueii}{RGB}{73,121,193}
 \definecolor{mygreen}{RGB}{202,217,126}
 \definecolor{mypink}{RGB}{233,198,235}
+
 
 
 \pgfdeclarelayer{background}
@@ -44,7 +46,7 @@ tikzcomputerpic/.style={
 ,span/.style={inner sep=0pt,text height=12pt}
 ,dockerapp/.style={blueb,fill=mybluei,font={\sffamily\bfseries\color{white}}}
 ,docker/.style={blueb,fill=myblueii}
-,os/.style={blueb,fill=orange,font={\sffamily\color{black}}}
+,os/.style={blueb,fill=BurntOrange,font={\sffamily\color{black}}}
 ,stack/.style={ column sep=0em, row sep=0em}
 }
 
@@ -57,7 +59,7 @@ tikzcomputerpic/.style={
 \begin{document}
 
 \newcommand\shareblock[2][\texttt{/project}]{
-\node[blueb,fill=blue] (#2) {#1};
+\node[blueb,fill=Aquamarine] (#2) {#1};
 }
 
 \begin{tikzpicture}[
