@@ -2,7 +2,8 @@
 \usepackage[dvipsnames]{xcolor}
 \usepackage{tikz}
 \usetikzlibrary{positioning,calc,fit
-  ,matrix}
+  ,matrix
+  ,chains,scopes}
 
 
 \definecolor{mybluei}{RGB}{124,156,205}
@@ -63,7 +64,7 @@
 
 \begin{document}
 \begin{tikzpicture}[
-node distance=2.7in
+node distance=.3in
 ,inner sep=0in
 ,remember picture
 ]
@@ -74,12 +75,12 @@ node distance=2.7in
   \begin{tikzpicture}[tikzcomputerpic]
     % local computer
     \matrix[stack](stack){
-      & \node[dockerapp] (localapp3) {app3}; 
+      \node[dockerapp] (localapp3) {app3}; 
       & \node[app](localvirtualbox) {VirtualBox};
       \\
-      \shareblock[share:\texttt{/project}]{localshare}
-      & \node[docker] (localdkr) {Docker};
+      \node[docker] (localdkr) {Docker};
       & \node[app](localvagrant) {Vagrant};
+      & \shareblock[share:\texttt{/project}]{localshare}
       \\
       \node[os] (localos1) {}; 
       & \node[os] (localos2) {}; 
@@ -98,7 +99,7 @@ node distance=2.7in
 
 
 
-\node[above of=local] (init) {
+\node[above= of local ] (init) {
   \begin{tikzpicture}[tikzcomputerpic]
     % init computer
     \matrix[stack](stack){
@@ -119,9 +120,11 @@ node distance=2.7in
 };
 
 
+%alignment of compute nodes along bottom
+{[start chain=computemachines going base right]
 
 
-\node[above of =init] (vagrant) {
+\node[above = of init,on chain] (vagrant) {
   \begin{tikzpicture}[tikzcomputerpic]
     % vagrant compute computer
     \matrix[stack](stack){
@@ -148,12 +151,12 @@ node distance=2.7in
 
 
     % span is last
-    \node[dockerapp,fit= (vaglib1) (vaglib2),span] (vaglib) {lib};
+    \node[dockerapp,fit= (vaglib1) (vaglib2),span] (vag1lib) {lib};
     \node[sharestyle,fit= (vagshare1) (vagshare2)(vagshare3),span]
     (vagshare) {\texttt{/project}};
     \node[docker,fit=(vagdkr1)(vagdkr2)(vagdkr3),span ] (vagdkr) {Docker}; \\
     \node[os,fit=(vagos1)(vagos2)(vagos3),span ] (vagos) {CoreOS}; \\
-    \node[computername] (vagrantcomputenm) {``vagrant''};
+    \node[computername] (vagrantcomputenm) {``vagrant1''};
 
     \begin{pgfonlayer}{background}
       \node[computer
@@ -164,7 +167,8 @@ node distance=2.7in
 
 
 
-\node[right of=vagrant] (vagrant2) {
+
+\node[on chain] (vagrant2) {
   \begin{tikzpicture}[tikzcomputerpic]
     % init computer
     \matrix[stack](stack){
@@ -185,7 +189,8 @@ node distance=2.7in
 };
 
 
-\node[right of=vagrant2] (aws1) {
+
+\node[on chain,xshift=.5in] (aws1) {
   \begin{tikzpicture}[tikzcomputerpic]
     % vagrant compute computer
     \matrix[stack](stack){
@@ -228,7 +233,7 @@ node distance=2.7in
 
 
 
-\node[right of=aws1] (aws2) {
+\node[on chain] (aws2) {
   \begin{tikzpicture}[tikzcomputerpic]
     % init computer
     \matrix[stack](stack){
@@ -248,7 +253,7 @@ node distance=2.7in
   \end{tikzpicture}
 };
 
-
+}
 
 %location
 \node[zone
