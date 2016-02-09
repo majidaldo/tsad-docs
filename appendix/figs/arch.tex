@@ -33,7 +33,7 @@
   ,bounder/.style={rounded corners,draw=black,inner sep=5pt}
   ,computer/.style={bounder}
   ,computername/.style={font=\sffamily\color{black}
-    % ,above=20pt of stack
+     ,above=20pt of stack
     ,remember picture
   }
   ,blueb/.style={
@@ -52,6 +52,7 @@
   ,stack/.style={ column sep=0em, row sep=0em}
   ,sharestyle/.style={blueb,fill=Aquamarine}
   ,app/.style={blueb,fill=Periwinkle}
+  ,zone/.style={rectangle,dashed,draw=black,inner sep=.2in}
 }
 
 
@@ -62,16 +63,68 @@
 
 \begin{document}
 \begin{tikzpicture}[
-node distance=4in
-,inner sep=0pt
+node distance=2.7in
+,inner sep=0in
 ,remember picture
 ]
 
 
-\node (vagrant) {
+
+\node[] (local) {
+  \begin{tikzpicture}[tikzcomputerpic]
+    % local computer
+    \matrix[stack](stack){
+      & \node[dockerapp] (localapp3) {app3}; 
+      & \node[app](localvirtualbox) {VirtualBox};
+      \\
+      \shareblock[share:\texttt{/project}]{localshare}
+      & \node[docker] (localdkr) {Docker};
+      & \node[app](localvagrant) {Vagrant};
+      \\
+      \node[os] (localos1) {}; 
+      & \node[os] (localos2) {}; 
+      & \node[os] (localos3) {};
+      \\
+    };
+    \node[os,fit=(localos1)(localos2)(localos3),span]
+    (localos)
+    {Win\textbar Lin\textbar OSX}; 
+    \node[computername] (localnm) {localhost};
+    \begin{pgfonlayer}{background}
+      \node[computer,fit=(localnm) (stack)] (localbox) {};
+    \end{pgfonlayer}
+  \end{tikzpicture}
+};
+
+
+
+\node[above of=local] (init) {
+  \begin{tikzpicture}[tikzcomputerpic]
+    % init computer
+    \matrix[stack](stack){
+      \node[dockerapp] (initreg) {registry};
+      \\
+      \node[docker] (initdkr) {Docker}; 
+      \\
+      \shareblock{initshare};
+      \\
+      \node[os] (initos) {CoreOS}; 
+      \\
+    };
+    \node[computername] (initnm) {init};
+    \begin{pgfonlayer}{background}
+      \node[computer,fit=(initnm) (stack)] (initbox) {};
+    \end{pgfonlayer}
+  \end{tikzpicture}
+};
+
+
+
+
+\node[above of =init] (vagrant) {
   \begin{tikzpicture}[tikzcomputerpic]
     % vagrant compute computer
-    \matrix[stack](vagstack){
+    \matrix[stack](stack){
       \node[dockerapp] (vagapp1) {app1}; 
       & \node[dockerapp] (vagapp2) {app2}; 
       \\
@@ -104,69 +157,38 @@ node distance=4in
 
     \begin{pgfonlayer}{background}
       \node[computer
-      ,fit=(vagrantcomputenm) (vagstack)] (vagrantcomputebox) {};
+      ,fit=(vagrantcomputenm) (stack)] (vagrantcomputebox) {};
     \end{pgfonlayer}
   \end{tikzpicture}
 };
 
 
 
-
-\node[left of=vagrant] (init) {
+\node[right of=vagrant] (vagrant2) {
   \begin{tikzpicture}[tikzcomputerpic]
     % init computer
-    \matrix[stack](initstack){
-      \node[dockerapp] (initreg) {registry};
+    \matrix[stack](stack){
+      \node[dockerapp] (vag2app4) {app4};
       \\
-      \node[docker] (initdkr) {Docker}; 
+      \node[docker] (vag2dkr) {Docker}; 
       \\
-      \shareblock{initshare};
+      \shareblock{vag2share};
       \\
-      \node[os] (initos) {CoreOS}; 
+      \node[os] (vag2os) {CoreOS}; 
       \\
     };
-    \node[computername] (initnm) {init};
+    \node[computername] (vag2nm) {``vagrant2''};
     \begin{pgfonlayer}{background}
-      \node[computer,fit=(initnm) (initstack)] (initbox) {};
+      \node[computer,fit=(vag2nm) (stack)] (vag2box) {};
     \end{pgfonlayer}
   \end{tikzpicture}
 };
 
 
-
-
-\node[below of=vagrant] (local) {
-  \begin{tikzpicture}[tikzcomputerpic]
-    % local computer
-    \matrix[stack](localstack){
-      \node[dockerapp] (localapp3) {app3}; 
-      &
-      & \node[app](localvirtualbox) {VirtualBox};
-      \\
-      \node[docker] (localdkr) {Docker};
-      &   \shareblock[share:\texttt{/project}]{localshare}
-      & \node[app](localvagrant) {Vagrant};
-      \\
-      \node[os] (localos1) {}; 
-      & \node[os] (localos2) {}; 
-      & \node[os] (localos3) {}; 
-      \\
-    };
-    \node[os,fit=(localos1)(localos2)(localos3),span]
-    (localos)
-    {Win\textbar Lin\textbar OSX}; 
-    \node[computername] (localnm) {localhost};
-    \begin{pgfonlayer}{background}
-      \node[computer,fit=(localnm) (localstack)] (localbox) {};
-    \end{pgfonlayer}
-  \end{tikzpicture}
-};
-
-
-\node[right of=vagrant] (aws1) {
+\node[right of=vagrant2] (aws1) {
   \begin{tikzpicture}[tikzcomputerpic]
     % vagrant compute computer
-    \matrix[stack](aws1stack){
+    \matrix[stack](stack){
       \node[dockerapp] (aws1app1) {app1}; 
       & \node[dockerapp] (aws1app2) {app2}; 
       \\
@@ -199,17 +221,55 @@ node distance=4in
 
     \begin{pgfonlayer}{background}
       \node[computer
-      ,fit=(aws1nm) (aws1stack)] (aws1box) {};
+      ,fit=(aws1nm) (stack)] (aws1box) {};
     \end{pgfonlayer}
   \end{tikzpicture}
 };
 
 
-%\draw (localos) -- (initos);
 
-%connections
+\node[right of=aws1] (aws2) {
+  \begin{tikzpicture}[tikzcomputerpic]
+    % init computer
+    \matrix[stack](stack){
+      \node[dockerapp] (asw2app4) {app4};
+      \\
+      \node[docker] (aws2dkr) {Docker}; 
+      \\
+      \shareblock{aws2share};
+      \\
+      \node[os] (aws2os) {CoreOS}; 
+      \\
+    };
+    \node[computername] (aws2nm) {aws2};
+    \begin{pgfonlayer}{background}
+      \node[computer,fit=(aws2nm) (stack)] (aws2box) {};
+    \end{pgfonlayer}
+  \end{tikzpicture}
+};
 
 
+
+%location
+\node[zone
+,fit=(init) (vagrant) (local) (vagrant2)
+]
+{local};
+
+
+%weave connections
+%http://hugoideler.com/2013/01/tikz-node-connector/
+\newcommand*{\connectorH}[4][]{
+  \draw[#1] (#3)
+  node[right=20pt of initshare,above] {\textsf{Weave}}
+  -| ($(#3) !#2! (#4)$)
+  |- (#4)
+;
+}
+\newcommand*{\connectorV}[4][]{
+  \draw[#1] (#3) |- ($(#3) !#2! (#4)$) -| (#4);
+}
+\connectorH[thick]{.5}{initshare}{localshare}
 
 \end{tikzpicture}
 \end{document}
