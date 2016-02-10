@@ -32,9 +32,10 @@
   }
   ,title/.style={ inner sep=0pt, color=white}
   ,bounder/.style={rounded corners,draw=black,inner sep=5pt}
-  ,computer/.style={bounder}
-  ,computername/.style={font=\sffamily\color{black}
-     ,above=20pt of stack
+  ,computer/.style={bounder,fill=gray!20}
+  ,computername/.style={
+    ,font=\ttfamily\color{black}
+     ,above=25pt of stack
     ,remember picture
   }
   ,blueb/.style={
@@ -53,7 +54,12 @@
   ,stack/.style={ column sep=0em, row sep=0em}
   ,sharestyle/.style={blueb,fill=Aquamarine}
   ,app/.style={blueb,fill=Periwinkle}
-  ,zone/.style={rectangle,dashed,draw=black,inner sep=.2in}
+  ,vagrantcomputer/.style={computer,fill=Periwinkle!15}
+  ,zone/.style={rectangle
+    ,dashed
+    ,very thick
+    ,draw=black
+    ,inner sep=.2in}
 }
 
 
@@ -64,7 +70,7 @@
 
 \begin{document}
 \begin{tikzpicture}[
-node distance=.3in
+node distance=.2in
 ,inner sep=0in
 ,remember picture
 ]
@@ -99,7 +105,7 @@ node distance=.3in
 
 
 
-\node[above= of local ] (init) {
+\node[above= of local,yshift=1in ] (init) {
   \begin{tikzpicture}[tikzcomputerpic]
     % init computer
     \matrix[stack](stack){
@@ -114,7 +120,9 @@ node distance=.3in
     };
     \node[computername] (initnm) {init};
     \begin{pgfonlayer}{background}
-      \node[computer,fit=(initnm) (stack)] (initbox) {};
+      \node[vagrantcomputer
+      ,fit=(initnm) (stack)
+      ] (initbox) {};
     \end{pgfonlayer}
   \end{tikzpicture}
 };
@@ -156,10 +164,10 @@ node distance=.3in
     (vagshare) {\texttt{/project}};
     \node[docker,fit=(vagdkr1)(vagdkr2)(vagdkr3),span ] (vagdkr) {Docker}; \\
     \node[os,fit=(vagos1)(vagos2)(vagos3),span ] (vagos) {CoreOS}; \\
-    \node[computername] (vagrantcomputenm) {``vagrant1''};
+    \node[computername] (vagrantcomputenm) {`vagrant1'};
 
     \begin{pgfonlayer}{background}
-      \node[computer
+      \node[vagrantcomputer
       ,fit=(vagrantcomputenm) (stack)] (vagrantcomputebox) {};
     \end{pgfonlayer}
   \end{tikzpicture}
@@ -181,16 +189,17 @@ node distance=.3in
       \node[os] (vag2os) {CoreOS}; 
       \\
     };
-    \node[computername] (vag2nm) {``vagrant2''};
+    \node[computername] (vag2nm) {`vagrant2'};
     \begin{pgfonlayer}{background}
-      \node[computer,fit=(vag2nm) (stack)] (vag2box) {};
+      \node[vagrantcomputer
+      ,fit=(vag2nm) (stack)] (vag2box) {};
     \end{pgfonlayer}
   \end{tikzpicture}
 };
 
 
 
-\node[on chain,xshift=.5in] (aws1) {
+\node[on chain,xshift=1.5in] (aws1) {
   \begin{tikzpicture}[tikzcomputerpic]
     % vagrant compute computer
     \matrix[stack](stack){
@@ -237,7 +246,7 @@ node distance=.3in
   \begin{tikzpicture}[tikzcomputerpic]
     % init computer
     \matrix[stack](stack){
-      \node[dockerapp] (asw2app4) {app4};
+      \node[dockerapp] (aws2app4) {app4};
       \\
       \node[docker] (aws2dkr) {Docker}; 
       \\
@@ -255,26 +264,48 @@ node distance=.3in
 
 }
 
-%location
+
+
+%zones
+
+\node[zone,inner sep=0pt
+,fit= (vagapp1)  (aws2app4)
+,color=mybluei
+,dotted
+,label=below:\textsf{Weave Net}
+] (weavenet) {};
+
 \node[zone
-,fit=(init) (vagrant) (local) (vagrant2)
-]
-{local};
+,fit= (vagrant) (init) (vagrant2)
+,label=below:\textsf{VirtualBox}/\textsf{Vagrant}
+,color=Periwinkle
+] (vagrantgrp) {};
+
+\node[zone
+,fit=(init) (local) (vagrantgrp)
+,label=below:local
+] {};
+
+\node[zone
+,fit= (aws1) (aws2)
+,label=below:remote (AWS)
+] {};
+
 
 
 %weave connections
 %http://hugoideler.com/2013/01/tikz-node-connector/
-\newcommand*{\connectorH}[4][]{
-  \draw[#1] (#3)
-  node[right=20pt of initshare,above] {\textsf{Weave}}
-  -| ($(#3) !#2! (#4)$)
-  |- (#4)
-;
-}
-\newcommand*{\connectorV}[4][]{
-  \draw[#1] (#3) |- ($(#3) !#2! (#4)$) -| (#4);
-}
-\connectorH[thick]{.5}{initshare}{localshare}
+% \newcommand*{\connectorH}[4][]{
+%   \draw[#1] (#3)
+%   node[right=20pt of initshare,above] {\textsf{Weave}}
+%   -| ($(#3) !#2! (#4)$)
+%   |- (#4)
+% ;
+% }
+% \newcommand*{\connectorV}[4][]{
+%   \draw[#1] (#3) |- ($(#3) !#2! (#4)$) -| (#4);
+% }
+% \connectorH[thick]{.5}{localshare}{initshare}
 
 \end{tikzpicture}
 \end{document}
