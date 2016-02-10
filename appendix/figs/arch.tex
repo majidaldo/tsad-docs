@@ -281,11 +281,18 @@ node distance=.2in
 ,fit= (initreg)
 ,color=mybluei
 ,dotted
-,label={[yshift=-5pt,xshift=5pt]right:\textsf{Weave Net}}
+,label={[yshift=-6pt,xshift=5pt]right:\textsf{Weave Net}}
 ] (initweavenet) {};
 \draw[zone
+,fill=none
+%,cap=line
+%,double distance=20pt
 ,dotted
-,color=mybluei] (initweavenet) -| (weavenet);
+,color=mybluei]
+([yshift=+.5pt]initweavenet.south east)
+-|
+ (weavenet);
+
 
 
 \node[zone
