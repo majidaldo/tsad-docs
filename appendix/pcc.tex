@@ -189,6 +189,8 @@ In the context of computational research, this ensures the fastest possible exec
 
 
 \subsection{Solution Stack}
+\label{sec:stack}
+
 
 The solution elements can be organized into a `stack' to help understand their place in an overall solution.
 %
@@ -204,9 +206,6 @@ As such, \textsf{Ansible} is not shown because it is an automation tool that set
 \newcolumntype{C}[0]{>{\centering\let\newline\\\arraybackslash\hspace{0pt}}m{1.5in}}
 \centering
 \begin{tabular}{l C C}
-  & local 
-  & remote
-  \\
   \Xhline{6\arrayrulewidth}
   application   
   &  \multicolumn{1}{TcT}{\ldots}
@@ -252,8 +251,9 @@ As such, \textsf{Ansible} is not shown because it is an automation tool that set
   & \multicolumn{1}{TcT}{x64}
   \\
   \Xhline{6\arrayrulewidth}
+  & local 
+  & remote
 \end{tabular}
-\label{fig:stack}
 \caption[Container-oriented computational technology stack]
 {Container-oriented computational technology stack.
 %
@@ -264,6 +264,7 @@ The parentheses around x64 indicate that the hardware architecture is virtualize
 Table cells with ellipses are immaterial to the discussion.
 %
 }
+\label{fig:stack}
 \end{figure}
 
 
@@ -282,14 +283,29 @@ So, at the container level, \textsf{Docker} instructions can be used to recreate
 %
 Alternatively, the image (itself) can be transferred to any compatible machine for execution.
 %
-At the application level, only the simplest program codes are truly portable.
+At the application level, only the most independent codes are truly portable.
 %
 Practically all modern computational codes have complex dependencies which are handled in a variety of ways.
 %
 But by using \textsf{Docker}, dependencies are handled in the most general way.
 
 
-However, speaking of a `stack' on a machine, individually, does not address distributed computing.
+In fact, the level of encapsulation that \textsf{Docker} offers has  been compared to that of virtual machines (inaccurately%
+\footnote{It is best to think of \textsf{Docker} containers as encapsulated \emph{processes}.}%
+).
+%
+But unlike a virtual machine, it does not suffer from the additional overhead incurred by running an operating system and possibly virtualizing hardware as well.
+%
+In fact, the overhead of running \textsf{Docker} is negligible.
+%
+So if the concern is just running a typical application, transferring a \textsf{Docker} image is preferrable to transferring a virtual machine image%
+\footnote{
+Applications requiring specialized hardware such as GPUs are not as transferrable.
+}%
+.
+
+
+But speaking of a `stack' on a machine, individually, does not address distributed computing.
 %
 Using multiple machines to accelerate computing is highly-desirable, if not essential, depending on the application.
 %todo: is this sentence redundant?
@@ -297,6 +313,8 @@ Using multiple machines to accelerate computing is highly-desirable, if not esse
 This is where automating the entire stack on any compute provider, homogeneously, becomes advantageous since the automation code embodies the distributed environment.
 %
 Therefore, even the distributed environment can be reproducible.
+
+
 
 \subsection{Partial Solutions}
 
@@ -320,36 +338,44 @@ Not only is \textsf{StarCluster} restricted to \textsf{AWS}, but its technology 
 %
 Furthermore, the argument holds that \textsf{StarCluster} does not facilitate the seamless transition from local development to remote execution due to the mismatch between the environments.
 
-%- cloudman. tied to ami
 
 
 \section{Solution}
 
+
+Section \ref{sec:stack} discussed the advantages of having a homogeneous computing stack on any hardware based on \textsf{Docker} solutions.
+%
+This section will exhibit a `base' infrastructure onto which complex distributed applications can run.
+%
+Figure \ref{fig:pcc} depicts the base infrastructure in a technology layer-oriented view.
+%layer view. not net view.
+
+
+\begin{sidewaysfigure}[h]
+
+  \includegraphics[width=\textwidth]{appendix/figs/arch.pdf}
+
+\caption[Generic infrastructure for distributed computation based on \textsf{Docker}]{
+Generic infrastructure for distributed computation based on \textsf{Docker}.
+%
+Dashed boxes group networks.
+%
+The (dotted) \textsf{Weave} network crosses network boundaries.
+}
+\label{fig:pcc}
+\end{sidewaysfigure}
+
+
+The base infrastructure begins with setting up resources on a user's local machine to enable the execution of applications on remote machines.
+%
+Central to this is sharing local files which provides persistence of data and executables between instantiations of machines.
+%
+
+
+
+
 %mismatch
 
-%fig here with 
-
-%registry |app1| app2       ___weave___   app1|app2 _wv_   app1
-%local                |                   remote1          remote2
-
-% two types of machines: compute and a coordination machine.
-
-% - compute stack: (unit same for all except h/w of course)
-% . app
-% . container, container, libs
-% . base os1, base os2
-% . docker cntroller
-% . os, coreos
-% . h/w (abstraction)
-
-
-
-% - fig w/ stack
-% - fig with explaining coordination/context
-% . local machine getting storage. for registry, and files
-% . local machine emu compute coputer
-% . 'cloud'
-% . networked 
 
 % use ansible to coordinate this. other coordiantion tools exist but ansible is a good base generic. lot's of support. customized for this workflow.
 
