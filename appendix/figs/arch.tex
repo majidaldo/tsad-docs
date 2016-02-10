@@ -50,7 +50,9 @@
   ,span/.style={inner sep=0pt,text height=12pt}
   ,dockerapp/.style={blueb,fill=mybluei,font={\sffamily\bfseries\color{white}}}
   ,docker/.style={blueb,fill=myblueii}
-  ,os/.style={blueb,fill=BurntOrange,font={\sffamily\color{black}}}
+  ,os/.style={blueb
+    ,fill=BurntOrange
+    ,font={\sffamily\color{black}}}
   ,stack/.style={ column sep=0em, row sep=0em}
   ,sharestyle/.style={blueb,fill=Aquamarine}
   ,app/.style={blueb,fill=Periwinkle}
@@ -95,7 +97,7 @@ node distance=.2in
     };
     \node[os,fit=(localos1)(localos2)(localos3),span]
     (localos)
-    {Win\textbar Lin\textbar OSX}; 
+    {Windows\textbar Linux\textbar OS X}; 
     \node[computername] (localnm) {localhost};
     \begin{pgfonlayer}{background}
       \node[computer,fit=(localnm) (stack)] (localbox) {};
@@ -274,6 +276,16 @@ node distance=.2in
 ,dotted
 ,label=below:\textsf{Weave Net}
 ] (weavenet) {};
+\node[zone,inner sep=0pt
+,fit= (initreg)
+,color=mybluei
+,dotted
+,label={[yshift=-5pt,xshift=5pt]right:\textsf{Weave Net}}
+] (initweavenet) {};
+\draw[zone
+,dotted
+,color=mybluei] (initweavenet) -| (weavenet);
+
 
 \node[zone
 ,fit= (vagrant) (init) (vagrant2)
