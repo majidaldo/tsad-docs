@@ -1,176 +1,194 @@
-as of sept '15.
+\chapter{Reproducing Results}
+\label{ch:reproduce}
 
-git clone --recursive 
-swith to commitid (instead of btrfs b/c more perm)
+This chapter show how the results obtained in 
 
-2. DISTRIBUTED EXEC
+% highest level instruction remain manual for some control. bc might want to go back to chage somthing in previous step.
+% not automated b/c wanted control. results id. it's just operational.
 
-start init and computers according to instructions
-ansible/
-ansible-playbook -vvv init.yml
-ditto                ec2.yml
-setup.yml --hosts=ec2
+% in the BO proc: 1 2 3 aprox these steps
+% - the BO proc
+% - storing rnn in mongodb
+% - storing bo opt prog in mongodb
 
-(todo put tsad code in sys.. subproj?)
-
-on init
-
-* start mongodb (collects task info)
-/project/docker/1111-mongodb/run.sh
-* start ipycontroller
-/project/docker/0200-ipycontroller/run.sh
-* start bayesian optimizer
-set settings. po.py. maybe restrict the spc
-. start a container with an env
-/project/docker/0100-computer/run.sh ipykernel
-do not do more than one ts at same time
-. enter env
-docker exec -ti init-ipykernel-1 bash
-cd /data/experiments/exp_name
-python ~/spearmint/spearmint/main.py .
+% talk about more specific things.
+% - task distribution across machines with ipyparallel
+% - rnn storage in mongodb as well.
 
 
-on a computer
+% as of sept '15.
 
-* start ipyengine (they will connect auto)
-/project/docker/0100-computer/run.sh  (run.sh ipyengine n procs)
-ensure ipy engine connect on init
-docker logs ipycontroller
-should have computed
-docker logs computernamefromdockerps-ipyengine-1
+% git clone --recursive 
+% swith to commitid (instead of btrfs b/c more perm)
 
-(obtain tsad code or subtree it?)
+% 2. DISTRIBUTED EXEC
 
+% start init and computers according to instructions
+% ansible/
+% ansible-playbook -vvv init.yml
+% ditto                ec2.yml
+% setup.yml --hosts=ec2
 
-join non-vm computer
+% (todo put tsad code in sys.. subproj?)
 
-install comoputing essentials:
-theano
-numpy,scipy
-paramiko
-python27
-theanets
-pymongo
-pandas
-sklearn just one func
+% on init
 
-get a local tsad dir
-tunnel these ports
-tsad/docker/port.sh 27017
-tsad/docker/port.sh 4321
-tsad/config.yml
-'
----
-rnndb: localhost
-'
-tsad/ > ipengine --file=..\sys\files\.ipython\profile_default\security\ipcontroller-engine.json --ssh="core@init" --sshkey=c:\Users\Majid\.vagrant.d\insecure_private_key
+% * start mongodb (collects task info)
+% /project/docker/1111-mongodb/run.sh
+% * start ipycontroller
+% /project/docker/0200-ipycontroller/run.sh
+% * start bayesian optimizer
+% set settings. po.py. maybe restrict the spc
+% . start a container with an env
+% /project/docker/0100-computer/run.sh ipykernel
+% do not do more than one ts at same time
+% . enter env
+% docker exec -ti init-ipykernel-1 bash
+% cd /data/experiments/exp_name
+% python ~/spearmint/spearmint/main.py .
 
 
-1. LOCAL EXEC
+% on a computer
 
-start mongodb
-in addition to non-vm computer stuff, install spearmint
-cd tsad/experiment/exp_name
-set o.py
-python /path/to/spearmint/main.py .
+% * start ipyengine (they will connect auto)
+% /project/docker/0100-computer/run.sh  (run.sh ipyengine n procs)
+% ensure ipy engine connect on init
+% docker logs ipycontroller
+% should have computed
+% docker logs computernamefromdockerps-ipyengine-1
+
+% (obtain tsad code or subtree it?)
 
 
----
+% join non-vm computer
 
-parallel
+% install comoputing essentials:
+% theano
+% numpy,scipy
+% paramiko
+% python27
+% theanets
+% pymongo
+% pandas
+% sklearn just one func
 
-{
+% get a local tsad dir
+% tunnel these ports
+% tsad/docker/port.sh 27017
+% tsad/docker/port.sh 4321
+% tsad/config.yml
+% '
+% ---
+% rnndb: localhost
+% '
+% tsad/ > ipengine --file=..\sys\files\.ipython\profile_default\security\ipcontroller-engine.json --ssh="core@init" --sshkey=c:\Users\Majid\.vagrant.d\insecure_private_key
 
-    "experiment-name": "spike",
-    "database": {"address":"mongodb"}, <<<
-    "language"   : "PYTHON",
+
+% 1. LOCAL EXEC
+
+% start mongodb
+% in addition to non-vm computer stuff, install spearmint
+% cd tsad/experiment/exp_name
+% set o.py
+% python /path/to/spearmint/main.py .
+
+
+% ---
+
+% parallel
+
+% {
+
+%     "experiment-name": "spike",
+%     "database": {"address":"mongodb"}, <<<
+%     "language"   : "PYTHON",
     
-    "resources" : {
-	"my-machine" : {
-	    "scheduler"         : "local",
-	    "max-concurrent"    : 3,
-	    "max-finished-jobs" : 50
-	}
-    },
+%     "resources" : {
+% 	"my-machine" : {
+% 	    "scheduler"         : "local",
+% 	    "max-concurrent"    : 3,
+% 	    "max-finished-jobs" : 50
+% 	}
+%     },
 
-    "tasks": {
-	"main" : {
-	    "type"       : "OBJECTIVE",
-	    "likelihood" : "GAUSSIAN",
-	    "main-file"  : "po.py", <<<
-	    "resources"  : ["my-machine"]
-	}
-    },
+%     "tasks": {
+% 	"main" : {
+% 	    "type"       : "OBJECTIVE",
+% 	    "likelihood" : "GAUSSIAN",
+% 	    "main-file"  : "po.py", <<<
+% 	    "resources"  : ["my-machine"]
+% 	}
+%     },
     
-    "variables" : {
-	"nl" : {
-	    "type" : "INT",
-	    "size" : 1,
-	    "min"  : 1,
-	    "max"  : 2
-	},
-	"n" : {
-	    "type" : "INT",
-	    "size" : 1,
-	    "min"  : 1,
-	    "max"  : 20
-	},
-	"iter" : {
-	    "type" : "FLOAT",
-	    "size" : 1,
-	    "min"  : 0,
-	    "max"  : 1
-	}
-    }
-}
+%     "variables" : {
+% 	"nl" : {
+% 	    "type" : "INT",
+% 	    "size" : 1,
+% 	    "min"  : 1,
+% 	    "max"  : 2
+% 	},
+% 	"n" : {
+% 	    "type" : "INT",
+% 	    "size" : 1,
+% 	    "min"  : 1,
+% 	    "max"  : 20
+% 	},
+% 	"iter" : {
+% 	    "type" : "FLOAT",
+% 	    "size" : 1,
+% 	    "min"  : 0,
+% 	    "max"  : 1
+% 	}
+%     }
+% }
 
 
-local
+% local
 
-{
+% {
 
-    "experiment-name": "power",
-    "database": {"address":"localhost"},
-    "language"   : "PYTHON",
+%     "experiment-name": "power",
+%     "database": {"address":"localhost"},
+%     "language"   : "PYTHON",
     
-    "resources" : {
-	"my-machine" : {
-	    "scheduler"         : "local",
-	    "max-concurrent"    : 1,
-	    "max-finished-jobs" : 20
-	}
-    },
+%     "resources" : {
+% 	"my-machine" : {
+% 	    "scheduler"         : "local",
+% 	    "max-concurrent"    : 1,
+% 	    "max-finished-jobs" : 20
+% 	}
+%     },
 
-    "tasks": {
-	"main" : {
-	    "type"       : "OBJECTIVE",
-	    "likelihood" : "GAUSSIAN",
-	    "main-file"  : "o.py",
-	    "resources"  : ["my-machine"]
-	}
-    },
+%     "tasks": {
+% 	"main" : {
+% 	    "type"       : "OBJECTIVE",
+% 	    "likelihood" : "GAUSSIAN",
+% 	    "main-file"  : "o.py",
+% 	    "resources"  : ["my-machine"]
+% 	}
+%     },
     
-    "variables" : {
-	"nl" : {
-	    "type" : "INT",
-	    "size" : 1,
-	    "min"  : 1,
-	    "max"  : 2
-	},
-	"n" : {
-	    "type" : "INT",
-	    "size" : 1,
-	    "min"  : 1,
-	    "max"  : 10
-	},
-	"iter" : {
-	    "type" : "FLOAT",
-	    "size" : 1,
-	    "min"  : 0,
-	    "max"  : 1
-	}
-    }
-}
+%     "variables" : {
+% 	"nl" : {
+% 	    "type" : "INT",
+% 	    "size" : 1,
+% 	    "min"  : 1,
+% 	    "max"  : 2
+% 	},
+% 	"n" : {
+% 	    "type" : "INT",
+% 	    "size" : 1,
+% 	    "min"  : 1,
+% 	    "max"  : 10
+% 	},
+% 	"iter" : {
+% 	    "type" : "FLOAT",
+% 	    "size" : 1,
+% 	    "min"  : 0,
+% 	    "max"  : 1
+% 	}
+%     }
+% }
 
 
 
@@ -179,3 +197,8 @@ local
 
 
 
+
+%%% Local Variables:
+%%% mode: latex
+%%% TeX-master: "../thesis"
+%%% End:
