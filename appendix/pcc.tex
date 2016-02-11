@@ -49,7 +49,7 @@ Many software tools from information technology (not specific to high-performanc
 %
 As such, the results presented in Chapter \ref{ch:results}, were obtained by using an automated process that used some of these information technology tools.
 %
-Futheremore, while being motivated by a problem encountered in this work, the process has been separated out as an independent solution applicable to any computational problem.
+Furthermore, while being motivated by a problem encountered in this work, the process has been separated out as an independent solution applicable to any computational problem.
 
 
 The following sections describe the problem and, in turn, its solution.
@@ -101,7 +101,7 @@ Also, this implies that the setup should occur in clean, isolated environments.
 
 Some solutions solve certain parts of the previously listed requirements.
 %
-They ccan be evaluatd based on their degree of reproducibility and automation.
+They can be evaluated based on their degree of reproducibility and automation.
 
 
 \begin{description}
@@ -158,7 +158,7 @@ Given that \textsf{Docker} was identified as an important solution component, it
 %
 \textsf{CoreOS} a \textsf{Linux} operating system designed for distributed, containerized applications.
 %
-As such, it is delivered with mimimal software and services as containers are assumed to be the primary method by which software and services are added.
+As such, it is delivered with minimal software and services as containers are assumed to be the primary method by which software and services are added.
 %
 In the context of computational research, this ensures the fastest possible execution of computational code since the operating system is not running unnecessary processes.
 %docker soles other probs but these are main ones
@@ -170,7 +170,7 @@ In the context of computational research, this ensures the fastest possible exec
 
   What is important for the purpose of automation, is that \textsf{AWS} provides a programmatic interface for the provisioning of machines.
   % 
-  However, the choice of \textsf{AWS} is not critical because \textsf{AWS} can be substitued by other providers providing comparable facilities.
+  However, the choice of \textsf{AWS} is not critical because \textsf{AWS} can be substituted by other providers providing comparable facilities.
  
 
 
@@ -182,7 +182,9 @@ In the context of computational research, this ensures the fastest possible exec
   %
   \textsf{Ansible} can also be used to provision software, containerized or not.
   %
-  Furthermore, the provisioning of hardware and software can occur in a coordianted fashion.
+  Furthermore, the provisioning of hardware and software can occur in a coordinated fashion.
+
+% use ansible to coordinate this. other coordiantion tools exist but ansible is a good base generic. lot's of support. customized for this workflow.
 
 
 \end{description}
@@ -298,9 +300,9 @@ But unlike a virtual machine, it does not suffer from the additional overhead in
 %
 In fact, the overhead of running \textsf{Docker} is negligible.
 %
-So if the concern is just running a typical application, transferring a \textsf{Docker} image is preferrable to transferring a virtual machine image%
+So if the concern is just running a typical application, transferring a \textsf{Docker} image is preferable to transferring a virtual machine image%
 \footnote{
-Applications requiring specialized hardware such as GPUs are not as transferrable.
+Applications requiring specialized hardware such as GPUs are not as transferable.
 }%
 .
 
@@ -319,7 +321,7 @@ Therefore, even the distributed environment can be reproducible.
 \subsection{Partial Solutions}
 
 
-Research-oriented cluster computing faciilties were found to not satisfy the requirements previously mentioned.
+Research-oriented cluster computing facilities were found to not satisfy the requirements previously mentioned.
 %
 Typically, the machines are provided with an operating system installed with a restricted user account.
 %
@@ -332,7 +334,7 @@ So treating cluster computing providers as just providers of machines is advanta
 
 While automating the setup for a research-oriented cluster is possible, \textsf{StarCluster} is notable for automating the setup for \textsf{AWS}.
 %
-Although the setup is convenient, \textsf{StarCluster} otherwise is much like a research-oriented cluster computing facility but with more control given to the user since adminitrative priviledges on the operating systems are granted.
+Although the setup is convenient, \textsf{StarCluster} otherwise is much like a research-oriented cluster computing facility but with more control given to the user since administrative privileges on the operating systems are granted.
 %
 Not only is \textsf{StarCluster} restricted to \textsf{AWS}, but its technology stack is not designed for the primary usage of \textsf{Docker}.
 %
@@ -349,7 +351,10 @@ This section will exhibit a `base' infrastructure onto which complex distributed
 %
 Figure \ref{fig:pcc} depicts the base infrastructure in a technology layer-oriented view.
 %layer view. not net view.
-
+%
+The end result is that the investigator gains control of multiple machines all of which have almost identical environments.
+%
+Machines occupying the top row in the diagram are designated as `compute' machines.
 
 \begin{sidewaysfigure}[h]
 
@@ -366,26 +371,81 @@ The (dotted) \textsf{Weave} network crosses network boundaries.
 \end{sidewaysfigure}
 
 
+The general infrastructure setup procedure, controlled by \textsf{Ansible}, is as follows:
+
+\begin{description}
+
+\item[1. File Share Setup] \hfill 
+
 The base infrastructure begins with setting up resources on a user's local machine to enable the execution of applications on remote machines.
-%
+
+
 Central to this is sharing local files which provides persistence of data and executables between instantiations of machines.
 %
+The file share also provides convenience for iterating over code on an arbitrary machine which is especially powerful when using version controlled code.
 
 
+\item[2. \texttt{init} Machine Setup] \hfill
+
+  The purpose of the \texttt{init} machine is to provide coordination services and other low resource services to other machines in the network.
+%
+In the base setup the \texttt{init} machine provides two services:
+
+  \begin{description}
+
+    \item[File Share Expose] \hfill
+
+      Through the use of \textsf{Weave}, the \texttt{init} machine sets up, transparently, local \emph{or} remote, access to the file share.
+
+    \item[\textsf{Docker} registry] \hfill
+
+      The \textsf{init} machine runs a \textsf{Docker} registry (of \textsf{Docker} images) so that any machine can download service and computation applications for execution.
+
+      The images are built from code (in `\texttt{Dockerfiles}') in an initialization process.
+      %
+      The images can modularly build on one another.
+      %
+      For example, \textsf{app1} and \textsf{app2} (show in Figure \ref{fig:pcc}) can build on a common \textsf{lib} image.
+
+  \end{description}
 
 
-%mismatch
+\item[3. Compute Machine Provisioning] \hfill
+
+After the \texttt{init} machine is set up, compute machines can be brought into the set of machines controlled by \textsf{Ansible}.
+%
+Local compute%
+\footnote{
+Local computing resources can be added to the network like \textsf{app3} running on \texttt{localhost} (shown in Figure \ref{fig:pcc}) but such operation is not the purview of the automation code.
+}
+machines can be provisioned by \textsf{Vagrant} which are well-suited for testing.
+%
+Remote compute machines can be acquired as well from \textsf{AWS}%
+\footnote{
+Other providers can be integrated by modifying \textsf{Ansible} scripts.
+}
+for accelerated performance.
 
 
-% use ansible to coordinate this. other coordiantion tools exist but ansible is a good base generic. lot's of support. customized for this workflow.
+\end{description}
 
 
-% major services of init: registry and storage
+After the setup, the investigator can expect that the same commands will work on any machine.
+%
+Moreover, the process is reproducible on any machine.
+%
+This is demonstrated in Chapter \ref{ch:reproduce}.
+
+
+More details on the setup and its use can be found in the code repository \url{https://github.com/majidaldo/personal-compute-cloud}.
+
+
+%\section{Advantages}
+
 
 % benefits:
 % code -> binary -> vm binary
 
-% - last thing: usage instructions as in repo. this doc jsut high level more specifics in repo. and since details will change.
 
 % adv:
 % - code is portable b/c it is agnostic to compute facility
