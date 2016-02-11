@@ -258,13 +258,13 @@ $v_{min}-v_{i}> v_{min} \cdot \mathrm{min\_improvement}$
 
 %todo: use s=h in lstm
 
-The \textsf{theanets} \cite{Johnson2015} implementation%
+The \textsf{Theanets} \cite{Johnson2015} implementation%
 \footnote{With every calculation of $\vc{o}$, the RNN states are initialized to 0.}
 of RNNs and RMSprop was used.
 %
-\textsf{theanets} is based on the mathematical expression compiler, \texttt{theano} \cite{Bergstra2010}.
+\textsf{Theanets} is based on the mathematical expression compiler, \texttt{Theano} \cite{Bergstra2010}.
 %
-Gradients were computed using \textsf{theano}'s automatic differentiation feature instead of explicitly-defined backpropagation \cite{Rumelhart1986}.
+Gradients were computed using \textsf{Theano}'s automatic differentiation feature instead of explicitly-defined backpropagation \cite{Rumelhart1986}.
 
 %\section{Hyper-parameter Optimization}
 %In the previous section, 
@@ -278,9 +278,9 @@ Bayesian optimization is suited for optimizing RNN training because
 2) it considers the stochasticity of the function, which, in this case, the selection of training and validation data are random in addition to the training data shuffling on each epoch.
 
 
-The \textsf{spearmint} \cite{snoek2012practical} package was used to drive the hyper-parameter optimization process.
+The \textsf{Spearmint} \cite{snoek2012practical} package was used to drive the hyper-parameter optimization process.
 %
-\textsf{spearmint} takes a parameter search space and a maximum number of optimization iterations.
+\textsf{Spearmint} takes a parameter search space and a maximum number of optimization iterations.
 %
 The process was programmed to save RNN parameters after every optimization iteration.
 %
