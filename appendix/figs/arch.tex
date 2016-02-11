@@ -113,14 +113,24 @@ node distance=.2in
     % init computer
     \matrix[stack](stack){
       \node[dockerapp] (initreg) {registry};
+      & \node[dockerapp] (initsvc1) {svc1};
       \\
-      \node[docker] (initdkr) {Docker}; 
+        \node[docker] (initdkr1) {}; 
+      & \node[docker] (initdkr2) {};
       \\
-      \shareblock{initshare};
+      \node[sharestyle] (initshare1) {};
+      & \node[sharestyle] (initshare2) {};
       \\
-      \node[os] (initos) {CoreOS}; 
+      \node[os] (initos1) {}; 
+      & \node[os] (initos2) {}; 
       \\
     };
+    \node[os,fit=(initos1)(initos2),span]
+    (initos) {CoreOS};
+    \node[docker,fit=(initdkr1)(initdkr2),span]
+    (initdkr) {Docker};
+    \node[sharestyle,fit= (initshare1) (initshare2),span]
+    (initshare) {\texttt{/project}};
     \node[computername] (initnm) {init};
     \begin{pgfonlayer}{background}
       \node[vagrantcomputer
@@ -165,8 +175,8 @@ node distance=.2in
     \node[dockerapp,fit= (vaglib1) (vaglib2),span] (vag1lib) {lib};
     \node[sharestyle,fit= (vagshare1) (vagshare2)(vagshare3),span]
     (vagshare) {\texttt{/project}};
-    \node[docker,fit=(vagdkr1)(vagdkr2)(vagdkr3),span ] (vagdkr) {Docker}; \\
-    \node[os,fit=(vagos1)(vagos2)(vagos3),span ] (vagos) {CoreOS}; \\
+    \node[docker,fit=(vagdkr1)(vagdkr2)(vagdkr3),span ] (vagdkr) {Docker}; 
+    \node[os,fit=(vagos1)(vagos2)(vagos3),span ] (vagos) {CoreOS}; 
     \node[computername] (vagrantcomputenm) {`vagrant1'};
 
     \begin{pgfonlayer}{background}
@@ -278,7 +288,7 @@ node distance=.2in
 ,label=below:\textsf{Weave Net}
 ] (weavenet) {};
 \node[zone,inner sep=0pt
-,fit= (initreg)
+,fit= (initsvc1)
 ,color=mybluei
 ,dotted
 ,label={[yshift=-6pt,xshift=5pt]right:\textsf{Weave Net}}
