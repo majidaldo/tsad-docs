@@ -1,9 +1,3 @@
-%%% Local Variables:
-%%% mode: latex
-%%% TeX-master: t
-%%% End:
-
-
 %%
 %% GMU LaTeX MS Thesis Format Template
 %%
@@ -59,6 +53,9 @@
 \renewcommand\thefootnote{\ding{\numexpr171+\value{footnote}}}
 %for thick vertical line
 \usepackage{array} \usepackage{makecell}
+\usepackage{minted}
+%http://tex.stackexchange.com/questions/237075/minted-not-working
+%http://tex.stackexchange.com/questions/211672/cannot-get-tex-command-extra-options-to-work-in-auctex-11-88
 
 %% The file ``mythesisabbrev.sty'' is an (optional) personalized file that
 %% may contain any and all LaTeX command (re)definitions that will be used
@@ -235,3 +232,8 @@ Given the characteristics of the test data, it was concluded that the RNNs were 
 education, and professional experience.
 \end{document}
 
+%%% Local Variables:
+%%% mode: latex
+%%% TeX-master: t
+%%% TeX-command-extra-options: "-shell-escape"
+%%% End:
