@@ -60,9 +60,9 @@
 %% The file ``mythesisabbrev.sty'' is an (optional) personalized file that
 %% may contain any and all LaTeX command (re)definitions that will be used
 %% throughout the document
-\usepackage{etoolbox}
-\BeforeBeginEnvironment{minted}{\ls{1}}%
-\AfterEndEnvironment{minted}{\doublespacing}% ugly
+\usepackage{etoolbox}  \usepackage{mdframed}
+\BeforeBeginEnvironment{minted}{\ls{1} \begin{mdframed}}%
+\AfterEndEnvironment{minted}{\end{mdframed} \doublespacing}% ugly
 \input{custom}
 
 % % fig stuff does not work!
