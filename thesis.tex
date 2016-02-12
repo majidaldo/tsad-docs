@@ -53,14 +53,16 @@
 \renewcommand\thefootnote{\ding{\numexpr171+\value{footnote}}}
 %for thick vertical line
 \usepackage{array} \usepackage{makecell}
-\usepackage{minted}
+\usepackage[]{minted}
 %http://tex.stackexchange.com/questions/237075/minted-not-working
 %http://tex.stackexchange.com/questions/211672/cannot-get-tex-command-extra-options-to-work-in-auctex-11-88
 
 %% The file ``mythesisabbrev.sty'' is an (optional) personalized file that
 %% may contain any and all LaTeX command (re)definitions that will be used
 %% throughout the document
-%\usepackage{mythesisabbrev}
+\usepackage{etoolbox}
+\BeforeBeginEnvironment{minted}{\ls{1}}%
+\AfterEndEnvironment{minted}{\doublespacing}% ugly
 \input{custom}
 
 % % fig stuff does not work!
@@ -121,6 +123,7 @@ Majid S. alDosari
 % please make appropriate changes in the "signaturepage" section of gmudissertation.sty file.
 \signaturepage
 
+
 \titlepage
 
 % copyright technically optional but should be included in to avoid potential pagination problems
@@ -151,6 +154,7 @@ His interest in and support of my work motivated me to do the best job that I ca
 %
 Last but not least, I appreciate very much that Leif Johnson, author of the \textsf{Theanets} neural network package that I used, provided assistance beyond user support.
 
+
 %%
 %% Table of contents, list of tables, and lists of figures
 %%
@@ -160,6 +164,8 @@ Last but not least, I appreciate very much that Leif Johnson, author of the \tex
 \listoftables
 
 \listoffigures
+
+
 
 %%
 %% Abstract
@@ -214,6 +220,10 @@ Given the characteristics of the test data, it was concluded that the RNNs were 
 
 %% any bibliography style can be used, but IEEEtran.bst is ideally suited to
 %% electrical engineering references
+
+
+
+
 
 %% include the following directives if there are any appendices
 \appendix
