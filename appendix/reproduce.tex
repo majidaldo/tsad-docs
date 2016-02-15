@@ -1,204 +1,556 @@
 \chapter{Reproducing Results}
 \label{ch:reproduce}
 
-This chapter show how the results obtained in 
-
-% highest level instruction remain manual for some control. bc might want to go back to chage somthing in previous step.
-% not automated b/c wanted control. results id. it's just operational.
-
-% in the BO proc: 1 2 3 aprox these steps
-% - the BO proc
-% - storing rnn in mongodb
-% - storing bo opt prog in mongodb
-
-% talk about more specific things.
-% - task distribution across machines with ipyparallel
-% - rnn storage in mongodb as well.
 
 
-% as of sept '15.
-
-% git clone --recursive 
-% swith to commitid (instead of btrfs b/c more perm)
-
-% 2. DISTRIBUTED EXEC
-
-% start init and computers according to instructions
-% ansible/
-% ansible-playbook -vvv init.yml
-% ditto                ec2.yml
-% setup.yml --hosts=ec2
-
-% (todo put tsad code in sys.. subproj?)
-
-% on init
-
-% * start mongodb (collects task info)
-% /project/docker/1111-mongodb/run.sh
-% * start ipycontroller
-% /project/docker/0200-ipycontroller/run.sh
-% * start bayesian optimizer
-% set settings. po.py. maybe restrict the spc
-% . start a container with an env
-% /project/docker/0100-computer/run.sh ipykernel
-% do not do more than one ts at same time
-% . enter env
-% docker exec -ti init-ipykernel-1 bash
-% cd /data/experiments/exp_name
-% python ~/spearmint/spearmint/main.py .
+\section{Introduction}
 
 
-% on a computer
-
-% * start ipyengine (they will connect auto)
-% /project/docker/0100-computer/run.sh  (run.sh ipyengine n procs)
-% ensure ipy engine connect on init
-% docker logs ipycontroller
-% should have computed
-% docker logs computernamefromdockerps-ipyengine-1
-
-% (obtain tsad code or subtree it?)
-
-
-% join non-vm computer
-
-% install comoputing essentials:
-% theano
-% numpy,scipy
-% paramiko
-% python27
-% theanets
-% pymongo
-% pandas
-% sklearn just one func
-
-% get a local tsad dir
-% tunnel these ports
-% tsad/docker/port.sh 27017
-% tsad/docker/port.sh 4321
-% tsad/config.yml
-% '
-% ---
-% rnndb: localhost
-% '
-% tsad/ > ipengine --file=..\sys\files\.ipython\profile_default\security\ipcontroller-engine.json --ssh="core@init" --sshkey=c:\Users\Majid\.vagrant.d\insecure_private_key
+This chapter shows the commands that were issued to obtain the results shown in Chapter \ref{ch:results}.
+% 
+The commands build on the infrastructure setup explained in Chapter \ref{ch:pcc}.
+% 
+Also, the commands (themselves) specifically address requirements of the Bayesian optimization process driven by \textsf{Spearmint} as described in \ref{sec:pccmotivation}.
+% 
+As such they are the highest-level commands that can be automated as well but were not to give the investigator some control over execution.
+% 
+But the control is only operational as similar results should be obtained regardless of how the computations are executed.
 
 
-% 1. LOCAL EXEC
+However, first, a set of `manual' instructions are provided as well that are more typical of instructions accompanying computational publications (if at all!).
+% 
+The manual instructions, in contrast to the automated instructions, are not straightforward to extend for distributed execution.
+% 
+Nonetheless, the automated execution is just encapsulating the manual procedure with an automated one which embodies a distributed environment.
+%
+So, becoming familiar with the manual process helps with understanding the automated process.
 
-% start mongodb
-% in addition to non-vm computer stuff, install spearmint
-% cd tsad/experiment/exp_name
-% set o.py
-% python /path/to/spearmint/main.py .
+
+In any case, all software used was current as of January, 2016.
+% 
+So, if the software version is not identified, it can be assumed that it was current as of January 2016.
+% 
+So newer software \emph{may} work.
 
 
-% ---
 
-% parallel
+\section{Manual Execution}
+\label{sec:manual}
 
-% {
 
-%     "experiment-name": "spike",
-%     "database": {"address":"mongodb"}, <<<
-%     "language"   : "PYTHON",
+\begin{description}
+
+\item[0. Install prerequisite software.] \hfill
+
+  Install the following.
+  % 
+  Using the versions indicated ensure reproduction of results
+  \footnote{
+    Each has its own, possibly multiple, methods of installation!
+    % 
+    Furthermore, the listed software can have their own prerequisites possibly with version restrictions.
+    % 
+    Therefore, using \textsf{Conda} from Continuum Analytics is recommended for installing \textsf{Python}-based computational software.
+    % 
+    Conda can be obtained from \url{http://conda.pydata.org/miniconda.html}.
+  }%
+  :
+  
+  \begin{tabular}{ll}
+    \textsf{Python}:              & 2.7.11 \\
+    \textsf{NumPy}:               & 1.10.1 \\
+    \textsf{SciPy}:               & 0.16.0 \\
+    \textsf{scikit-learn}:        & 0.16.1 \\
+    \textsf{MongoDB}:             & 3.1.9 \\
+    \textsf{PyMongo}:             & 2.8 \\
+    \textsf{psutil}:              & 3.2 \\
+    modified \textsf{Spearmint}:  & \textsf{Git} commit ccc503ae08798cb5ed9fd6090310de89b6d9b39f \\
+                                  & from the repository at \\ 
+                                  & \url{https://github.com/majidaldo/Spearmint} \\
+    \textsf{Theano}:              & \textsf{Git} commit fe58ada7cbf8b6fd031d9ad9b3c6c570b1717f9b \\
+                                  & from the official repository at \\
+                                  & \url{https://github.com/Theano/Theano} \\
+    \textsf{Theanets}:            & \textsf{Git} commit ae588cfd6b7b04c02a603ecfee4ba14c68d46ca2 \\
+                                  & from the official repository at \\ 
+                                  & \url{https://github.com/lmjohns3/theanets}
+  \end{tabular}
+
+
+
+\item[1. Obtain main program code] \hfill
+
+  The main computational code is available at \url{https://github.com/majidaldo/tsad}.
+  % 
+  Use \textsf{Git} commit 37703f3d10cf5ff26cc72cc8b7dff639cffda78c.
+  % todo: where is the doi num?
+  
+
+
+\item[2. Setup] \hfill
+
+  \begin{description}
+
+  \item[1. Configure RNN storage.] \hfill
+
+    With local execution of \textsf{MongoDB}, the server host must be set to \texttt{localhost} in \path{config.yml} in the program code.
+
+\begin{minted}{yaml}
+---
+rnndb: localhost
+\end{minted}
+
+
+  \item[2. Start \textsf{MongoDB}.] \hfill
     
-%     "resources" : {
-% 	"my-machine" : {
-% 	    "scheduler"         : "local",
-% 	    "max-concurrent"    : 3,
-% 	    "max-finished-jobs" : 50
-% 	}
-%     },
+    Usually, this involves some kind of invocation of the \mintinline[]{bash}{mongod} command.
+    % 
+    Refer to \textsf{MongoDB} documentation for specific instructions.
 
-%     "tasks": {
-% 	"main" : {
-% 	    "type"       : "OBJECTIVE",
-% 	    "likelihood" : "GAUSSIAN",
-% 	    "main-file"  : "po.py", <<<
-% 	    "resources"  : ["my-machine"]
-% 	}
-%     },
+    The \textsf{MongoDB} instance will store RNN parameters and \textsf{Spearmint} progress.
+
+
+  \item[3. Change to sequence directory.] \hfill
+
+    Each sequence optimization is associated with two executables and a \textsf{Spearmint} configuration file in the directory \path{tsad/experiments}.
+    % 
+    The correspondence between the names used in Section \ref{sec:sampling} to the directory names is as follows:
     
-%     "variables" : {
-% 	"nl" : {
-% 	    "type" : "INT",
-% 	    "size" : 1,
-% 	    "min"  : 1,
-% 	    "max"  : 2
-% 	},
-% 	"n" : {
-% 	    "type" : "INT",
-% 	    "size" : 1,
-% 	    "min"  : 1,
-% 	    "max"  : 20
-% 	},
-% 	"iter" : {
-% 	    "type" : "FLOAT",
-% 	    "size" : 1,
-% 	    "min"  : 0,
-% 	    "max"  : 1
-% 	}
-%     }
-% }
+    \begin{tabular}{ll}
+      spike-1 & \texttt{spikelv} \\
+      spike-2 & \texttt{spikereg} \\
+      sine    & \texttt{sin} \\
+      power   & \texttt{power} \\
+      ECG     & \texttt{ECG} \\
+      ECG-PSG & \texttt{sleep} \\
+    \end{tabular}
 
 
-% local
-
-% {
-
-%     "experiment-name": "power",
-%     "database": {"address":"localhost"},
-%     "language"   : "PYTHON",
+  \item[4. Configure \textsf{Spearmint}] \hfill
     
-%     "resources" : {
-% 	"my-machine" : {
-% 	    "scheduler"         : "local",
-% 	    "max-concurrent"    : 1,
-% 	    "max-finished-jobs" : 20
-% 	}
-%     },
+    Ensure that \textsf{Spearmint} runs the non-distributed executable, \path{o.py}, by modifying the contents of the configuration file, \path{config.json}, if needed.
+    % 
+    \path{"o.py"} should be the value for \texttt{main-file} attribute of the configuration file.
+    %
+    Also, the \texttt{address} attribute for \texttt{database} should be set to \texttt{"localhost"} since it is assumed that a local \textsf{MongoDB} is running.
+    %
+    With these settings, \path{config.json} should be as follows.
 
-%     "tasks": {
-% 	"main" : {
-% 	    "type"       : "OBJECTIVE",
-% 	    "likelihood" : "GAUSSIAN",
-% 	    "main-file"  : "o.py",
-% 	    "resources"  : ["my-machine"]
-% 	}
-%     },
+\begin{minted}[]{json}
+{
+
+    "experiment-name": "power",
+    "database": {"address":"localhost"},
+    "language"   : "PYTHON",
     
-%     "variables" : {
-% 	"nl" : {
-% 	    "type" : "INT",
-% 	    "size" : 1,
-% 	    "min"  : 1,
-% 	    "max"  : 2
-% 	},
-% 	"n" : {
-% 	    "type" : "INT",
-% 	    "size" : 1,
-% 	    "min"  : 1,
-% 	    "max"  : 10
-% 	},
-% 	"iter" : {
-% 	    "type" : "FLOAT",
-% 	    "size" : 1,
-% 	    "min"  : 0,
-% 	    "max"  : 1
-% 	}
-%     }
-% }
+    "resources" : {
+	"my-machine" : {
+	    "scheduler"         : "local",
+	    "max-concurrent"    : 1,
+	    "max-finished-jobs" : 20
+	}
+    },
+
+    "tasks": {
+	"main" : {
+	    "type"       : "OBJECTIVE",
+	    "likelihood" : "GAUSSIAN",
+	    "main-file"  : "o.py",
+	    "resources"  : ["my-machine"]
+	}
+    },
+    
+    "variables" : {
+	"nl" : {
+	    "type" : "INT",
+	    "size" : 1,
+	    "min"  : 1,
+	    "max"  : 2
+	},
+	"n" : {
+	    "type" : "INT",
+	    "size" : 1,
+	    "min"  : 1,
+	    "max"  : 10
+	},
+	"iter" : {
+	    "type" : "FLOAT",
+	    "size" : 1,
+	    "min"  : 0,
+	    "max"  : 1
+	}
+    }
+}
+\end{minted}
+
+    In addition, the paramater space for the Bayesian optimization search can be set by changing the \texttt{min} and \texttt{max} under the \texttt{variables} attribute.
+    % 
+    \texttt{nl} is the variable name for number of RNN layers, $l$, while \texttt{n} is the number of nodes in a layer, $n$.
+
+
+
+\end{description}
+
+\item[3. Run \textsf{Spearmint}.] \hfill
+
+\begin{minted}{bash}
+python /path/to/spearmint/main.py .    
+\end{minted}
+
+
+\end{description}
+
+
+\section[Automated Execution]{Automated Execution%
+\protect\footnotemark[1]
+}
+\footnote{
+Unfortunately the reproducibility of the automated computation is flawed because the most recent version of the software identified in Step 0 of the manual execution instructions is installed by default.
+%
+However, the versions can be fixed easily by modifying the appropriate command in the file \texttt{docker/0100-computer/Dockerfile} in the automation code for CPU operation or \texttt{docker/01111-computer-gpu/Dockerfile} for GPU operation.
+}
+
+%unfortunately in the interest of automating the latest
+%unfortunately s/w vers not thourougly integrated. but refer to manual if any problem. auto just gets the latest. instructions in dockerfiles. but were encoded when ver became an issue.
+%sometimes new s/w good for performance reasons. best to work wtih latest. as developed over months.
+%most are in the computer dockerfile easily encoded
+
+\begin{description}
+
+
+
+\item[1. Obtain automation code.] \hfill
+
+  The code is available at \url{https://github.com/majidaldo/tsad-sys}.
+  % 
+  It is made of several submodules so \texttt{git} should be used with the \texttt{recursive} option.%
+  
+  %
+\begin{minted}{bash}
+git clone --recursive https://github.com/majidaldo/tsad-sys
+\end{minted}
+  % 
+  Then, change into the code directory and checkout the appropriate version.
+  
+
+\begin{minted}{bash}
+git checkout 8f20b9768cd4c4ae83bbb8e156e5d7aa9fbb2565
+\end{minted}
+
+  The automation code also contains the computational code as a submodule in the \texttt{tsad} directory.
+
+
+\item[2. Setup] \hfill
+
+\begin{description}
+
+\item[1. Setup automation.] \hfill
+
+  Follow instructions according to the \path{README} file \url{https://github.com/majidaldo/personal-compute-cloud/tree/thesis0/README.md} to initialize the automation, provision the \texttt{init} machine, and provision compute machines.
+  % 
+  There is no need to change any system variable set in the automation code.
+
+
+\item[2. Start services.] \hfill
+
+  \texttt{ssh} into the \texttt{init} machine to run services on it.
+  % 
+  The services (and compute applications) are all \textsf{Docker} applications.
+  % 
+  Each application corresponds to a directory within the \texttt{docker} directory in the automation code.
+  % 
+  The application directories contain shell scripts to run the application.
+
+  \begin{description}
+
+  \item[1. Start \textsf{MongoDB}.] \hfill
+
+    Change into the \path{/project/docker/1111-mongodb} directory and execute \mintinline{bash}{./run.sh}.
+
+  \item[2. Start the \textsf{IPython} controller.] \hfill
+
+    Similarly, change into the \path{/project/docker/0200-ipycontroller} directory and execute \mintinline{bash}{./run.sh}.
+
+    The \textsf{IPython} controller handles the distribution of computational tasks across workers.
+    % 
+    Its data is configured for storage in \texttt{MongoDB} as well.
+
+  \end{description}
+
+
+\item[3. Configure RNN storage.] \hfill
+  
+  Just like in manual execution, the RNNs are configured for storage in a \textsf{MongoDB} database.
+  %
+  So similarly, confirm that the database host is set to \texttt{mongodb} in \path{tsad/config.yml}.
+
+
+\item[4. Configure \textsf{Spearmint}] \hfill
+    
+  Again, like in manual execution, change into a sequence directory in \path{tsad/experiments}.
+  %
+  Ensure that \textsf{Spearmint} runs the \emph{distributed} executable, \texttt{po.py}, by modifying the contents of the configuration file, \path{config.json}, if needed.
+    % 
+    \path{po.py} should be in the \texttt{main-file} attribute of the configuration.
+    %
+    Furthermore, set the number of concurrent compute workers \textsf{Spearmint} controls by changing the value of the \texttt{max-concurrent} attribute.
+
+
+    %
+    Also, the \texttt{address} attribute for \texttt{database} should be set to \texttt{"mongodb"} since it is assumed that a \emph{remote} instance of \textsf{MongoDB} is running.
+    %
+    With these settings, \path{config.json} should be as follows.
+
+\begin{minted}[]{json}
+{
+
+    "experiment-name": "power",
+    "database": {"address":"mongodb"},
+    "language"   : "PYTHON",
+    
+    "resources" : {
+	"my-machine" : {
+	    "scheduler"         : "local",
+	    "max-concurrent"    : 5,
+	    "max-finished-jobs" : 20
+	}
+    },
+
+    "tasks": {
+	"main" : {
+	    "type"       : "OBJECTIVE",
+	    "likelihood" : "GAUSSIAN",
+	    "main-file"  : "po.py",
+	    "resources"  : ["my-machine"]
+	}
+    },
+    
+    "variables" : {
+	"nl" : {
+	    "type" : "INT",
+	    "size" : 1,
+	    "min"  : 1,
+	    "max"  : 2
+	},
+	"n" : {
+	    "type" : "INT",
+	    "size" : 1,
+	    "min"  : 1,
+	    "max"  : 10
+	},
+	"iter" : {
+	    "type" : "FLOAT",
+	    "size" : 1,
+	    "min"  : 0,
+	    "max"  : 1
+	}
+    }
+}
+\end{minted}
+
+    In addition, the paramater space for the Bayesian optimization search can be set in the same manner described in manual execution.
+  
+
+\end{description}
+
+\item[3. Run Spearmint.] \hfill
+
+  In distributed operation, \textsf{Spearmint} is run as a coordinating `service' so it is recommended that the following steps are run on the \texttt{init} machine.
+ 
+\begin{description}
+
+
+\item[1. Enter compute environment.] \hfill
+
+  Change into the \texttt{docker} directory that represents the computing environment, \path{/project/docker/0100-computer}.
+  %
+  Then, start the environment with the following command%
+  \footnote{This runs an \textsf{IPython} kernel but it is irrelevant.}%
+  .
+
+\begin{minted}{bash}
+./run.sh ipykernel
+\end{minted}
+%
+Now, enter the environment by issuing the following \textsf{Docker} command.
+
+%
+\begin{minted}{bash}
+docker exec -ti init-ipykernel-1 bash
+\end{minted}
+%
+Notice that the command includes \texttt{init} because the \path{run.sh} command assigns a name to the \textsf{Docker} container that includes the hostname.
+
+
+\item[2. Execute.] \hfill
+
+  Now inside the \textsf{Docker} container, change into the sequence directory in \path{/data/experiments} and execute the following.
+
+  %
+\begin{minted}{bash}
+python ~/spearmint/spearmint/main.py .
+\end{minted}
+
+
+\end{description}
+
+
+\item[4. Join compute workers.] \hfill
+
+The workers are \textsf{IPython} engines that connect to the \textsf{IPython} controller.
+%
+Running compute workers on compute machines provisioned by the automation is straightforward. 
+%
+However, other workers can join as long as their environment is the same as that described in the manual execution section.
+
+\begin{description}
+
+
+\item[Join automated workers.] \hfill
+
+  \texttt{ssh} into a compute worker and run the following in the \path{/project/docker/0100-computer} directory.
+
+\begin{minted}{bash}
+./run.sh ipyengine 1
+\end{minted}
+
+%
+The 1 indicates that just one worker will be started but the number can be increased.
+
+
+A NVIDIA GPU-equipped machine can start a GPU accelerated worker by running the same command in the \path{/project/docker/0111-computer-gpu} directory.
+
+
+Computation progress can be monitored by issuing a \texttt{docker logs} command for the container name.
+
+\begin{minted}{bash}
+docker logs compute-machine-name-ipyengine-1
+\end{minted}
+
+The 1 stands for the first worker started from the previous \texttt{./run.sh} command.
+%
+The container name can be found from the list output from the command, \mintinline{bash}{docker ps}.
+
+\item[Manually join worker.] \hfill
+
+An \texttt{IPython} engine can join the group of workers if it establishes connectivity to the \textsf{MongoDB} database and the \textsf{IPython} controller.
+%
+Assuming the worker is on the local machine setup as per the manual execution instructions in Section \ref{sec:manual}, connect the worker as follows.
+
+\begin{description}[style=unboxed]
+
+
+\item[1. Forward \textsf{MongoDB} and \textsf{IPython} controller network ports to \texttt{init} computer.] \hfill
+
+  Instead of communicating to local services, local communication is forwarded to services runninig on the \texttt{init} machine.
+  % 
+  Since the ports are forwarded from the local machine, in the main program code directory (say, \texttt{tsad}) confirm that the RNN code is communicating with \textsf{MongoDB} as if it were local;
+  %
+  check the contents file \path{config.json} so that it is as follows.
+
+\begin{minted}{yaml}
+---
+rnndb: localhost
+\end{minted}
+
+  %
+  Then, also in the \texttt{tsad} directory, navigate to the \texttt{docker} directory.
+  %
+  In the \texttt{docker} directory, the \path{port.sh} script forwards network ports.
+  % 
+  Forward the \textsf{MongoDB} port with \mintinline{bash}{./port.sh 27017}.
+  %
+  In another command console, forward (one of) the \textsf{IPython} controller ports with \mintinline{bash}{./port.sh 4321}.
+  %
+  Keep the consoles open.
+
+
+\item[2. Start \textsf{IPython} engine.] \hfill
+
+  From the \texttt{tsad} directory, start the \textsf{IPython} engine as follows.
+
+\begin{minted}{bash}
+ipengine \
+--file=/path/to/tsad-sys/files/\
+.ipython/profile_default/security/ipcontroller-engine.json \
+--ssh="core@init"\
+--sshkey=/path/to/.vagrant.d/insecure_private_key
+\end{minted}
+
+%
+The \texttt{tsad-sys} directory is the automation code directory.
+%
+In this command, the \textsf{IPython} engine is making a \textsf{SSH} network tunnel to the \textsf{IPython} controller residing in the \texttt{init} machine.
+%
+The \textsf{IPython} controller writes its (dynamic) network configuration to the \texttt{ipcontroller-engine.json} file on its start.
+%
+This information is available on the (outside) local machine through the file share.
+%
+For the location of the \path{insecure\_private\_key} file, check your \textsf{Vagrant} installation.
+
+\end{description}
+  
+\end{description}
+
+\end{description}
 
 
 
 
+\section{Reproduction of Figures}
 
+
+The figures shown in Chapter \ref{ch:results} are produced in a separate process associated with the production of this document.
+%
+Figure production is not fully automated but the previously described computation environments can used as a basis for producing the figures by following the steps below.
+% 
+
+\begin{description}[style=unboxed]
+
+
+\item[1. Install data analysis and plot tools.] \hfill
+
+  Install the following in a compute environment:
+
+  \begin{tabular}{ll}
+    \textsf{matplotlib} & 1.5.1 \\
+    \textsf{Seaborn} &  0.6.0 \\
+    \textsf{pandas} & 0.17.1
+  \end{tabular}
+
+
+\item[2. Obtain code for this document.] \hfill
+
+  Download the code from \url{https://github.com/majidaldo/tsad-docs}.
+  % 
+  Then checkout the appropriate version as follows.
+
+\begin{minted}{bash}
+git checkout c524238ba7a4e514e6cb155afe42c3b4808048ed
+\end{minted}
+
+
+\item[3. Configure location of main computaion code.] \hfill
+
+  In the document code, change the path in \path{figs/tsad.py} to the location of the main computation code.
+
+
+\item[4. Generate figures.] \hfill
+
+  Assuming \textsf{MongoDB} is running, from the \texttt{figs} directory execute the following command.
+
+\begin{minted}{bash}
+python figs.py all
+\end{minted}
+
+The figures will be produced as files written in the same directory.
+
+\end{description}
 
 
 
 
 %%% Local Variables:
 %%% mode: latex
+%%% TeX-command-extra-options: "-shell-escape"
 %%% TeX-master: "../thesis"
 %%% End:
