@@ -1,13 +1,13 @@
 \chapter[Reproducible Computational Infrastructure]{Reproducible Computational Infrastructure%
   \protect\footnotemark[1]% idk
 }
-\footnotetext{The code is citable under DOI 10.5281/zenodo.45950}
+\footnotetext{The code described in this chapter is referenced under DOI 10.5281/zenodo.45950}
 \label{ch:pcc}
 
 \section{Introduction}
 
 
-There has been much attention recently paid to reproducible computational research \cite{Stodden2013}. 
+There has been much attention recently paid to reproducible computational research \cite{Stodden2013}.
 %
 In some cases, just providing the computational code and data, along with some instructions, is sufficient to be able to reproduce a computational experiment.
 %
@@ -25,7 +25,7 @@ As examples, \textsf{Galaxy} is used in genome analysis \cite{Giardine2005},
 %
 and \textsf{Bioconductor} in computational biology and bioinformatics \cite{Gentleman2004}.
 %
-These solutions can be seen as platforms onto which instructions can be provided.
+These solutions can be seen as platforms onto which instructions can be provided to reproduce results.
 
 
 However, these solutions do not address computational infrastructure setup in addition to being limited to their domains.
@@ -97,7 +97,7 @@ That is, the investigator's workflow should be uninterrupted.
 
 So the challenge is twofold: the reproducibility of each component and the reproducibility of the setup.
 %
-Also, this implies that the setup should occur in clean, isolated environments.
+This implies that the setup should occur in clean, isolated environments.
 
 
 \section{Solution Elements}
@@ -128,7 +128,7 @@ They can be evaluated based on their degree of reproducibility and automation.
   %
   While a virtual machine provisioned automatically provides an isolated, reproducible environment for work, it needs to exist in the context of being a part of a network of machines.
   %
-  So, ideally, after a minimal initial provisioning, the virtual machine is treated as just another machine regardless of the fact that it exists virtualized locally.
+  So, ideally, after a minimal initial provisioning, the virtual machine should be treated as just another machine regardless of the fact that it exists virtualized locally.
 
 
 \item[application reproducibility: \textsf{Docker}.]
@@ -138,9 +138,9 @@ They can be evaluated based on their degree of reproducibility and automation.
 
   \textsf{Docker} has recently emerged as an easy yet powerful way to work with (isolated) application containers.
   %
-  Furthermore, the image execution is portable as long as the machine has compatible architecture which has obvious advantages when working with multiple machines.
+  Furthermore, the image execution is portable as long as the machine has compatible hardware architecture which has obvious advantages when working with multiple machines.
   %
-  Also, by persisting the image, the application can be started swiftly since the image creation process would have already gone through potentially lengthy software installation processes.
+  Also, by persisting the image, the application can be started swiftly since the image is the result of potentially lengthy software installation processes.
   %
 %footnote? docker like vm but compare to handling vm img!
   %
@@ -148,7 +148,7 @@ They can be evaluated based on their degree of reproducibility and automation.
 %
   In the context of computational research, it is possible to have isolated, reproducible containers for, as examples, databases, computational code, and computational task management.
   %
-  While \textsf{Docker} provides a great deal of reproducibility, it is not involved in machine provisioning.
+  While \textsf{Docker} provides a great deal of application reproducibility, it is not involved in machine provisioning.
 
 
 
@@ -160,21 +160,22 @@ Given that \textsf{Docker} was identified as an important solution component, it
 %
 \textsf{Weave} provides global private network addressing for each container.
 %
-\textsf{CoreOS} a \textsf{Linux} operating system designed for distributed, containerized applications.
+\textsf{CoreOS} is a \textsf{Linux} operating system designed for distributed, containerized applications.
 %
 As such, it is delivered with minimal software and services as containers are assumed to be the primary method by which software and services are added.
 %
 In the context of computational research, this ensures the fastest possible execution of computational code since the operating system is not running unnecessary processes.
 %docker soles other probs but these are main ones
 
+
 \item[remote machine facility: \textsf{Amazon Web Services (AWS)}.] 
   %
-  \textsf{AWS} provides high-performance compute machines, including machines equipped with GPUs, running \textsf{CoreOS}.
+  \textsf{AWS} provides high-\\performance compute machines, including machines equipped with GPUs, running \textsf{CoreOS}.
   
 
-  What is important for the purpose of automation, is that \textsf{AWS} provides a programmatic interface for the provisioning of machines.
+  What is important for the purpose of automation is that \textsf{AWS} provides a programmatic interface for the provisioning of machines.
   % 
-  However, the choice of \textsf{AWS} is not critical because \textsf{AWS} can be substituted by other providers providing comparable facilities.
+  However, the choice of \textsf{AWS} is not critical because \textsf{AWS} can be substituted by other providers with comparable facilities.
  
 
 
@@ -200,15 +201,15 @@ In the context of computational research, this ensures the fastest possible exec
 
 The solution elements can be organized into a `stack' to help understand their place in an overall solution.
 %
-The stack represents a technology dependency which is depicted in Figure \ref{fig:stack}.
+As depicted in Table \ref{tbl:stack}, the stack represents a technology dependency where higher elements depend on lower elements.
 %
 The goal is to be able to automatically recreate this technology stack anywhere.
 %
 As such, \textsf{Ansible} is not shown because it is an automation tool that sets up the stack.
 
 
-\begin{figure}[h]
-\newcolumntype{T}{!{\vrule width 3\arrayrulewidth}}
+\begin{table}[h]
+\newcolumntype{T}{!{\color{blue} \vrule width 4\arrayrulewidth}}
 \newcolumntype{C}[0]{>{\centering\let\newline\\\arraybackslash\hspace{0pt}}m{1.5in}}
 \centering
 \begin{tabular}{l C C}
@@ -263,29 +264,31 @@ As such, \textsf{Ansible} is not shown because it is an automation tool that set
 \caption[Container-oriented computational technology stack]
 {Container-oriented computational technology stack.
 %
-Technologies bordered by thick lines are under the influence of automation by \textsf{Ansible}.
+Technologies bordered by blue lines are under the influence of automation by \textsf{Ansible}.
 %
 The parentheses around x64 indicate that the hardware architecture is virtualized (under type-2 hypervisor).
 %
-Table cells with ellipses are immaterial to the discussion.
+Table cells containing ellipses are immaterial to the discussion.
 %
 }
-\label{fig:stack}
-\end{figure}
+\label{tbl:stack}
+\end{table}
 
 
 The reproducibility of results from computation (at the application layer) is generally not influenced by technologies lower in the stack.
 %
 In fact, they can be swapped with other technologies as long as the technology stack is compatible.
+%
+But the automation ensures the compatibility of the stack.
 
 
 For reproduciblity of results, it is more a matter of convenience that the layers above the hypervisor can be recreated locally and remotely.
 %
-However, the technologies selected facilitate portability in several ways which allows for easier collaboration and reproducibility of results starting at different levels.
+However, the technologies selected facilitate portability of execution in several ways which allows for easier collaboration and reproducibility of results starting at different levels.
 %
 At the lowest level, the automation code can recreate the full stack, locally and remotely, perhaps with different hypervisors.
 %
-So, at the container level, \textsf{Docker} instructions can be used to recreate the application image.
+So, at the container level, the highest level, \textsf{Docker} instructions can be used to recreate the application image.
 %
 Alternatively, the image (itself) can be transferred to any compatible machine for execution.
 %
@@ -333,10 +336,10 @@ This restricts the ease in which some software can be installed although this ca
 %
 Most importantly, is that the use of research-oriented clusters does not facilitate a seamless transition from local development to remote execution because the local and remote environments do not match (unless the local environment is restricted to use the same technologies as the facility which would limit portability of the setup process).
 %
-So treating cluster computing providers as just providers of machines is advantageous because it allows the investigator generically automate the setup of the same computing environment on any facility.
+So treating cluster computing providers as just providers of machines is advantageous because it allows the investigator to generically automate the setup of the same computing environment on any facility.
 
 
-While automating the setup for a research-oriented cluster is possible, \textsf{StarCluster} is notable for automating the setup for \textsf{AWS}.
+While automating the setup on a research-oriented cluster is possible, \textsf{StarCluster} is notable for automating the setup on \textsf{AWS}.
 %
 Although the setup is convenient, \textsf{StarCluster} otherwise is much like a research-oriented cluster computing facility but with more control given to the user since administrative privileges on the operating systems are granted.
 %
@@ -353,10 +356,10 @@ Section \ref{sec:stack} discussed the advantages of having a homogeneous computi
 %
 This section will exhibit a `base' infrastructure onto which complex distributed applications can run.
 %
+The end result is that the investigator gains control of multiple machines all of which have almost identical environments.
+%
 Figure \ref{fig:pcc} depicts the base infrastructure in a technology layer-oriented view.
 %layer view. not net view.
-%
-The end result is that the investigator gains control of multiple machines all of which have almost identical environments.
 %
 Machines occupying the top row in the diagram are designated as `compute' machines.
 
@@ -386,7 +389,7 @@ The base infrastructure begins with setting up resources on a user's local machi
 
 Central to this is sharing local files which provides persistence of data and executables between instantiations of machines.
 %
-The file share also provides convenience for iterating over code on an arbitrary machine which is especially powerful when using version controlled code.
+The file share also provides convenience for developing code on any machine which is especially powerful when using version controlled code.
 
 
 \item[2. \texttt{init} Machine Setup] \hfill
@@ -409,7 +412,7 @@ In the base setup the \texttt{init} machine provides two services:
       %
       The images can modularly build on one another.
       %
-      For example, \textsf{app1} and \textsf{app2} (show in Figure \ref{fig:pcc}) can build on a common \textsf{lib} image.
+      For example, \textsf{app1} and \textsf{app2} (shown in Figure \ref{fig:pcc}) can build on a common \textsf{lib} image.
 
   \end{description}
 
@@ -420,15 +423,17 @@ After the \texttt{init} machine is set up, compute machines can be brought into 
 %
 Local compute%
 \footnote{
-Local computing resources can be added to the network like \textsf{app3} running on \texttt{localhost} (shown in Figure \ref{fig:pcc}) but such operation is not the purview of the automation code.
+Non-virtualized local computing resources can be added to the network like \textsf{app3} running on \texttt{localhost} as shown in Figure \ref{fig:pcc}.
+%
+But such operation is not the purview of the automation code.
 }
 machines can be provisioned by \textsf{Vagrant} which are well-suited for testing.
 %
 Remote compute machines can be acquired as well from \textsf{AWS}%
 \footnote{
-Other providers can be integrated by modifying \textsf{Ansible} scripts.
+Other providers can be integrated by creating and modifying \textsf{Ansible} scripts.
 }
-for accelerated performance.
+for accelerated execution.
 
 
 \end{description}
@@ -436,7 +441,7 @@ for accelerated performance.
 
 After the setup, the investigator can expect that the same commands will work on any machine.
 %
-Moreover, the process is reproducible on any machine.
+Moreover, the set up can be executed on any (local) machine.
 %
 This is demonstrated in Chapter \ref{ch:reproduce}.
 
