@@ -58,7 +58,7 @@ The normal behaviour, as well as anomalous behaviour, of these time series can b
 
 While there is only one `source' time series to train on (in each test), the RNN needs to see many `samples' from the source time series.
 %
-The sliding window procedure, described in \ref{sec:adsample}, is used to get samples of some window width.
+The sliding window procedure, described in Section \ref{sec:adsample}, is used to get samples of some window width.
 %
 Additionally, since RNNs do not need a fixed window, sliding windows are obtained for more than one window width.
 %
@@ -628,5 +628,6 @@ Concludingly, the autoencoding recurrent neural network can be used to detect an
 
 %%% Local Variables:
 %%% mode: latex
+%%% TeX-command-extra-options: "-shell-escape"
 %%% TeX-master: "thesis"
 %%% End:
