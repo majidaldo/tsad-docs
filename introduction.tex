@@ -26,11 +26,12 @@ Hence, the problem that is addressed can be stated as follows: find anomalous po
 
 The solution presented here comes from an unsupervised use of recurrent neural networks. A literature search only readily gives two similar solutions. In the acoustics domain, \cite{Marchi2015} transform audio signals into a sequence of spectral features which are then input to a denoising recurrent autoencoder. \cite{Malhotra2015} improve on this by using recurrent neural networks (directly) without the use of features (that are specific to a problem domain, like acoustics) to multiple domains.
 
-This work closely resembles \cite{Malhotra2015} but presenting a single, highly-automated procedure that applies to many domains is emphasized. First, some background is given on anomaly detection \footnote{Outlier, surprise, novelty, and deviation detection are alternative names used in literature.} that explains the challenges of finding a solution. Second, recurrent neural networks are introduced as general sequence modelers. Then, experiments will be presented to show that recurrent neural networks can find different types of anomalies in multiple domains. Finally, concluding remarks are given.
+This work closely resembles \cite{Malhotra2015} but presenting a single, highly-automated procedure that applies to many domains is emphasized. First, some background is given on anomaly detection\footnote{Outlier, surprise, novelty, and deviation detection are alternative names used in literature.} that explains the challenges of finding a solution. Second, recurrent neural networks are introduced as general sequence modelers. Then, experiments will be presented to show that recurrent neural networks can find different types of anomalies in multiple domains. Finally, concluding remarks are given.
 
 %todo pcc project
 
 %%% Local Variables:
 %%% mode: latex
+%%% TeX-command-extra-options: "-shell-escape"
 %%% TeX-master: "thesis"
 %%% End:
