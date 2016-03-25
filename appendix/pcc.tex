@@ -212,6 +212,16 @@ As such, \textsf{Ansible} is not shown because it is an automation tool that set
 \newcolumntype{T}{!{\color{blue} \vrule width 4\arrayrulewidth}}
 \newcolumntype{C}[0]{>{\centering\let\newline\\\arraybackslash\hspace{0pt}}m{1.5in}}
 \centering
+\caption[Container-oriented computational technology stack]
+{Container-oriented computational technology stack.
+%
+Technologies bordered by blue lines are under the influence of automation by \textsf{Ansible}.
+% todo: consider shading
+The parentheses around x64 indicate that the hardware architecture is virtualized (under type-2 hypervisor).
+%
+Table cells containing ellipses are immaterial to the discussion.
+%
+}
 \begin{tabular}{l C C}
   \Xhline{6\arrayrulewidth}
   application   
@@ -261,16 +271,6 @@ As such, \textsf{Ansible} is not shown because it is an automation tool that set
   & local 
   & remote
 \end{tabular}
-\caption[Container-oriented computational technology stack]
-{Container-oriented computational technology stack.
-%
-Technologies bordered by blue lines are under the influence of automation by \textsf{Ansible}.
-%
-The parentheses around x64 indicate that the hardware architecture is virtualized (under type-2 hypervisor).
-%
-Table cells containing ellipses are immaterial to the discussion.
-%
-}
 \label{tbl:stack}
 \end{table}
 

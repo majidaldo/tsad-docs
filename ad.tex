@@ -130,6 +130,7 @@ However, by introducing a large enough hop, anomalies could be missed. Consider 
 
 \begin{table}[h]
   \centering
+  \caption[Point anomalies in sliding windows of various hop sizes]{Point anomalies in sliding windows of width 3 for various hop sizes for the sequence \emph{abc\underline{c}abcabc} are underlined (The \emph{c} in the first \emph{cab} for $h=1$ cannot be considered anomalous because it is not in its context). From \cite{Cheboli2010}.}
   \begin{tabular}{|c|c|}
     \hline
     hop ($h$) & Ordered Windows \\
@@ -157,7 +158,6 @@ However, by introducing a large enough hop, anomalies could be missed. Consider 
         \emph{abc} \\
     \hline
   \end{tabular}
-  \caption[Point anomalies in sliding windows of various hop sizes]{Point anomalies in sliding windows of width 3 for various hop sizes for the sequence \emph{abc\underline{c}abcabc} are underlined (The \emph{c} in the first \emph{cab} for $h=1$ cannot be considered anomalous because it is not in its context). From \cite{Cheboli2010}.}
   \label{tbl:hop}
 \end{table}
 
@@ -322,6 +322,7 @@ The problem comes from adjacent windows being close to each other in space. Cons
 %todo: merge similar cells
 \begin{table}[h]
   \centering
+  \caption[Neighbors of sliding windows]{Neighbors of sliding windows of sequence \emph{abcabcXXXabcababc}}
   \begin{tabular}{|c||c|}
     \hline
     $h=1$ & $h=3$ \\
@@ -348,7 +349,6 @@ The problem comes from adjacent windows being close to each other in space. Cons
     \emph{abc} & \\
     \hline
   \end{tabular}
-  \caption[Neighbors of sliding windows]{Neighbors of sliding windows of sequence \emph{abcabcXXXabcababc}}
   \label{tbl:selfmatch}
 \end{table}
 
