@@ -63,6 +63,13 @@
 \usepackage{etoolbox}  \usepackage{mdframed}
 \BeforeBeginEnvironment{minted}{\ls{1} \begin{mdframed}}%
 \AfterEndEnvironment{minted}{\end{mdframed} \doublespacing}% ugly
+
+
+\BeforeBeginEnvironment{figure}{\figSpace}%
+\AfterEndEnvironment{figure}{\figSpace}
+\BeforeBeginEnvironment{table}{\tableSpace}%
+\AfterEndEnvironment{table}{\tableSpace}
+
 \input{custom}
 
 % % fig stuff does not work!
