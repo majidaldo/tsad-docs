@@ -66,10 +66,12 @@
 \AfterEndEnvironment{minted}{\end{mdframed} \doublespacing}% ugly
 
 
-\BeforeBeginEnvironment{figure}{\figSpace}%
-\AfterEndEnvironment{figure}{\figSpace}
-\BeforeBeginEnvironment{table}{\tableSpace}%
-\AfterEndEnvironment{table}{\tableSpace}
+
+\AtBeginEnvironment{figure}{\figSpace}
+\AtEndEnvironment{figure}{\figSpace}
+\AtBeginEnvironment{table}{\tableSpace}
+\AtEndEnvironment{table}{\tableSpace}
+
 
 \input{custom}
 
