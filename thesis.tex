@@ -83,6 +83,11 @@
 
 \beforedoc
 
+\usepackage{caption}
+\captionsetup[subfigure]{labelformat=simple}
+\renewcommand{\thesubfigure}{\thefigure(\alph{subfigure})}
+\renewcommand{\subfigurename}{Figure}
+
 \begin{document}
 
 %% In this section, all of the user-specific fields to be used in the
