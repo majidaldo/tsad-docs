@@ -77,6 +77,9 @@
 % \usepackage{pgf}
 % \usepackage{tikz}
 
+%so that i can have a standlone cv
+\usepackage{standalone}
+
 \beforedoc
 
 \begin{document}
@@ -248,10 +251,9 @@ Such flexibility and automation allows the researcher to be more confident of re
 %%
 %% curriculum vitae
 %%
-\cvpage %todo
+\cvpage
+\input{cv}
 
-\noindent Include your \emph{curriculum vitae} here detailing your background,
-education, and professional experience.
 \end{document}
 
 %%% Local Variables:
