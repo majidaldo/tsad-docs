@@ -215,8 +215,8 @@ As such, \textsf{Ansible} is not shown because it is an automation tool that set
 \caption[Container-oriented computational technology stack]
 {Container-oriented computational technology stack.
 %
-Technologies bordered by blue lines are under the influence of automation by \textsf{Ansible}.
-% todo: consider shading
+Technologies in shaded cells are under the influence of automation by \textsf{Ansible}.
+%
 The parentheses around x64 indicate that the hardware architecture is virtualized (under type-2 hypervisor).
 %
 Table cells containing ellipses are immaterial to the discussion.
@@ -225,33 +225,33 @@ Table cells containing ellipses are immaterial to the discussion.
 \begin{tabular}{l C C}
   \Xhline{6\arrayrulewidth}
   application   
-  &  \multicolumn{1}{TcT}{\ldots}
-  & \multicolumn{1}{TcT}{\ldots} 
+  &  \multicolumn{1}{TcT}{\cellcolor{blue!10}\ldots}
+  & \multicolumn{1}{TcT}{\cellcolor{blue!10}\ldots} 
   \\
   \hline
   container network 
-  & \multicolumn{2}{TcT}{\textsf{Weave}}  
+  & \multicolumn{2}{TcT}{\cellcolor{blue!10}\textsf{Weave}}  
   \\
   app. containerization  
-  & \multicolumn{2}{TcT}{\textsf{Docker}}   
+  & \multicolumn{2}{TcT}{\cellcolor{blue!10}\textsf{Docker}}   
   \\
   \hline
   operating system 
-  & \multicolumn{2}{TcT}{\textsf{CoreOS}} 
+  & \multicolumn{2}{TcT}{\cellcolor{blue!10}\textsf{CoreOS}} 
   \\ 
   \hline
   machine 
-  & \multicolumn{1}{TcT}{(x64)}
-  &  \multicolumn{1}{TcT}{x64} 
+  & \multicolumn{1}{TcT}{\cellcolor{blue!10}(x64)}
+  &  \multicolumn{1}{TcT}{\cellcolor{blue!10}x64} 
   \\ 
   \hline
   hypervisor 
-  & \multicolumn{1}{TcT}{\textsf{VirtualBox}} 
-  & \multicolumn{1}{TcT}{\ldots }
+  & \multicolumn{1}{TcT}{\cellcolor{blue!10}\textsf{VirtualBox}} 
+  & \multicolumn{1}{TcT}{\cellcolor{blue!10}\ldots }
   \\
   hypervisor interface
-  & \multicolumn{1}{TcT}{\textsf{Vagrant}} 
-  & \multicolumn{1}{TcT}{\textsf{AWS}}
+  & \multicolumn{1}{TcT}{\cellcolor{blue!10}\textsf{Vagrant}} 
+  & \multicolumn{1}{TcT}{\cellcolor{blue!10}\textsf{AWS}}
   \\
   \hline
   host operating sys. 
@@ -260,12 +260,12 @@ Table cells containing ellipses are immaterial to the discussion.
     \textbar \textsf{OS X}%
     \textbar \textsf{Linux}
     }
-  & \multicolumn{1}{TcT}{\ldots}
+  & \multicolumn{1}{TcT}{\cellcolor{blue!10}\ldots}
   \\
   \hline
   hardware 
   & \multicolumn{1}{|c|}{x64}
-  & \multicolumn{1}{TcT}{x64}
+  & \multicolumn{1}{TcT}{\cellcolor{blue!10}x64}
   \\
   \Xhline{6\arrayrulewidth}
   & local 
