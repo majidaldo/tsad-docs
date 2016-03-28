@@ -417,9 +417,9 @@ The kernel density estimate might change significantly accordingly.
 What follows is a discussion of the ability of the (optimal) RNN to detect anomalies referencing subfigures of Figure \ref{fig:err}.
 
 
-\noindent {\bfseries{spikes-1}}
+\noindent {\bfseries{spikes-1}} \nopagebreak
 
-\begin{figure}[!hp] %todo: i think gmu wants all figs at the top
+\begin{figure}[H]
     \centering
   
   \begin{subfigure}[t]{\textwidth}
@@ -441,9 +441,10 @@ Note the error increases as soon as the sliding window (from the left) encounter
 This observation can be used to analyze the other series.
 
 
-\noindent {\bfseries{spikes-2}}
 
-\begin{figure}[!hp]
+\noindent {\bfseries{spikes-2}} \nopagebreak
+
+\begin{figure}[H]
     \ContinuedFloat 
     \begin{subfigure}[t]{\textwidth}
         \centering
@@ -457,10 +458,10 @@ This spike series tests if the error becomes significant where the spike is out 
 The anomaly is definitely detected in the windowed error plot but not the point error plot.
 
 
-\noindent {\bfseries{sine}}
 
+\noindent {\bfseries{sine}} \nopagebreak
 
-\begin{figure}[!hp]
+\begin{figure}[H]
     \ContinuedFloat 
   
     \begin{subfigure}[t]{\textwidth}
@@ -484,9 +485,12 @@ So, given these results, the windowed error can be more attributed to the extrem
 In any case the RNN found a tight expectation for typical values.
 %kde bad
 
-\noindent {\bfseries{power}}
 
-\begin{figure}[!hp]
+
+%\pagebreak
+\noindent {\bfseries{power}} \nopagebreak
+
+\begin{figure}[H]
     \ContinuedFloat 
 
     \begin{subfigure}[t]{\textwidth} 
@@ -508,9 +512,9 @@ Nonetheless, both windowed errors distinguished the anomalous region.
 But, obviously, the point errors can not be used to detect the anomalous region.
 
 
-\noindent {\bfseries{ECG}}
+\noindent {\bfseries{ECG}} \nopagebreak
 
-\begin{figure}[!hp]
+\begin{figure}[H]
     \ContinuedFloat 
 
     \begin{subfigure}[t]{\textwidth} 
@@ -542,15 +546,10 @@ This window size was chosen to be about the size of the repeating unit since the
 The larger windows detected the most anomalous region but it is not apparent whether the extreme error values were due to deviant values or deviant behavior.
 
 
-\noindent {\bfseries{PSG-ECG}}
+\noindent {\bfseries{PSG-ECG}} \nopagebreak
 
-In this ECG, the point errors do not reveal much about the anomalous region because every spike in the error plot plot corresponds to a normal spike in the ECG, normal or otherwise.
-%
-However, the anomalous region is clearly detected in both windowed error plots.
-%
-Again the error in the anomalous region is well beyond the normal range of error fluctuations albeit the test series values are slightly above average (as can be seen from the density estimate).
 
-\begin{figure}[!hp] 
+\begin{figure}[H] 
     \ContinuedFloat
 
     \begin{subfigure}[t]{\textwidth} 
@@ -583,6 +582,12 @@ The highest 5 percentile and the maximum of (all) the errors are marked on the o
 }
 \label{fig:err}
 \end{figure}
+
+In this ECG, the point errors do not reveal much about the anomalous region because every spike in the error plot plot corresponds to a normal spike in the ECG, normal or otherwise.
+%
+However, the anomalous region is clearly detected in both windowed error plots.
+%
+Again the error in the anomalous region is well beyond the normal range of error fluctuations albeit the test series values are slightly above average (as can be seen from the density estimate).
 
 %todo:replace: indices to ^X^X FOR p omitted
 %todo: 'was programmed to save'  ...just write: process saves
