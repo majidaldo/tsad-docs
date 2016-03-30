@@ -1,0 +1,87 @@
+%undeveloped code: RNN, sys, bo
+
+\documentclass{beamer}
+%\usepackage{cite} %\bibliographystyle{IEEEtran}
+\usepackage[backend=bibtex]{biblatex}
+\bibliography{IEEEfull,library}
+%\addbibresource{library.bib}
+\usetheme{metropolis}           % Use metropolis theme
+\title{Unsupervised Anomaly Detection in Sequences
+Using Long Short Term Memory Recurrent Neural Networks}
+\date{\today} %todo
+\author{Majid S. alDosari}
+\institute{George Mason University}
+
+\begin{document}
+
+
+  \maketitle
+
+  \begin{frame}{Contents}
+    \tableofcontents 
+  \end{frame}
+
+  \section{Introduction}
+
+  \begin{frame}{Modern technology facilitates the 
+      capture, storage, and processing of sequential data at scale}
+
+    \begin{itemize}
+    \item Data capture
+      \begin{itemize}
+      \item physiological signals
+      \item network traffic
+      \item industrial processes
+      \item automobiles
+      \item website navigation
+      \item environment
+      \end{itemize}
+    \item Data storage
+      \begin{itemize}
+      \item Hadoop
+      \item MongoDB
+      \end{itemize}
+    \item Ubiquitous computing
+      \begin{itemize}
+      \item cloud/cluster
+      \item desktop
+      \item at point of capture
+      \end{itemize}
+    \end{itemize}    
+
+  \end{frame}
+
+
+  \begin{frame}{Problem: Finding anomalous data is challenging}
+
+    \begin{itemize}
+    \item large 
+    \item varied
+    \item domain knowledge required
+    \end{itemize}
+
+  \end{frame}
+
+
+  \begin{frame}{Solution: Use recurrent neural networks to find anomalous data}
+
+    \begin{itemize}
+      \item This work:
+    \begin{enumerate}
+      \item Background: Anomaly detection in sequences
+      \item Sequence Modeler: Recurent neural network (RNN)
+      \item Experiments: RNNs for anomaly detection
+    \end{enumerate}
+
+    \item Prior: Malhotra \footfullcite{Malhotra2015} but no emphasis on process
+    % i actually had a discussion with him
+    \end{itemize}
+
+  \end{frame}
+
+
+ % \begin{frame}[allowframebreaks]{References}
+ %   %
+ % \end{frame}
+\end{document}
+
