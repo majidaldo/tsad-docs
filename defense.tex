@@ -2,7 +2,7 @@
 
 \documentclass{beamer}
 %\usepackage{cite} %\bibliographystyle{IEEEtran}
-\usepackage[backend=bibtex]{biblatex}
+\usepackage[backend=bibtex,style=authortitle-ibid]{biblatex}
 \bibliography{IEEEfull,library}
 %\addbibresource{library.bib}
 \usetheme{metropolis}           % Use metropolis theme
@@ -63,7 +63,7 @@ Using Long Short Term Memory Recurrent Neural Networks}
   \end{frame}
 
 
-  \begin{frame}{Solution: Use recurrent neural networks to find anomalous data}
+  \begin{frame}{Solution: Use recurrent neural networks to generically find anomalous data}
 
     \begin{itemize}
       \item This work:
@@ -73,12 +73,25 @@ Using Long Short Term Memory Recurrent Neural Networks}
       \item Experiments: RNNs for anomaly detection
     \end{enumerate}
 
-    \item Prior: Malhotra \footfullcite{Malhotra2015} but no emphasis on process
+    \item Prior: Malhotra \footcite{Malhotra2015} but no emphasis on process
     % i actually had a discussion with him
     \end{itemize}
 
   \end{frame}
 
+
+  \section{The Challenge of Anomaly Detection in Sequences}
+  \begin{frame}[allowframebreaks]{Anomaly dectection work is fragmented}
+    \begin{itemize}
+    \item variety of solutions in communication networks, biology, economics, biology, ...etc.
+    \item different settings
+    \item no comparison between application domains
+    \item technical basis in computer science vs. statistics
+    \item not much review literature:
+      Cheboli\footcite{Cheboli2010}
+      and Gupta\footcite{Gupta2013}
+    \end{itemize}
+  \end{frame}
 
  % \begin{frame}[allowframebreaks]{References}
  %   %
