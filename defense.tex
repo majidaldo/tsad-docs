@@ -12,8 +12,9 @@ Using Long Short Term Memory Recurrent Neural Networks}
 \author{Majid S. alDosari}
 \institute{George Mason University}
 
-\begin{document}
 
+\input{custom}
+\begin{document}
 
   \maketitle
 
@@ -81,7 +82,8 @@ Using Long Short Term Memory Recurrent Neural Networks}
 
 
   \section{The Challenge of Anomaly Detection in Sequences}
-  \begin{frame}[allowframebreaks]{Anomaly dectection work is fragmented}
+
+  \begin{frame}{Anomaly dectection work is fragmented}
     \begin{itemize}
     \item variety of solutions in communication networks, biology, economics, biology, ...etc.
     \item different settings
@@ -93,8 +95,460 @@ Using Long Short Term Memory Recurrent Neural Networks}
     \end{itemize}
   \end{frame}
 
- % \begin{frame}[allowframebreaks]{References}
- %   %
- % \end{frame}
+
+  \begin{frame}{Define the problem to focus on the right solution}
+
+    Sequence $\x$
+    \begin{gather*}
+      \x=\{\x\tm{1},\x\tm{2},\x\tm{t},\ldots,\x\tm{T}\} \\
+      \x\tm{t} \in \mathbb{R}^v
+    \end{gather*}%
+
+    Assumption: Anomalies are a small part of the data.
+
+  \end{frame}
+
+
+  \begin{frame}{Solution must answer the following:}
+
+    \begin{enumerate}
+    \item
+      \textcolor{red}{What is normal (as an anomaly is defined as what is \textit{not} normal)?}
+    \item
+      What measure is used to indicate how anomalous point(s) are?
+    \item
+      How is the measure tested to decide if it is anomalous?
+    \end{enumerate}
+
+  \end{frame}
+
+
+  \begin{frame}[allowframebreaks]{Solution must address different anomaly types}
+
+    Simple point anomaly
+    \centering
+    \includegraphics[width=\textwidth]{figs/trivial.pdf}
+
+    \framebreak
+    Anomaly in a periodic context
+    \centering
+    \includegraphics[width=\textwidth]{figs/context.pdf}
+
+    \framebreak
+    Discord anomaly in a periodic time series
+    \centering
+    \includegraphics[width=\textwidth]{figs/discord_per.pdf}
+
+    \framebreak
+    Discord anomaly in an aperiodic time series
+    \centering
+    \includegraphics[width=\textwidth]{figs/discord_aper.pdf}
+
+    \framebreak
+    \centering
+    Multivariate: (a)synchronous and (a)periodic
+
+  \end{frame}
+
+
+  \section{Procedure}
+
+  \begin{frame}{Description of anomaly detection procedure is straightforward}
+
+    \begin{enumerate}
+    \item Compute an anomaly score for an observation
+    \item Aggregate the anomaly scores for many observations.
+    \item Use the anomaly scores to determine whether an observation can be considered anomalous
+    \end{enumerate}
+
+  \end{frame}
+
+  \begin{frame}{Characterizing normal behavior is involved}
+
+    \begin{enumerate}
+    \item Extract Samples
+    \item Transform Samples
+    \item Apply Detection Technique
+    \end{enumerate}
+
+  \end{frame}
+
+
+  \section{1. Sample Extraction}
+  
+  \begin{frame}{Use sliding windows to obtain samples}
+    
+    \begin{center}
+    $\mathcal{X}=\{W_1,W_2,\ldots,W_p\}$
+    \end{center}
+
+    \begin{itemize}
+      \item hop, $h$
+      \item window, $w$ %for localizing anom
+    \end{itemize}
+
+  \end{frame}
+
+
+  \begin{frame}{Problem: Hops can skip over anomalies}
+
+    \begin{center} 
+     sequence: \emph{abc\underline{c}abcabc} 
+
+      \begin{tabular}{|c|c|}
+        \hline
+        hop ($h$) & Ordered Windows \\
+        \hline
+        \hline
+        1 & \emph{abc},
+            \emph{bc\underline{c}}, 
+            \emph{c\underline{c}a}, 
+            \emph{cab},
+            \emph{abc}, 
+            \emph{bca},
+            \emph{cab},
+            \emph{abc} \\
+        \hline
+        2 & \emph{abc},
+            \emph{c\underline{c}a},
+            \emph{abc},
+            \emph{cab} \\
+        \hline
+        3 & \emph{abc}, 
+            \emph{cab},
+            \emph{cab} \\
+        \hline
+        4 & \emph{abc}, 
+            \emph{abc} \\
+        \hline
+      \end{tabular}
+
+    \end{center}
+    
+  \end{frame}
+
+
+  \begin{frame}{Problem: Window size must be large enough to contain anomaly}
+
+    \begin{center}
+      sequence:
+      \emph{aaabbbccc\underline{c}aaabbbcccaaabbbccc}
+    \end{center}
+
+    Window width must be at least 4.
+
+  \end{frame}
+
+
+  \begin{frame}{Problem: Treating window width as a dimension ignores temporal nature}
+
+    \begin{gather*}
+      \mathcal{X} =\{W_1,W_2,\ldots,W_p\}   \\
+      W \in \mathcal{R}^{1 \times w}
+    \end{gather*}
+    
+  \end{frame}
+
+
+  % \begin{frame}{Problem: Windows and hop size can't be too lage}
+
+  %   \begin{center}
+  %     sequence:
+  %     \emph{aaabbbccc\underline{c}aaabbbcccaaabbbccc}
+  %   \end{center}
+
+  % \end{frame}
+
+
+  \section{2. Transformation}
+
+
+  \begin{frame}{Transformation can help reveal anomalies}
+
+    \begin{itemize}
+    \item Haar transform %but only if 
+    \item Symbolic Aggregate approXimation (SAX) \footcite{Lin2007}
+    \end{itemize}
+
+  \end{frame}
+
+  \begin{frame}{Transformation is not general}
+
+    \begin{itemize}
+    \item Choice of representation must be compatible with data characteristics  %can't encode pt anom in freq
+    \item normal:anomaly as transform(normal):transform(anomaly)
+    \end{itemize}
+
+    Study \footcite{Wang2013} suggests generally little difference among representations.
+
+  \end{frame}
+
+
+  \section{3. Detection Technique}
+
+  \begin{frame}{Anomaly detection techniques and their application domains are varied}
+
+    Based on
+    \begin{itemize}
+    \item Segmentation:
+    \item Information Theory
+    \item Proximity 
+    \item Modeling
+    \end{itemize}
+
+  \end{frame}
+
+  \begin{frame}{Model and proximity-based techniques are most developed}
+
+    Based on
+    \begin{itemize}
+    \item Segmentation: requires homogeneous segments
+    \item Information Theory: requires finding sensitive information-theoretic measure
+    \item Proximity
+    \item Modeling
+    \end{itemize}
+
+  \end{frame}
+
+
+  \section{Proximity}
+
+
+  \begin{frame}{Idealization never occurs}
+
+      \centering
+      \includegraphics[height=\textheight]{figs/simple_dist.pdf}
+
+  \end{frame}
+
+  \begin{frame}{Practically, distributions are complicated}
+    
+    \centering
+    \begin{tabular}{c|c}
+    \includegraphics[width=.45\textwidth]{figs/hard1_dist.pdf} &
+    \includegraphics[width=.45\textwidth]{figs/hard2_dist.pdf}
+    \end{tabular}
+
+  \end{frame}
+
+
+  \section{Effects on Point Distribution}
+
+
+  \begin{frame}{Distance measure should be invariant to:}
+
+    \begin{itemize}
+      \item length
+      \item (skew)
+      \item translation
+      \item (amplitude)
+    \end{itemize}
+
+    Study \footcite{Wang2013}: Not much difference in similarity measures
+
+  \end{frame}
+
+  \begin{frame}{Window width needs to be chosen on the scale of expected anomaly}
+    
+    % so you might thing oh just make it big
+    If width is too large:
+    \begin{itemize}
+      \item anomalous points not distinguished
+      \item data becomes equidistant in high-dimensional space
+    \end{itemize}
+
+  \end{frame}
+
+
+  \section{Data Classification}
+
+  \begin{frame}{Global vs Local: Local techniques use neigborhood data}
+    
+    \centering
+    \begin{tabular}{c|c}
+      \includegraphics[width=.45\textwidth]{figs/hard1_dist.pdf} &
+      \includegraphics[width=.45\textwidth]{figs/hard2_dist.pdf}
+    \end{tabular}
+
+  \end{frame}
+
+
+  \section{Nearest Neighbor}
+
+
+  \begin{frame}{Overlapping windows distort data similarity}
+
+    \begin{tabular}{lc}
+      \emph{abcabcXXXabcababc} &
+      \begin{small} 
+ %       \begin{center}
+          \begin{tabular}{|c||c|}
+            \hline
+            $h=1$ & $h=3$ \\
+            \hline
+            \hline
+            \emph{abc} & \emph{abc} \\
+            \emph{bca} & \\
+            \emph{cab} & \\
+            \hline
+            \emph{abc} & \emph{abc} \\
+            \emph{bcX} & \\
+            \emph{cXX} & \\
+            \hline
+            \emph{XXX} & \emph{XXX} \\
+            \emph{XXa} & \\
+            \emph{Xab} & \\
+            \hline
+            \emph{abc} & \emph{abc} \\
+            \emph{bca} & \\
+            \emph{cab} & \\
+            \hline
+            \emph{aba} & \emph{aba} \\ 
+            \emph{bab} & \\
+            \emph{abc} & \\
+            \hline
+          \end{tabular}
+%        \end{center}
+      \end{small}
+    \end{tabular}
+
+  \end{frame}
+
+
+  \begin{frame}{Solution: Use non-self matches \footcite{Keogh2005}}
+
+    \small
+    \centering
+    \begin{tabular}{|c||c|}
+      \hline
+      $h=1$ & $h=3$ \\
+      \hline
+      \hline
+      \emph{abc} & \emph{abc} \\
+      \emph{bca} & \\
+      \emph{cab} & \\
+      \hline
+      \emph{abc} & \emph{abc} \\
+      \emph{bcX} & \\
+      \emph{cXX} & \\
+      \hline
+      \emph{XXX} & \emph{XXX} \\
+      \emph{XXa} & \\
+      \emph{Xab} & \\
+      \hline
+      \emph{abc} & \emph{abc} \\
+      \emph{bca} & \\
+      \emph{cab} & \\
+      \hline
+      \emph{aba} & \emph{aba} \\ 
+      \emph{bab} & \\
+      \emph{abc} & \\
+      \hline
+    \end{tabular}
+
+  \end{frame}
+
+
+  \begin{frame}{kNN uses no local information}
+    % hotsax k=1, go thru 2,3,*4*,5,6 
+    % N2 different density
+    
+    \centering
+    \begin{tabular}{c|c}
+      \includegraphics[width=.45\textwidth]{figs/hard1_dist.pdf} &
+      \includegraphics[width=.45\textwidth]{figs/hard2_dist.pdf}
+    \end{tabular}
+
+  \end{frame}
+
+
+  \begin{frame}{Local Outlier Factor\footcite{Breunig1999} uses local density information}
+    
+    A point is likely to be an anomaly if its neighbors are in dense regions while it is in a less dense region
+    \centering
+    \begin{tabular}{c|c}
+    \includegraphics[width=.45\textwidth]{figs/hard1_dist.pdf} &
+    \includegraphics[width=.45\textwidth]{figs/hard2_dist.pdf}
+    \end{tabular}
+    (Didn't you say anomalies may not be in less dense regions?!)
+    
+  \end{frame}
+
+
+  \section{Clustering}
+
+  \begin{frame}{Clustering algorithms are usually not designed to find anomalies}
+
+    Assumptions: anomalous points
+    \begin{itemize}
+    \item do not belong to a cluster (DBSCAN\footcite{Ester1996})
+    \item are far from a cluster centroid %see the problem?
+    \item are in less dense clusters
+    \end{itemize}
+
+  \end{frame}
+
+
+  \section{Models}
+
+  \begin{frame}{Hidden Markov Models (HMMs) are general advanced sequence modelers}
+    
+    Restrictions:
+    \begin{itemize}
+      \item fixed length sequences
+      \item Markovian process
+    \end{itemize}
+
+  \end{frame}
+
+
+  \section{Problems with Established Techniques}
+
+
+  \begin{frame}{How to determine \emph{a priori} what the best algorithm is?}
+    
+    review papers only give subjective assessments
+
+  \end{frame}
+
+
+  \begin{frame}{Proximity-based techniques need alot of decisions}
+    
+    Choose:
+    \begin{itemize}
+      \item similarity measure
+      \item sliding window size
+      \item sliding window hop
+      \item compatible classification technique
+    \end{itemize}
+
+  \end{frame}
+
+
+  \begin{frame}{Solution: Use a model-based technique}
+    
+    \begin{itemize}
+      \item characterize normal %more elegant. compare with clustering/NN
+      \item restriction: use when data \emph{can} be modeled
+    \end{itemize}
+
+    Ideally:
+    \begin{itemize}
+      \item model arbitrary time series
+      \item minimize effect of window length
+      \item requires as few parameters as possible
+    \end{itemize}
+    
+
+  \end{frame}
+
+% endp
+
+%  \begin{frame}[allowframebreaks]{References}
+%    %
+%  \end{frame}
+
+% /other/ contribs
+
 \end{document}
 
