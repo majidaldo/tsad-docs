@@ -164,7 +164,7 @@ The stacking can be seen graphically in Figure \ref{fig:rnn}. Notice that the un
 
 %use s_(l)ayers. todo
 
-To train the network, the loss function is used to  minimize (optimize) an objective function given pairs of training examples, $(\x,\vc{y})$, by adjusting the parameters $\vc{\theta}$. Unfortunately, training neural networks in general, let alone recurrent neural networks, are challenging optimization and computational problems \cite{Blum1992}. However, a flavor of the relatively simple mini-batch stochastic gradient descent (SGD) has remained successful in training a variety of networks \cite{Bengio2012b} despite the availability of other, perhaps more sophisticated, optimization algorithms. %practical recs for training deep. todo 2014+ ref?
+To train the network, the loss function is used to  minimize (optimize) an objective function given pairs of training examples, $(\x,\vc{y})$, by adjusting the parameters, $\vc{\theta}$. Unfortunately, training neural networks in general, let alone recurrent neural networks, are challenging optimization and computational problems \cite{Blum1992}. However, a flavor of the relatively simple mini-batch stochastic gradient descent (SGD) has remained successful in training a variety of networks \cite{Bengio2012b} despite the availability of other, perhaps more sophisticated, optimization algorithms. %practical recs for training deep. todo 2014+ ref?
 
 In plain mini-batch SGD, parameters are updated with a `learning rate', $\alpha$, for a selected `mini-batch' example set (from the training set), $M$, according to Equation \ref{eqn:sgd} until a convergence criterion is met.
 
