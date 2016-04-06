@@ -538,9 +538,133 @@ Using Long Short Term Memory Recurrent Neural Networks}
       \item minimize effect of window length
       \item requires as few parameters as possible
     \end{itemize}
-    
 
   \end{frame}
+
+
+
+
+
+  \section{Recurrent Neural Networks (RNNs)}
+
+  
+  \begin{frame}{RNNs are powerful}
+    
+    \begin{itemize}
+
+    \item speech recognition
+    \item handwriting recognition
+    \item music generation
+    \item text generation
+    \item handwriting generation
+      %lstm
+    \item translation
+    \item identifying non-verbal cues from speech
+    \item image caption generation
+    \item video to text description
+    \item generating talking heads
+
+    \end{itemize}
+        
+  \end{frame}
+
+
+  \begin{frame}{RNNs are more flexible and efficient than HMMs}
+    
+    state:
+    \begin{itemize}
+    \item HMM: hidden state depends only on previous state
+    \item RNN: shared state
+    \end{itemize}
+
+    generality:
+    \begin{itemize}
+    \item HMM: Markovian
+    \item RNN: general computation device
+    \end{itemize}
+    
+  \end{frame}
+
+
+  \begin{frame}{Recurrence explains the efficiency of RNN encoding}
+    
+    \newsavebox{\recurrent}
+\savebox{\recurrent}{\includegraphics[]{figs/recurrent.pdf}}
+\newsavebox{\recurrentuf}
+\savebox{\recurrentuf}{\includegraphics[]{figs/recurrent_uf.pdf}}
+
+cyclic view
+    \begin{center} \usebox{\recurrent} \end{center}
+
+acyclic view
+    \begin{center}  \usebox{\recurrentuf} \end{center}
+    
+  \end{frame}
+
+
+  \begin{frame}{RNN computation is elaborate}
+
+    \newsavebox{\rnn}
+    \savebox{\rnn}{\includegraphics[]{figs/rnn.pdf}}
+    \newsavebox{\rnnuf}
+    \savebox{\rnnuf}{\includegraphics[]{figs/rnn_uf.pdf}}
+
+    \begin{tabular}{p{\wd\rnn}|p{\wd\rnnuf}}
+      \includegraphics[width=.7\wd\rnn]{figs/rnn.pdf}  & 
+                                                         \includegraphics[width=.7\wd\rnnuf]{figs/rnn_uf.pdf}  
+    \end{tabular}
+
+  \end{frame}
+
+
+  \begin{frame}{Training RNNs is difficult}
+    
+    \begin{equation*}
+      L(\vc{o},\vc{y}) = \frac{1}{TV} \sum_t \sum_v(
+      \vc{o}\tm{t}_v - \vc{y}\tm{t}_v
+      )^2
+    \end{equation*}
+
+    \begin{itemize}
+      \item but mini-batch SGD-flavor training still works
+        \begin{equation*}
+          \Delta \vc{\theta} =
+          -\alpha
+          \frac{1}{|M|} \sum_{(\vc{x}_m,\vc{y}_m) \in M}
+          \frac{\partial{L}(
+            \vc{o}%(\x_m;\vc{\theta})
+            ,\vc{y}_m)}
+          {\partial{\vc{\theta}}}
+        \end{equation*}
+      \item acute vanishing gradient problem
+        \begin{equation*}
+          \frac{\partial{L}\tm{t}}{\partial{\vc{W}_{ss}}} = 
+          \sum_{i=0}^T
+          \frac{\partial{    L}\tm{ t}}{\partial{\vc{o}\tm{t}}}
+          \frac{\partial{\vc{o}}\tm{t}}{\partial{\vc{s}\tm{t}}}
+          \left(
+            \prod_{j=i+1}^{T}
+            \frac{\partial{\vc{s}}\tm{j}}{\partial{\vc{s}\tm{j-1}}}
+          \right)
+          \frac{\partial{\vc{s}}\tm{i}}{\partial{\vc{W}_{ss}}}
+        \end{equation*}
+      \end{itemize}
+
+    \end{frame}
+
+
+    \begin{frame}{Understand vanishing gradient problem through computational graph for $T=4$}
+
+      \includegraphics[width=\textwidth]{figs/grad.pdf}
+
+    \end{frame}
+
+
+    \begin{frame}{Long Short Term Memory (LSTM) `cells' store information but are more complicated than vanilla RNNs' $tanh$}
+
+      \includegraphics[width=\textwidth]{figs/lstm.pdf}
+
+    \end{frame}
 
 % endp
 
