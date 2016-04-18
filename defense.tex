@@ -4,6 +4,9 @@
 %\usepackage{cite} %\bibliographystyle{IEEEtran}
 \usepackage[backend=bibtex,style=authortitle-ibid]{biblatex}
 \bibliography{IEEEfull,library}
+\usepackage{xcolor}
+\usepackage{array} \usepackage{makecell}
+\usepackage{colortbl}
 
 %\addbibresource{library.bib}
 \usetheme{metropolis}           % Use metropolis theme
@@ -934,6 +937,72 @@ acyclic view
     \end{frame}
 
 
+    \section{Reproducibility}
+
+    \begin{frame}{Technology stack enables automation and reproducibility}
+
+      \newcolumntype{T}{!{\color{blue} \vrule width 4\arrayrulewidth}}
+      \newcolumntype{C}[0]{>{\centering\let\newline\\\arraybackslash\hspace{0pt}}m{1.3in}}
+
+      \centering 
+      \begin{tabular}{l C C}
+         \Xhline{6\arrayrulewidth}
+         application   
+         &  \multicolumn{1}{TcT}{\cellcolor{blue!10}\ldots}
+        & \multicolumn{1}{TcT}{\cellcolor{blue!10}\ldots} 
+        \\
+        \hline
+        container network 
+        & \multicolumn{2}{TcT}{\cellcolor{blue!10}\textsf{Weave}}  
+        \\
+        app. containerization  
+        & \multicolumn{2}{TcT}{\cellcolor{blue!10}\textsf{Docker}}   
+        \\
+        \hline
+        operating system 
+        & \multicolumn{2}{TcT}{\cellcolor{blue!10}\textsf{CoreOS}} 
+        \\ 
+        \hline
+        machine 
+        & \multicolumn{1}{TcT}{\cellcolor{blue!10}(x64)}
+        &  \multicolumn{1}{TcT}{\cellcolor{blue!10}x64} 
+        \\ 
+        \hline
+        hypervisor 
+        & \multicolumn{1}{TcT}{\cellcolor{blue!10}\textsf{VirtualBox}} 
+        & \multicolumn{1}{TcT}{\cellcolor{blue!10}\ldots }
+        \\
+        hypervisor interface
+        & \multicolumn{1}{TcT}{\cellcolor{blue!10}\textsf{Vagrant}} 
+        & \multicolumn{1}{TcT}{\cellcolor{blue!10}\textsf{AWS}}
+        \\
+        \hline
+        host operating sys. 
+        & \multicolumn{1}{|c|}{
+          \textsf{Windows}%
+          \textbar \textsf{OS X}%
+          \textbar \textsf{Linux}
+          }
+        & \multicolumn{1}{TcT}{\cellcolor{blue!10}\ldots}
+        \\
+        \hline
+        hardware 
+        & \multicolumn{1}{|c|}{x64}
+        & \multicolumn{1}{TcT}{\cellcolor{blue!10}x64}
+        \\
+        \Xhline{6\arrayrulewidth}
+        & local 
+        & remote
+      \end{tabular}
+
+    \end{frame}
+
+
+    \begin{frame}{Reproducibility of technology stack on any machine enables parallel processing}
+        \includegraphics[width=\textwidth]{appendix/figs/arch.pdf}
+    \end{frame}
+
+    \section{Discussion Time}
 
 % endp
 
