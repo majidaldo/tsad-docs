@@ -4,6 +4,7 @@
 %\usepackage{cite} %\bibliographystyle{IEEEtran}
 \usepackage[backend=bibtex,style=authortitle-ibid]{biblatex}
 \bibliography{IEEEfull,library}
+
 %\addbibresource{library.bib}
 \usetheme{metropolis}           % Use metropolis theme
 \title{Unsupervised Anomaly Detection in Sequences
@@ -663,8 +664,276 @@ acyclic view
     \begin{frame}{Long Short Term Memory (LSTM) `cells' store information but are more complicated than vanilla RNNs' $tanh$}
 
       \includegraphics[width=\textwidth]{figs/lstm.pdf}
+      \footcite{Colah2015}
+    \end{frame}
+
+
+
+    \section{Using RNN for Anomaly Detection}
+
+    \begin{frame}{Use same procedure for test time series to test generality}
+      
+      \begin{enumerate}
+      \item sample
+      \item setup RNN autoencoder
+      \item train
+      \item optimize
+      \item evaluate anomaly scores
+      \end{enumerate}
 
     \end{frame}
+
+
+    \begin{frame}{1. Sample with sliding windows of varying length to test versatility}
+      
+      \begin{enumerate}
+      \item spikes
+      \item sine
+      \item power demand
+      \item electrocardiogram (ECG)
+      \item polysomnography ECG (PSG-ECG)
+      \end{enumerate}
+
+    \end{frame}
+
+
+    \begin{frame}{2. Setup RNN autoencoder}
+
+      \begin{itemize}
+      \item Set target to (uncorrupted) input
+        \begin{equation*}\vc{y}=\vc{x}\end{equation*}
+      \item Add noise to input
+        \begin{equation*}
+          \tilde{\x} = \x
+          + \mathcal{N}(0,(0.75\sigma_{\mathrm{std}}(\x))^2)
+        \end{equation*}
+      \end{itemize}
+
+    \end{frame}
+
+
+    \begin{frame}{3a. Train: RMSprop is appropriate algorithm}
+      
+      \begin{itemize}
+      \item works with mini-batch learning as data is highly redundant
+      \item similar in results to second order methods with less computational cost
+      \end{itemize}
+
+    \end{frame}
+
+
+    \begin{frame}{3b. Optimize RNN hyperparameters to find best RNN configuration}
+      
+      Optimize
+      \begin{itemize}
+        \item number of layers, $l$
+        \item `size' of each layer, $n$
+      \end{itemize}
+      % could have kept size of each layer a var but kiss
+
+      using Bayesian optimization
+      \begin{itemize}
+      \item minimize expensive objective function calls
+      \item considers stochasticity of function
+      \end{itemize}
+
+    \end{frame}
+
+    
+    \begin{frame}{Optimization of spike-1}
+      % i guess rnn is seeing val and trn as same even tough i chopped up the data into different sizes and views
+      % was hoping to see l=2 lower
+      % sometimes it gets stuck. hope not a false opt
+
+      \includegraphics[width=.5\textwidth]{figs/bo_spikelv.pdf}
+      \includegraphics[width=.5\textwidth]{figs/trn_spikelv.pdf}
+      
+    \end{frame}
+
+
+    \begin{frame}{Optimization of spike-2}
+
+      \includegraphics[width=.5\textwidth]{figs/bo_spikereg.pdf}
+      \includegraphics[width=.5\textwidth]{figs/trn_spikereg.pdf}
+      
+    \end{frame}
+
+
+    \begin{frame}{Optimization of sine}
+
+      \includegraphics[width=.5\textwidth]{figs/bo_sin.pdf}
+      \includegraphics[width=.5\textwidth]{figs/trn_sin.pdf}
+     
+    \end{frame}
+
+
+    \begin{frame}{Optimization of power}
+
+      \includegraphics[width=.5\textwidth]{figs/bo_power.pdf}
+      \includegraphics[width=.5\textwidth]{figs/trn_power.pdf}
+      
+    \end{frame}
+
+
+    \begin{frame}{Optimization of ECG}
+
+      \includegraphics[width=.5\textwidth]{figs/bo_ecg.pdf}
+      \includegraphics[width=.5\textwidth]{figs/trn_ecg.pdf}
+      
+    \end{frame}
+
+
+    \begin{frame}{Optimization of PSG-ECG}
+
+      \includegraphics[width=.5\textwidth]{figs/bo_sleep.pdf}
+      \includegraphics[width=.5\textwidth]{figs/trn_sleep.pdf}
+      
+    \end{frame}
+
+
+    \begin{frame}{4. Use squared error as an anomaly score}
+
+      Reconstruction Error
+      \begin{itemize}
+      \item individual squared error
+      \item mean squared error of a window
+      \end{itemize}
+
+    \end{frame}
+    
+
+    \begin{frame}{spike-1: atypical value detected}
+
+      \includegraphics[width=\textwidth]{figs/er_spikelv.pdf}
+
+    \end{frame}
+
+
+    \begin{frame}{spike-2: irregularity detected}
+
+      \includegraphics[width=\textwidth]{figs/er_spikereg.pdf}
+
+    \end{frame}
+
+
+    \begin{frame}{sine: discord detection inconclusive}
+      %pdf not accurate
+      \centering
+      \includegraphics[height=\textheight]{figs/er_sin.pdf}
+
+    \end{frame}
+
+
+    \begin{frame}{power: discord detected}
+
+      \includegraphics[width=\textwidth]{figs/er_power.pdf}
+
+    \end{frame}
+
+
+    \begin{frame}{power: discord detected}
+
+      \includegraphics[width=\textwidth]{figs/er_power.pdf}
+
+    \end{frame}
+
+
+    \begin{frame}{ECG: discord detected}
+
+      \includegraphics[width=\textwidth]{figs/er_ecg.pdf}
+
+    \end{frame}
+
+
+    \begin{frame}{PSG-ECG: discord detected}
+
+      \includegraphics[width=\textwidth]{figs/er_sleep.pdf}
+
+    \end{frame}
+
+
+
+    \begin{frame}{Experiment conclusion: squared reconstruction error of AE-RNNs can be used to detect anomalies}
+
+      \begin{itemize}
+        \item point errors find extreme values
+        \item windowed errors find anomalies if size is on the order of anomaly
+        \item RNNs were insensitive to translation and length
+        \item the same process found anomalies in all tests
+        \item RNNs learned \emph{behaviour}
+      \end{itemize}
+
+    \end{frame}
+
+
+    \section{Conclusions}
+
+    \begin{frame}{RNNs have advantages over advanced techniques}
+
+      Model-based: HMMs
+      \begin{itemize}
+        \item more efficient encoding
+        \item varying sequence length
+      \end{itemize}
+
+      Proximity-based: HOT SAX
+      \begin{itemize}
+        \item more efficient \emph{after training}
+        \item multivariate
+      \end{itemize}
+
+    \end{frame}
+
+
+    \begin{frame}{Alternative method checklist}
+
+      \begin{itemize}
+      \item Does other data need to be accessed?%
+        (Is a summary of the data stored?)
+
+      \item Is it robust against some window length?
+
+      \item Is it invariant to translation? (Is it invariant to sliding a window?)
+
+      \item Is it fundamentally a sequence modeler?
+
+      \item Can it handle multivariate sequences?
+
+      \item Can the model prediction be associated with a probability?
+
+      \item Does it need labeled data? If not, is it robust to anomalous training data?
+
+      \item Does it require domain knowledge?
+
+      \end{itemize}
+
+    \end{frame}
+
+
+    \begin{frame}{Main disadvantage of RNNs: computational cost}
+      \begin{itemize}
+        \item training
+        \item hyperoptimization
+      \end{itemize}
+        
+    \end{frame}
+
+
+    \begin{frame}{Further work is needed to strengthen the case for using RNNs for anomaly detection}
+      \begin{itemize}
+        \item better optimize
+        \item use autocorrelation to determine window length
+        \item accelerate training: normalization, optimium training data size
+        \item use drop out to guard against overfitting
+        \item experiment with RNN architectures: bi-directional RNNs, LSTM alts., more connections
+        \item incorporate uncertainty
+        \item objective comparisons with labelled data
+        \item try multivariate series
+      \end{itemize}
+        
+    \end{frame}
+
+
 
 % endp
 
