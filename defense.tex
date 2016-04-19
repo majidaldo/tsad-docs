@@ -825,6 +825,8 @@ acyclic view
 
       \includegraphics[width=\textwidth]{figs/er_spikelv.pdf}
 
+      \note[item]{lower value more of a challenge}
+
     \end{frame}
 
 
@@ -879,7 +881,7 @@ acyclic view
         \item windowed errors find anomalies if size is on the order of anomaly
         \item RNNs were insensitive to translation and length
         \item the same process found anomalies in all tests
-        \item RNNs learned \emph{behaviour}
+        \item RNNs learned normal \emph{behaviour} despite having some anomalies in the training data
       \end{itemize}
 
     \end{frame}
@@ -941,7 +943,7 @@ acyclic view
     \begin{frame}{Further work is needed to strengthen the case for using RNNs for anomaly detection}
       \begin{itemize}
         \item better optimize
-        \item use autocorrelation to determine window length
+        \item use autocorrelation to determine minimum window length
         \item accelerate training: normalization, optimium training data size
         \item use drop out to guard against overfitting
         \item experiment with RNN architectures: bi-directional RNNs, LSTM alts., more connections
@@ -950,6 +952,13 @@ acyclic view
         \item try multivariate series
       \end{itemize}
         
+    \end{frame}
+
+
+    \begin{frame}{Conclusion}
+
+      Use RNNs to find anomalies when computational cost can be managed.
+
     \end{frame}
 
 
