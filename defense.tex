@@ -377,7 +377,7 @@ Using Long Short Term Memory Recurrent Neural Networks}
   \begin{frame}{Sliding windows challenge anomaly detection assumptions}
     
     \begin{itemize}
-      \item anomalous points are not necessarily in sparce space while repeated patterns are not necessarily  in dense space \footcite{Keogh2005}
+      \item anomalous points are not necessarily in sparse space while repeated patterns are not necessarily  in dense space \footcite{Keogh2005}
       \item ``Clustering of Time Series Subsequences is Meaningless'' \footcite{Keogh2004}
     \end{itemize}
 
@@ -916,8 +916,8 @@ acyclic view
     \begin{frame}{Alternative method checklist}
 
       \begin{itemize}
-      \item Does other data need to be accessed?%
-        (Is a summary of the data stored?)
+        
+      \item Is only the test sequence needed to determine how anomalous it is? (Is a summary of the data stored?)
 
       \item Is it robust against some window length?
 
@@ -929,7 +929,7 @@ acyclic view
 
       \item Can the model prediction be associated with a probability?
 
-      \item Does it need labeled data? If not, is it robust to anomalous training data?
+      \item Can it work with unlabeled data? If not, is it robust to anomalous training data?
 
       \item Does it require domain knowledge?
 
