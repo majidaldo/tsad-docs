@@ -122,7 +122,7 @@ Many instances of data are needed to inform what is normal. So, subsequences nee
 
 Samples can be extracted from a sliding a window over the time series. More precisely, beginning at step $t=0$, sliding a window of width $w$ over a time series $x$ of length $T$ one step at a time produces $p=T-w+1$ windows, $\mathcal{X}=\{W_1,W_2,\ldots,W_p\}$\footnote{In literature, this form corresponds to a time series database \cite{Gupta2013}}.
 
-Now, $\mathcal{X}$ contains all possible subsequences of $\x$ of length $w$ and the value $p$ is typically not much less than $T$. Having many subsequences helps to localize the anomaly; so the window capturing the anomaly will have a higher anomaly score than adjacent windows.
+Now, $\mathcal{X}$ contains all possible subsequences of $\x$ of length $w$ and the value of $p$ is typically not much less than $T$. Having many subsequences helps to localize the anomaly; so the window capturing the anomaly will have a higher anomaly score than adjacent windows.
 
 But sometimes it is not desirable for computational reasons to process all subsequences. $p$ can be reduced by introducing a `hop', $h$, that skips $h$ steps when advancing the window from the previous one ($h=1$ gives all possible subsequences).
 
