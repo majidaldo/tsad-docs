@@ -271,7 +271,7 @@ Gradients were computed using \textsf{Theano}'s automatic differentiation featur
 
 While the training procedure optimizes $\vc{\theta}$, there are other parameters that could be adjusted to minimize the loss.
 %
-The number of layers, $l$, and the `size' of each layer, $n$, corresponding the dimension of vector $\vc{s}$ (which equals the cell state memory dimension as well), were chosen as `hyper-parameters' for optimization in a Bayesian optimization process.
+The number of layers, $l$, and the `size' of each layer, $n$, corresponding to the dimension of vector $\vc{s}$ (which equals the cell state memory dimension as well), were chosen as `hyper-parameters' for optimization in a Bayesian optimization process.
 %
 Bayesian optimization is suited for optimizing RNN training because
 1) it tries to minimize the number of (expensive) objective function calls, which, in this case, is the training procedure, and
