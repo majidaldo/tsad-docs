@@ -236,52 +236,53 @@
         \pagenumbering{roman}
         \pagestyle{plain}
         \thispagestyle{empty}%
-        \null\vskip .5825in %\vskip .01in%
-        \begin{center}
-                \rm\uline{\uppercase\expandafter{\@title}}\\
-                \normalsize
-                \bigskip by \\
-                \bigskip \@author \\
-                %\bigskip
-                A \@doctype\ \\
-                Submitted to the\\
-                Graduate Faculty\\
-                of\\
-                George Mason University\\
-                in Partial Fulfillment of\\
-                The Requirements for the Degree\\
-                of\\
-                \@degree\\
-                \@subject\\[0.5 in]
-        \end{center}
-        Committee:\\[16 pt]
-        \siglinewithspace \@advisor,    \@doctype\ Director   \\[\intercommspace]
-        \siglinewithspace \@firstmember, \\
-        \phantom{\siglinewithspace\!\!} Committee Chair  \\[\intercommspace]
-        \siglinewithspace \@secondmember, Committee Member \\[\intercommspace]
-%        \siglinewithspace \@thirdmember        \\[\intercommspace]
-        % need this pct here if the code is to be nice looking
-        \siglinewithspace \@depthead,  Department Chair \\ [\intercommspace]
-        %
-        \siglinewithspace \@assocdean, Associate Dean, Office \\
-        \phantom{\siglinewithspace\!\!} of Student Affairs \& Special Programs, \\
-        \phantom{\siglinewithspace\!\!} College of Science \\[\intercommspace]
-        %
-        \siglinewithspace \@dean, Dean, College of \\
-        \phantom{\siglinewithspace\!\!} Science \\[\intercommspace]
-        %
-        Date: \rule{\datelinelength}{\siglinedepth} \hspace{\spacesiglinename} \!\!\@degreesemester\
-%       Semester
-        \@degreeyear\\
-%         % optional fourth member
-%         \if*\@fourthmember
-%         \else
-%             \rule{\siglinelength}{\siglinedepth} \qquad \@fourthmember
-%             \\[\intercommspace]
-%         \fi
-        \phantom{Date: \rule{\datelinelength}{\siglinedepth} \hspace{\spacesiglinename} \!\!}George Mason University \\
-        \phantom{Date: \rule{\datelinelength}{\siglinedepth} \hspace{\spacesiglinename} \!\!}Fairfax, VA
-       \newpage
+        \includepdf[]{sigs.pdf}
+%         \null\vskip .5825in %\vskip .01in%
+%         \begin{center}
+%                 \rm\uline{\uppercase\expandafter{\@title}}\\
+%                 \normalsize
+%                 \bigskip by \\
+%                 \bigskip \@author \\
+%                 %\bigskip
+%                 A \@doctype\ \\
+%                 Submitted to the\\
+%                 Graduate Faculty\\
+%                 of\\
+%                 George Mason University\\
+%                 in Partial Fulfillment of\\
+%                 The Requirements for the Degree\\
+%                 of\\
+%                 \@degree\\
+%                 \@subject\\[0.5 in]
+%         \end{center}
+%         Committee:\\[16 pt]
+%         \siglinewithspace \@advisor,    \@doctype\ Director   \\[\intercommspace]
+%         \siglinewithspace \@firstmember, \\
+%         \phantom{\siglinewithspace\!\!} Committee Chair  \\[\intercommspace]
+%         \siglinewithspace \@secondmember, Committee Member \\[\intercommspace]
+% %        \siglinewithspace \@thirdmember        \\[\intercommspace]
+%         % need this pct here if the code is to be nice looking
+%         \siglinewithspace \@depthead,  Department Chair \\ [\intercommspace]
+%         %
+%         \siglinewithspace \@assocdean, Associate Dean, Office \\
+%         \phantom{\siglinewithspace\!\!} of Student Affairs \& Special Programs, \\
+%         \phantom{\siglinewithspace\!\!} College of Science \\[\intercommspace]
+%         %
+%         \siglinewithspace \@dean, Dean, College of \\
+%         \phantom{\siglinewithspace\!\!} Science \\[\intercommspace]
+%         %
+%         Date: \rule{\datelinelength}{\siglinedepth} \hspace{\spacesiglinename} \!\!\@degreesemester\
+% %       Semester
+%         \@degreeyear\\
+% %         % optional fourth member
+% %         \if*\@fourthmember
+% %         \else
+% %             \rule{\siglinelength}{\siglinedepth} \qquad \@fourthmember
+% %             \\[\intercommspace]
+% %         \fi
+%         \phantom{Date: \rule{\datelinelength}{\siglinedepth} \hspace{\spacesiglinename} \!\!}George Mason University \\
+%         \phantom{Date: \rule{\datelinelength}{\siglinedepth} \hspace{\spacesiglinename} \!\!}Fairfax, VA
+%        \newpage
 }
 
 \def\titlepage{%
